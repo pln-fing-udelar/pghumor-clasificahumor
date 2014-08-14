@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -49,17 +48,16 @@
 
     <div class="container">
 
-      <div  id="HomeText" class="starter-template">
+      <div id="HomeText" class="starter-template">
         <p class="lead" id="Chiste"></p>
             <button type="button" class="btn btn-lg btn-success chiste" onclick="procesar('c');">Humor</button>
             <button type="button" class="btn btn-lg btn-default" onclick="procesar('r');">Repetido</button>
             <button type="button" class="btn btn-lg btn-info" onclick="procesar('n');">Nose</button>
             <button type="button" class="btn btn-lg btn-danger cualquiera" onclick="procesar('x');">Cualquiera</button>    
-            
       </div>
 
-      <div  id="aboutUsText" class="starter-template">
-        <p class="lead"> Somos dos estudiantes (Santiago Castro y Matías Cubero) de Ingeniería en Computación que estamos realizando un proyecto de grado que pretende detectar humor en textos en español. Para esto necesitamos obtener una base de datos de chistes en español. Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad.<br><br> ¡¡¡MUCHAS GRACIAS!!! </p>
+      <div id="aboutUsText" class="starter-template">
+        <p class="lead">Somos dos estudiantes (Santiago Castro y Matías Cubero) de Ingeniería en Computación que estamos realizando un proyecto de grado que pretende detectar humor en textos en español. Para esto necesitamos obtener una base de datos de chistes en español. Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad.<br><br> ¡¡¡MUCHAS GRACIAS!!! </p>
       </div>
       
       
@@ -74,5 +72,15 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="../../dist/js/bootstrap.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-34392230-5', 'auto');
+      ga('send', 'pageview');
+
+    </script>
   </body>
 </html>
