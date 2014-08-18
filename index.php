@@ -66,13 +66,15 @@
     <hr>
     <footer>
         <p>&copy; pgHumor 2014</p>
-      </footer>
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script>
+    if (document.location.hostname.search("clasificachistes.com") !== -1) { // Enable GA only in production.
+
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -81,6 +83,7 @@
       ga('create', 'UA-34392230-5', 'auto');
       ga('send', 'pageview');
 
+    }
     </script>
   </body>
 </html>
