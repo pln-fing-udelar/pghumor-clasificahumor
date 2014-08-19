@@ -7,7 +7,7 @@
         
         $voto = $_GET['voto'];
         
-        if ($voto == 'c' || $voto == 'x' || $voto == 'r' || $voto == 'n'){
+        if ($voto == 'a' || $voto == 'x' || $voto == 'm' || $voto == 'n' || $voto == 'b'){
 
             include 'config.php';
             
@@ -20,7 +20,7 @@
 
             $result = mysqli_query($con,$statement);
 
-            if($voto == 'c' || $voto == 'x' || $voto == 'r'){
+            if($voto != 'n'){
                 //Marcar chiste como votado
                 $marcarVotado = "UPDATE tweets SET votado_tweet = 1 WHERE id_tweet = ". $id;
                 $result = mysqli_query($con, $marcarVotado);

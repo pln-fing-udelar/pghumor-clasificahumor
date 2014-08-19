@@ -12,3 +12,11 @@ footer{
 #aboutUsText{
     display: none;
 }
+
+.right{
+    float: right;
+}
+
+#HomeText{
+    clear: both;
+}

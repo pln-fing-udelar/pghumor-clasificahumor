@@ -26,7 +26,6 @@
   </head>
 
   <body>
-
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -47,13 +46,14 @@
     </div>
 
     <div class="container">
-
       <div id="HomeText" class="starter-template">
-        <p class="lead" id="Chiste"></p>
-            <button type="button" class="btn btn-lg btn-success chiste" onclick="procesar('c');">Humor</button>
-            <button type="button" class="btn btn-lg btn-default" onclick="procesar('r');">Repetido</button>
-            <button type="button" class="btn btn-lg btn-info" onclick="procesar('n');">Nose</button>
-            <button type="button" class="btn btn-lg btn-danger cualquiera" onclick="procesar('x');">Cualquiera</button>    
+            <p class="lead" id="Chiste"></p>
+            
+            <button type="button" class="btn btn-lg btn-success chiste" onclick="procesar('b');">Muy Bueno</button>
+            <button type="button" class="btn btn-lg btn-default" onclick="procesar('a');">Bueno</button>
+            <button type="button" class="btn btn-lg btn-danger" onclick="procesar('m');">Muy Malo</button>
+            <button type="button" class="btn btn-lg btn-info" onclick="procesar('x');">No es Humor</button>  
+            <button type="button" class="btn btn-lg btn-primary" onclick="procesar('n');">Ver Otro</button>  
       </div>
 
       <div id="aboutUsText" class="starter-template">
