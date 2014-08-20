@@ -53,7 +53,7 @@
             <button type="button" class="btn btn-lg btn-primary" onclick="procesar('a');">Bueno</button>
             <button type="button" class="btn btn-lg btn-info" onclick="procesar('m');">Malísimo</button>
             <button type="button" class="btn btn-lg btn-danger" onclick="procesar('x');">No es Humor</button>  
-            <button type="button" class="btn btn-lg btn-default" onclick="procesar('n');">Ver Otro</button>  
+            <button type="button" class="btn btn-lg btn-default" onclick="procesar('n');">Ver otro</button>  
       </div>
 
       <div id="aboutUsText" class="starter-template">
