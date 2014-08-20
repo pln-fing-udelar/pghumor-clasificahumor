@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="favi.png">
 
-    <title>Clasificá Chistes y Divertite - pgHumor</title>
+    <title>Clasificá Humor y divertite | pgHumor</title>
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
