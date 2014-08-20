@@ -39,7 +39,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li id="aboutUs"><a  href="#" onclick="aboutUs();">Quiénes Somos?</a></li>
+            <li id="aboutUs"><a  href="#" onclick="aboutUs();">¿Quiénes Somos?</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -49,9 +49,9 @@
       <div id="HomeText" class="starter-template">
             <p class="lead" id="Chiste"></p>
             
-            <button type="button" class="btn btn-lg btn-success chiste" onclick="procesar('b');">Muy Bueno</button>
+            <button type="button" class="btn btn-lg btn-success chiste" onclick="procesar('b');">Buenísimo</button>
             <button type="button" class="btn btn-lg btn-default" onclick="procesar('a');">Bueno</button>
-            <button type="button" class="btn btn-lg btn-danger" onclick="procesar('m');">Muy Malo</button>
+            <button type="button" class="btn btn-lg btn-danger" onclick="procesar('m');">Malísimo</button>
             <button type="button" class="btn btn-lg btn-info" onclick="procesar('x');">No es Humor</button>  
             <button type="button" class="btn btn-lg btn-primary" onclick="procesar('n');">Ver Otro</button>  
       </div>
