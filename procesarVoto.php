@@ -7,7 +7,7 @@
         
         $voto = $_GET['voto'];
         
-        if ($voto == 'a' || $voto == 'x' || $voto == 'm' || $voto == 'n' || $voto == 'b'){
+        if ($voto == '1' || $voto == '2' || $voto == '3' || $voto == '4' || $voto == '5' || $voto == 'x' || $voto == 'n'){
 
             include 'config.php';
             

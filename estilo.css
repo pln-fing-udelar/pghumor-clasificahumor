@@ -1,22 +1,32 @@
 body {
   padding-top: 50px;
 }
+
 .starter-template {
   padding: 40px 15px;
   text-align: center;
 }
-footer{
+
+footer {
     text-align: center;
 }
 
-#aboutUsText{
+#aboutUsText {
     display: none;
 }
 
-.right{
+.right {
     float: right;
 }
 
-#HomeText{
+#HomeText {
     clear: both;
+}
+
+h1 {
+	font-size: 56px;
+}
+
+#Chiste {
+	min-height: 50px; /* 16*5 */
 }
