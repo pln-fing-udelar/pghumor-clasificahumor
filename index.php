@@ -60,7 +60,7 @@
       </div>
 
       <div id="aboutUsText" class="starter-template">
-        <p class="lead">Somos dos estudiantes (Santiago Castro y Matías Cubero) de Ingeniería en Computación que estamos realizando un proyecto de grado que pretende detectar humor en textos en español. Para esto necesitamos obtener una base de datos de chistes en español. Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad.<br><br> ¡¡¡MUCHAS GRACIAS!!! </p>
+        <p class="lead">Somos dos estudiantes (Santiago Castro y Matías Cubero) de Ingeniería en Computación - Universidad de la República, Montevideo, Uruguay que estamos realizando un proyecto de grado que pretende detectar humor en textos en español. Para esto necesitamos obtener una base de datos de chistes en español. Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad.<br><br> ¡¡¡MUCHAS GRACIAS!!! </p>
       </div>
       
       

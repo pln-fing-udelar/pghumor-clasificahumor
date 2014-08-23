@@ -29,6 +29,8 @@ $(document).ready(function() {
         }, 700);
     });
 
+});
+
     function obtener3ChistesDistintos(){
         //Ajax para llenar arrays
         $.ajax({
@@ -90,4 +92,3 @@ $(document).ready(function() {
            $('#HomeText').css("display","none");
         } 
     }
-});
