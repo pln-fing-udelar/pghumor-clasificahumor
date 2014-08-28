@@ -19,7 +19,7 @@ $i = 0;
 
 if (rand(0, 1000) >= 150 ){
    
-    $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " AND " . $notVotado . " AND ". $notDudoso. " LIMIT 3");
+    $result = mysqli_query($con,"SELECT id_tweet, text_tweet FROM tweets AS T ,(SELECT (RAND()*(SELECT MAX(id_tweet) FROM tweets)) as r2) as r2 WHERE T.id_tweet >= r2 AND " . $notSeen . " AND " . $notVotado . " AND ". $notDudoso. " LIMIT 3");
 
     while($row = mysqli_fetch_array($result)) {
         $json[$i]['id_tweet'] = $row['id_tweet'];
@@ -29,7 +29,7 @@ if (rand(0, 1000) >= 150 ){
     
     if ( $i != 3){
         // Retorna los chistes que no hayan sido presentadas a ningun usuario y que sea de distintas cuentas de los ultimos 3
-        $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE" . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " LIMIT 1");
+        $result = mysqli_query($con,"SELECT id_tweet, text_tweet FROM tweets AS T ,(SELECT (RAND()*(SELECT MAX(id_tweet) FROM tweets)) as r2) as r2 WHERE T.id_tweet >= r2 AND " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " LIMIT 1");
 
         while($row = mysqli_fetch_array($result) && $i < 3) {
             $json[$i]['id_tweet'] = $row['id_tweet'];
