@@ -37,7 +37,7 @@ $(document).ready(function() {
             url: 'obtenerTresChistes.php',
             success: function(data){
                 chistes = eval(data);
-                $( "#Chiste" ).text( chistes[index].text_tweet );
+                $( "#Chiste" ).html(chistes[index].text_tweet).text(); // asi para hacer html decode
             }
         });
 
@@ -70,7 +70,7 @@ $(document).ready(function() {
         index = (index + 1) % chistes.length;
 
         //Cambiar para el chiste siguiente
-        $( "#Chiste" ).text( chistes[index].text_tweet );
+        $( "#Chiste" ).html(chistes[index].text_tweet).text(); // asi para hacer html decode
         //Obtener nuevo chiste 
     }
 
