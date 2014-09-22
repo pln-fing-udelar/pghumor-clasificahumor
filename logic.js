@@ -31,13 +31,17 @@ $(document).ready(function() {
 
 });
 
+    function mostrarHumor(){
+        $( "#Chiste" ).html(chistes[index].text_tweet.replace(/\n/mg,"<br/>")).text(); // asi para hacer html decode
+    }
+
     function obtener3ChistesDistintos(){
         //Ajax para llenar arrays
         $.ajax({
             url: 'obtenerTresChistes.php',
             success: function(data){
                 chistes = eval(data);
-                $( "#Chiste" ).html(chistes[index].text_tweet).text(); // asi para hacer html decode
+                mostrarHumor();
             }
         });
 
@@ -70,7 +74,7 @@ $(document).ready(function() {
         index = (index + 1) % chistes.length;
 
         //Cambiar para el chiste siguiente
-        $( "#Chiste" ).html(chistes[index].text_tweet).text(); // asi para hacer html decode
+        mostrarHumor();
         //Obtener nuevo chiste 
     }
 
