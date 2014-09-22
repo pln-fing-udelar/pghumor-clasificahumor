@@ -48,8 +48,10 @@ $notDudoso = " ( T.dudoso_tweet = 0 )";
 
 $json = array();
 $i = 0;
+
 if (rand(0, 1000) >= 150 ){
     // Retorna los chistes que no hayan sido presentadas a ningun usuario y que sea de distintas cuentas de los ultimos 3
+    
     $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T  WHERE " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " AND ". $notDudoso ." ORDER BY rand LIMIT 1");
     
     while($row = mysqli_fetch_array($result)) {
@@ -57,6 +59,7 @@ if (rand(0, 1000) >= 150 ){
         $json[$i]['text_tweet'] = $row['text_tweet'];
         $i++;
     }
+    
     
     if ( $i != 1){
         // Retorna los chistes que no hayan sido presentadas a ningun usuario y que sea de distintas cuentas de los ultimos 3
@@ -82,7 +85,6 @@ else{
 }
 
 
-
 if ($i != 1){
     //Si estan todos votados
     $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " ORDER BY rand LIMIT 1");
@@ -94,6 +96,7 @@ if ($i != 1){
     }
 }
 
+
 if ($i != 1){
     $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE". $notCurrentAcount . " AND " . $notCurrent  ." LIMIT 1");
 
@@ -103,6 +106,7 @@ if ($i != 1){
         $i++;
     }
 }
+
 
 echo json_encode($json);
 

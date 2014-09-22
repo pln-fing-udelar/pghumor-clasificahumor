@@ -29,18 +29,19 @@ if (rand(0, 1000) >= 150 ){
     
     if ( $i != 3){
         // Retorna los chistes que no hayan sido presentadas a ningun usuario y que sea de distintas cuentas de los ultimos 3
-        $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " ORDER BY rand LIMIT 1");
+        $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notVotado  . " AND " . $notSeen . " ORDER BY rand LIMIT 3");
 
-        while($row = mysqli_fetch_array($result) && $i < 3) {
+        while(($row = mysqli_fetch_array($result)) && ($i < 3)) {
             $json[$i]['id_tweet'] = $row['id_tweet'];
             $json[$i]['text_tweet'] = $row['text_tweet'];
             $i++;
         }         
     }
     
+    
 }
 else{
- 
+    
     $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " AND " . $notVotado . " LIMIT 3");
 
     while($row = mysqli_fetch_array($result)) {
@@ -49,23 +50,25 @@ else{
       $i++;
     }
     
+    
+    
 }
-
 
 if ($i != 3){
     $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " LIMIT 3");
 
-    while($row = mysqli_fetch_array($result) && $i < 3) {
+    while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
       $json[$i]['id_tweet'] = $row['id_tweet'];
       $json[$i]['text_tweet'] = $row['text_tweet'];
       $i++;
     }
 }
 
+
 if ($i != 3){
     $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE  '" . session_id() ."' NOT IN (SELECT session_id FROM audit_table AS A WHERE A.id_tweet = T.id_tweet) LIMIT 3");
 
-    while($row = mysqli_fetch_array($result) && $i < 3) {
+    while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
       $json[$i]['id_tweet'] = $row['id_tweet'];
       $json[$i]['text_tweet'] = $row['text_tweet'];
       $i++;
