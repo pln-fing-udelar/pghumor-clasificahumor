@@ -27,10 +27,10 @@ $cuentas = array();
 for($j = 0; $j < 3; $j++){
 
     //Obtener Los ids de las cuentas que se obtuvieron los chistes
-    $resultCuenta[$j] = mysqli_query($con,"SELECT twitter_accounts_id_account FROM tweets WHERE id_tweet =  " . $id[$j] );
+    $resultCuenta[$j] = mysqli_query($con,"SELECT id_account FROM tweets WHERE id_tweet =  " . $id[$j] );
 
     while($row = mysqli_fetch_array($resultCuenta[$j])) {
-        $cuentas[$j] = $row['twitter_accounts_id_account'];
+        $cuentas[$j] = $row['id_account'];
     }
 }
 
@@ -38,7 +38,7 @@ for($j = 0; $j < 3; $j++){
 //No visto
 $notSeen = "( id_tweet NOT IN ( SELECT id_tweet FROM audit_table WHERE session_id = '" . session_id() ."'))";
 //No de las cuentas ya mostradas
-$notCurrentAcount = "( T.twitter_accounts_id_account <> ". $cuentas[0] . " AND T.twitter_accounts_id_account <> ". $cuentas[1] . " AND T.twitter_accounts_id_account <> ". $cuentas[2] . " ) ";
+$notCurrentAcount = "( T.id_account <> ". $cuentas[0] . " AND T.id_account <> ". $cuentas[1] . " AND T.id_account <> ". $cuentas[2] . " ) ";
 //No de los tweets que ya estan en el buffer
 $notCurrent = "( T.id_tweet <> " . $id[0] . " AND T.id_tweet <> " . $id[1] . " AND T.id_tweet <> " . $id[2] . " )";
 // no Votado
@@ -50,7 +50,7 @@ $json = array();
 $i = 0;
 if (rand(0, 1000) >= 150 ){
     // Retorna los chistes que no hayan sido presentadas a ningun usuario y que sea de distintas cuentas de los ultimos 3
-    $result = mysqli_query($con,"SELECT id_tweet, text_tweet FROM tweets AS T ,(SELECT (RAND()*(SELECT MAX(id_tweet) FROM tweets)) as r2) as r2 WHERE T.id_tweet >= r2 AND " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " AND ". $notDudoso ." LIMIT 1");
+    $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T  WHERE " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " AND ". $notDudoso ." ORDER BY rand LIMIT 1");
     
     while($row = mysqli_fetch_array($result)) {
         $json[$i]['id_tweet'] = $row['id_tweet'];
@@ -60,7 +60,7 @@ if (rand(0, 1000) >= 150 ){
     
     if ( $i != 1){
         // Retorna los chistes que no hayan sido presentadas a ningun usuario y que sea de distintas cuentas de los ultimos 3
-        $result = mysqli_query($con,"SELECT id_tweet, text_tweet FROM tweets AS T ,(SELECT (RAND()*(SELECT MAX(id_tweet) FROM tweets)) as r2) as r2 WHERE T.id_tweet >= r2 AND " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " LIMIT 1");
+        $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . "ORDER BY rand LIMIT 1");
 
         while($row = mysqli_fetch_array($result)) {
             $json[$i]['id_tweet'] = $row['id_tweet'];
@@ -71,7 +71,7 @@ if (rand(0, 1000) >= 150 ){
 }
 else{
     // Retorna los chistes que no hayan sido presentadas a ningun usuario y que sea de distintas cuentas de los ultimos 3
-    $result = mysqli_query($con,"SELECT id_tweet, text_tweet FROM tweets AS T ,(SELECT (RAND()*(SELECT MAX(id_tweet) FROM tweets)) as r2) as r2 WHERE T.id_tweet >= r2 AND " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " LIMIT 1");
+    $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T  WHERE " . $notVotado .  " AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . "ORDER BY rand LIMIT 1");
 
     while($row = mysqli_fetch_array($result)) {
         $json[$i]['id_tweet'] = $row['id_tweet'];
@@ -85,7 +85,7 @@ else{
 
 if ($i != 1){
     //Si estan todos votados
-    $result = mysqli_query($con,"SELECT id_tweet, text_tweet FROM tweets AS T ,(SELECT (RAND()*(SELECT MAX(id_tweet) FROM tweets)) as r2) as r2 WHERE T.id_tweet >= r2 AND " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " LIMIT 1");
+    $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notCurrentAcount . " AND " . $notCurrent . " AND " . $notSeen . " ORDER BY rand LIMIT 1");
 
     while($row = mysqli_fetch_array($result)) {
         $json[$i]['id_tweet'] = $row['id_tweet'];
