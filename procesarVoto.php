@@ -15,7 +15,7 @@
             $id = mysqli_real_escape_string($con,$_GET['id']);
             $session = session_id();
             
-            $statement = "INSERT into audit_table VALUES (". $id . ",'" .$session . "','" . $voto . "')";
+            $statement = "INSERT into audit_table (id_tweet, session_id, votacion) VALUES (". $id . ",'" .$session . "','" . $voto . "')";
 
 
             $result = mysqli_query($con,$statement);
