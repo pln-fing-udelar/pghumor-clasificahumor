@@ -1,0 +1,3 @@
+# Instalación
+
+Montar en un servidor Apache (u otro a elección) con PHP. Instalar MySQL y levantar el dump chistesdump.sql
