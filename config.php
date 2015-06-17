@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-$con=mysqli_connect("localhost","pghumor","ckP8t/2l","chistesdb");
+$con=mysqli_connect("localhost","pghumor","--PASSWORD--","chistesdb");
 // Check connection
 if (mysqli_connect_errno()) {
   echo "Failed to connect to MySQL: " . mysqli_connect_error();
