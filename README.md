@@ -1,7 +1,7 @@
-# Instalación
+# Installation
 
-Montar en un servidor Apache (u otro a elección) con PHP. Instalar MySQL y levantar el dump chistesdump.sql
+Mount this project in an Apache server (or other) with PHP. Install MySQL and load the dump `chistesdump.sql`.
 
-# Configuración
+# Set up
 
-En el archivo `config.php` en `mysqli_connect` poner en orden el host de la base de datos, el nombre, el usuario y la contraseña.
+In the file `config.php`, in `mysqli_connect`, write in order: the database hostname, the database name, the user and the password.
