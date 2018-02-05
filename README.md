@@ -1,7 +1,12 @@
-# Installation
+# pgHumor-clasificahumor
 
-Mount this project in an Apache server (or other) with PHP. Install MySQL and load the dump `chistesdump.sql`.
+Web page for [pgHumor](TODO) and [HUMOR](TODO) corpora crowd-annotation.
 
-# Set up
+Setup:
 
-In the file `config.php`, in `mysqli_connect`, write in order: the database hostname, the database name, the user and the password.
+```shell
+touch .env # Add the env vars TODO
+docker-compose up -d --build
+```
+
+TODO: https?

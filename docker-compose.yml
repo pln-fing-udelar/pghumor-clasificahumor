@@ -1,0 +1,20 @@
+version: '3'
+services:
+  web:
+    build: .
+    env_file:
+      - .env
+    links:
+      - database
+    ports:
+      - 80:80
+    restart: always
+  database:
+    image: mysql:8
+    expose:
+      - 3306
+    volumes:
+      - data:/var/lib/mysql
+    restart: always
+volumes:
+  data:
