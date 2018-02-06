@@ -2,6 +2,10 @@ version: '3'
 services:
   web:
     build: .
+    environment:
+      - DB_HOST=database
+      - DB_USER=root
+      - DB_NAME=chistesdb
     env_file:
       - .env
     links:
@@ -11,6 +15,8 @@ services:
     restart: always
   database:
     image: mysql:8
+    env_file:
+      - .env
     expose:
       - 3306
     volumes:

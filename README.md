@@ -1,12 +1,17 @@
 # pgHumor-clasificahumor
 
-Web page for [pgHumor](TODO) and [HUMOR](TODO) corpora crowd-annotation.
+Web page for [pgHumor](https://github.com/pln-fing-udelar/pghumor) and [HUMOR](https://github.com/pln-fing-udelar/humor) corpora crowd-annotation.
 
-Setup:
+## Setup
 
-```shell
-touch .env # Add the env vars TODO
-docker-compose up -d --build
+Create a `.env` file with the following content (replacing where specified):
+
+```
+MYSQL_ROOT_PASSWORD=REPLACE_THIS
 ```
 
-TODO: https?
+Then run:
+
+```shell
+docker-compose up -d --build
+```

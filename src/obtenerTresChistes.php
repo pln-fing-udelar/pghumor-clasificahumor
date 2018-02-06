@@ -53,7 +53,7 @@ else{
 */
 
 if ($i != 3){
-    $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notSeen . " ORDER BY rand LIMIT 3");
+    $result = mysqli_query($connection,"SELECT T.id_tweet, T.text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notSeen . " ORDER BY rand LIMIT 3");
     while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
       $json[$i]['id_tweet'] = $row['id_tweet'];
       $json[$i]['text_tweet'] = $row['text_tweet'];
@@ -62,7 +62,7 @@ if ($i != 3){
 }
 
 if ($i != 3){
-    $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " LIMIT 3");
+    $result = mysqli_query($connection,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " LIMIT 3");
     while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
       $json[$i]['id_tweet'] = $row['id_tweet'];
       $json[$i]['text_tweet'] = $row['text_tweet'];
@@ -71,7 +71,7 @@ if ($i != 3){
 }
 
 if ($i != 3){
-    $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " LIMIT 3");
+    $result = mysqli_query($connection,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " LIMIT 3");
     while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
       $json[$i]['id_tweet'] = $row['id_tweet'];
       $json[$i]['text_tweet'] = $row['text_tweet'];
@@ -81,7 +81,7 @@ if ($i != 3){
 
 
 if ($i != 3){
-    $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE  '" . session_id() ."' NOT IN (SELECT session_id FROM audit_table AS A WHERE A.id_tweet = T.id_tweet) LIMIT 3");
+    $result = mysqli_query($connection,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE  '" . session_id() ."' NOT IN (SELECT session_id FROM audit_table AS A WHERE A.id_tweet = T.id_tweet) LIMIT 3");
     while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
       $json[$i]['id_tweet'] = $row['id_tweet'];
       $json[$i]['text_tweet'] = $row['text_tweet'];
@@ -90,5 +90,5 @@ if ($i != 3){
 }
 
 echo json_encode($json);
-mysqli_close($con);
+mysqli_close($connection);
 ?>
