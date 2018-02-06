@@ -1,94 +1,63 @@
 <?php
 
+const MAX_LIFETIME = 2592000;
+const BATCH_SIZE = 3;
+const SQL_SUB_UNSEEN = '( id_tweet NOT IN ( SELECT id_tweet FROM audit_table WHERE session_id = ? ) )';
+
 include 'config.php';
 
-ini_set('session.cookie_lifetime', 2592000); 
-ini_set('session.gc_maxlifetime', 2592000);
+ini_set('session.cookie_lifetime', MAX_LIFETIME);
+ini_set('session.gc_maxlifetime', MAX_LIFETIME);
 session_start();
 
-//Predicados generales
-//No visto
-$notSeen = "( id_tweet NOT IN ( SELECT id_tweet FROM audit_table WHERE session_id = '" . session_id() ."'))";
-// Votado
-$notVotado = " ( T.votado_tweet = 0 )";
-// Dudoso
-$notDudoso = " ( T.dudoso_tweet = 0 )";
+function get_random_unseen_tweets($connection) {
+    $statement_random_unseen_tweets = $connection->prepare(
+        'SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets WHERE ' . SQL_SUB_UNSEEN . ' ORDER BY rand LIMIT '
+        . BATCH_SIZE);
+
+    $statement_random_unseen_tweets->bind_param('s', session_id());
+    $statement_random_unseen_tweets->execute();
+    return $statement_random_unseen_tweets->get_result();
+}
 
 $json = array();
-$i = 0;
-/*
-if (rand(0, 1000) >= 150 ){
-   
-    $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notSeen . " AND " . $notVotado . " AND ". $notDudoso. " ORDER BY rand LIMIT 3");
+$tweets = 0;
 
-    while($row = mysqli_fetch_array($result)) {
-        $json[$i]['id_tweet'] = $row['id_tweet'];
-        $json[$i]['text_tweet'] = $row['text_tweet'];
-        $i++;
-    }
-    
-    if ( $i != 3){
-        // Retorna los chistes que no hayan sido presentadas a ningun usuario y que sea de distintas cuentas de los ultimos 3
-        $result = mysqli_query($con,"SELECT id_tweet, text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notVotado  . " AND " . $notSeen . " ORDER BY rand LIMIT 3");
-
-        while(($row = mysqli_fetch_array($result)) && ($i < 3)) {
-            $json[$i]['id_tweet'] = $row['id_tweet'];
-            $json[$i]['text_tweet'] = $row['text_tweet'];
-            $i++;
-        }         
-    }
-    
-    
+$result = mysqli_query($connection, "SELECT T.id_tweet, T.text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $sql_not_seen . " ORDER BY rand LIMIT 3");
+while (($row = mysqli_fetch_array($result))) {
+    $json[$tweets]['id_tweet'] = $row['id_tweet'];
+    $json[$tweets]['text_tweet'] = $row['text_tweet'];
+    $tweets++;
 }
-else{
-    
-    $result = mysqli_query($con,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " AND " . $notVotado . " LIMIT 3");
-    while($row = mysqli_fetch_array($result)) {
-      $json[$i]['id_tweet'] = $row['id_tweet'];
-      $json[$i]['text_tweet'] = $row['text_tweet'];
-      $i++;
-    }
-    
-}
-*/
 
-if ($i != 3){
-    $result = mysqli_query($connection,"SELECT T.id_tweet, T.text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $notSeen . " ORDER BY rand LIMIT 3");
-    while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
-      $json[$i]['id_tweet'] = $row['id_tweet'];
-      $json[$i]['text_tweet'] = $row['text_tweet'];
-      $i++;
+if ($tweets != BATCH_SIZE) {
+    $result = mysqli_query($connection, "SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $sql_not_seen . " LIMIT 3");
+    while (($row = mysqli_fetch_array($result)) && ($tweets < BATCH_SIZE)) {
+        $json[$tweets]['id_tweet'] = $row['id_tweet'];
+        $json[$tweets]['text_tweet'] = $row['text_tweet'];
+        $tweets++;
     }
 }
 
-if ($i != 3){
-    $result = mysqli_query($connection,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " LIMIT 3");
-    while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
-      $json[$i]['id_tweet'] = $row['id_tweet'];
-      $json[$i]['text_tweet'] = $row['text_tweet'];
-      $i++;
-    }
-}
-
-if ($i != 3){
-    $result = mysqli_query($connection,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $notSeen . " LIMIT 3");
-    while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
-      $json[$i]['id_tweet'] = $row['id_tweet'];
-      $json[$i]['text_tweet'] = $row['text_tweet'];
-      $i++;
+if ($tweets != BATCH_SIZE) {
+    $result = mysqli_query($connection, "SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE " . $sql_not_seen . " LIMIT 3");
+    while (($row = mysqli_fetch_array($result)) && ($tweets < BATCH_SIZE)) {
+        $json[$tweets]['id_tweet'] = $row['id_tweet'];
+        $json[$tweets]['text_tweet'] = $row['text_tweet'];
+        $tweets++;
     }
 }
 
 
-if ($i != 3){
-    $result = mysqli_query($connection,"SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE  '" . session_id() ."' NOT IN (SELECT session_id FROM audit_table AS A WHERE A.id_tweet = T.id_tweet) LIMIT 3");
-    while( ($row = mysqli_fetch_array($result)) && ($i < 3)) {
-      $json[$i]['id_tweet'] = $row['id_tweet'];
-      $json[$i]['text_tweet'] = $row['text_tweet'];
-      $i++;
+if ($tweets != BATCH_SIZE) {
+    $result = mysqli_query($connection, "SELECT T.id_tweet, T.text_tweet FROM tweets AS T WHERE  '" . session_id() . "' NOT IN (SELECT session_id FROM audit_table AS A WHERE A.id_tweet = T.id_tweet) LIMIT 3");
+    while (($row = mysqli_fetch_array($result)) && ($tweets < BATCH_SIZE)) {
+        $json[$tweets]['id_tweet'] = $row['id_tweet'];
+        $json[$tweets]['text_tweet'] = $row['text_tweet'];
+        $tweets++;
     }
 }
 
 echo json_encode($json);
+
 mysqli_close($connection);
-?>
