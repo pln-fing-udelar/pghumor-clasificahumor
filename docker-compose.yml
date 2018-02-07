@@ -12,6 +12,7 @@ services:
       - database
     ports:
       - 80:80
+      - 443:443
     restart: always
   database:
     image: mysql:8

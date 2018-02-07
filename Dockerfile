@@ -1,5 +1,9 @@
-FROM php:7-apache
+FROM tiangolo/uwsgi-nginx-flask:python3.6
 
-RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+RUN set -ex && pip install pipenv --upgrade
 
-COPY src/ /var/www/html/
+COPY app/Pipfile* /app/
+
+RUN set -ex && pipenv install --deploy --system
+
+COPY app/ /app

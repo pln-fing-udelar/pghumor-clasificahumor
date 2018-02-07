@@ -38,7 +38,7 @@ $(document).ready(function() {
     function obtener3ChistesDistintos(){
         //Ajax para llenar arrays
         $.ajax({
-            url: 'obtenerTresChistes.php',
+            url: 'tweets',
             success: function(data){
                 chistes = eval(data);
                 mostrarHumor();

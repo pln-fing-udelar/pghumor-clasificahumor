@@ -4,10 +4,11 @@ Web page for [pgHumor](https://github.com/pln-fing-udelar/pghumor) and [HUMOR](h
 
 ## Setup
 
-Create a `.env` file with the following content (replacing where specified):
+Create a `.env` file with the following content (setting the env vars values):
 
 ```
-MYSQL_ROOT_PASSWORD=REPLACE_THIS
+FLASK_SECRET_KEY=SET_VALUE
+MYSQL_ROOT_PASSWORD=SET_VALUE
 ```
 
 Then run:

@@ -23,7 +23,7 @@ function get_random_unseen_tweets($connection) {
 $json = array();
 $tweets = 0;
 
-$result = mysqli_query($connection, "SELECT T.id_tweet, T.text_tweet, RAND() AS rand FROM tweets AS T WHERE " . $sql_not_seen . " ORDER BY rand LIMIT 3");
+$result = get_random_unseen_tweets($connection);
 while (($row = mysqli_fetch_array($result))) {
     $json[$tweets]['id_tweet'] = $row['id_tweet'];
     $json[$tweets]['text_tweet'] = $row['text_tweet'];
