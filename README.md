@@ -11,6 +11,8 @@ FLASK_SECRET_KEY=SET_VALUE
 MYSQL_ROOT_PASSWORD=SET_VALUE
 ```
 
+You should create the database schema as well, and perhaps populate it with data. There's [a sample dump](chistedump.sql).
+
 Then run:
 
 ```shell

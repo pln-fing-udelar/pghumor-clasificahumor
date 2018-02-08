@@ -37,7 +37,7 @@ def tweets():
                    ' ORDER BY c, RAND()'
                    ' LIMIT %(limit)s',
                    {'session_id': session_id, 'limit': BATCH_SIZE})
-    # app.logger.error(cursor.fetchall())  # FIXME: not logging
+    app.logger.info(cursor.fetchall())  # FIXME: not logging
     return "a"
 
 
