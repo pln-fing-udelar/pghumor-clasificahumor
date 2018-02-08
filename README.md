@@ -18,3 +18,18 @@ Then run:
 ```shell
 docker-compose up -d --build
 ```
+
+## Development
+
+First, from `app` folder, install the dependencies using [pipenv](https://docs.pipenv.org/):
+
+```shell
+pipenv install
+pipenv shell
+```
+
+Then, to run with the Flask development server (and some MySQL server instance), instance the env vars and run it, like this:
+
+```shell
+env FLASK_DEBUG=1 DB_HOST=172.18.0.2 DB_USER=root DB_NAME=chistesdb $(cat ../.env | grep -v ^# | xargs) flask run
+```
