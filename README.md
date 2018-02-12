@@ -2,34 +2,52 @@
 
 Web page for [pgHumor](https://github.com/pln-fing-udelar/pghumor) and [HUMOR](https://github.com/pln-fing-udelar/humor) corpora crowd-annotation.
 
-## Setup
+## Setup with Docker
 
-Create a `.env` file with the following content (setting the env vars values):
+This is useful for production mostly.
 
-```
-FLASK_SECRET_KEY=SET_VALUE
-MYSQL_ROOT_PASSWORD=SET_VALUE
-```
+1. Create a `docker.env` file with the following content (setting the env vars values):
 
-You should create the database schema as well, and perhaps populate it with data. There's [a sample dump](chistedump.sql).
+    ```
+    FLASK_SECRET_KEY=SET_VALUE
+    MYSQL_ROOT_PASSWORD=SET_VALUE
+    ```
 
-Then run:
+2. You should create the database schema as well, and perhaps populate it with data. There's [a sample dump](dump.sql).
 
-```shell
-docker-compose up -d --build
-```
+3. Then run:
+
+    ```shell
+    docker-compose up -d --build
+    ```
 
 ## Development
 
-First, from `app` folder, install the dependencies using [pipenv](https://docs.pipenv.org/):
+This intended to run Flask in debug mode, auto-detecting changes.
 
-```shell
-pipenv install
-pipenv shell
-```
-
-Then, to run with the Flask development server (and some MySQL server instance), instance the env vars and run it, like this:
-
-```shell
-env FLASK_DEBUG=1 DB_HOST=172.18.0.2 DB_USER=root DB_NAME=chistesdb $(cat ../.env | grep -v ^# | xargs) flask run
-```
+1. First install the dependencies using [pipenv](https://docs.pipenv.org/) and start its shell:
+    
+    ```shell
+    pipenv shell
+    ```
+    
+2. Setup a MySQL database, create the schema and maybe populate it with data.
+    
+3. Create a `.env` file with the following content (setting some env vars values):
+    
+    ```
+    FLASK_SECRET_KEY=SET_VALUE
+    MYSQL_ROOT_PASSWORD=SET_VALUE
+    
+    FLASK_APP=app/main.py
+    FLASK_DEBUG=1
+    DB_HOST=SET_VALUE
+    DB_USER=SET_VALUE
+    DB_NAME=SET_VALUE
+    ```
+    
+4. Run:
+    
+    ```shell
+    flask run
+    ```

@@ -15,6 +15,8 @@ def random_least_voted_unseen_tweets(session_id: str, batch_size: int) -> List[D
     """
     Returns a random list of the least voted unseen tweets (by the session) with size batch_size.
 
+    Each tweet is represented as a dictionary with the fields 'id_tweet' and 'text_tweet'.
+
     :param session_id: Session ID
     :param batch_size: Size of the list to return
     :return: Random list of the least voted unseen tweets with size batch_size
@@ -32,6 +34,14 @@ def random_least_voted_unseen_tweets(session_id: str, batch_size: int) -> List[D
 
 
 def random_tweets(batch_size: int) -> List[Dict[str, Any]]:
+    """
+    Returns a random list tweets with size batch_size.
+
+    Each tweet is represented as a dictionary with the fields 'id_tweet' and 'text_tweet'.
+
+    :param batch_size: Size of the list to return
+    :return: Random list of tweets with size batch_size
+    """
     cursor = db.cursor()
     cursor.execute('SELECT t.id_tweet, text_tweet'
                    ' FROM tweets t'
@@ -39,3 +49,20 @@ def random_tweets(batch_size: int) -> List[Dict[str, Any]]:
                    ' LIMIT %(limit)s',
                    {'limit': batch_size})
     return [{'id_tweet': id_, 'text_tweet': text} for id_, text in cursor.fetchall()]
+
+
+def add_vote(session_id: str, tweet_id: str, vote: str) -> None:
+    """
+    Adds a vote for a tweet by a determined session.
+
+    If the vote is not one of ['1', '2', '3', '4', '5', 'x', 'n'], it will do nothing.
+
+    :param session_id: Session ID
+    :param tweet_id: Tweet ID
+    :param vote: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
+    """
+    if vote in ['1', '2', '3', '4', '5', 'x', 'n']:
+        cursor = db.cursor()
+        cursor.execute('INSERT INTO audit_table (id_tweet, session_id, votacion)'
+                       ' VALUES (%(tweet_id)s, %(session_id)s, %(vote)s)',
+                       {'tweet_id': tweet_id, 'session_id': session_id, 'vote': vote})
