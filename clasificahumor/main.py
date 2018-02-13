@@ -3,7 +3,7 @@ import os
 
 from flask import Flask, jsonify, request, Response, send_from_directory, session
 
-from app import database
+from clasificahumor import database
 
 app = Flask(__name__)
 

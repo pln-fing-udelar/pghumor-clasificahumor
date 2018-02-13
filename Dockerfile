@@ -6,4 +6,5 @@ COPY Pipfile* /app/
 
 RUN set -ex && pipenv install --deploy --system
 
-COPY app/ /app
+COPY uwsgi.ini .
+COPY clasificahumor clasificahumor

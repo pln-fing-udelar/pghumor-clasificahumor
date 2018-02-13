@@ -6,13 +6,14 @@ services:
       - DB_HOST=database
       - DB_USER=root
       - DB_NAME=chistesdb
+      - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
+      #,classifyhumor.com,www.classifyhumor.com as well:
+      - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
+      - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
     env_file:
       - docker.env
     links:
       - database
-    ports:
-      - 80:80
-      - 443:443
     restart: always
   database:
     image: mysql:8
@@ -23,5 +24,29 @@ services:
     volumes:
       - data:/var/lib/mysql
     restart: always
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - certs:/etc/nginx/certs:ro
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
 volumes:
+  certs:
   data:
+  html:
+  vhost:
