@@ -45,7 +45,7 @@ def vote_and_get_new_tweet_route() -> Response:
     if not tweets:
         tweets = database.random_tweets(1)
 
-    return jsonify(tweets[0])
+    return jsonify(tweets[0] if tweets else {})
 
 
 @app.route('/', defaults={'path': 'index.html'})

@@ -28,6 +28,7 @@ This intended to run Flask in debug mode, auto-detecting changes.
 1. First install the dependencies using [pipenv](https://docs.pipenv.org/) and start its shell:
     
     ```shell
+    pipenv install
     pipenv shell
     ```
     

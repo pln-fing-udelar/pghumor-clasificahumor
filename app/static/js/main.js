@@ -18,10 +18,10 @@ $(document).ready(function () {
     $rating.rating({
         captionElement: '#caption',
         clearCaption: '¡Votá!',
+        emptyStar: '<i class="glyphicon glyphicon-star" style="color: #e3e3e3"></i>',
         showClear: false,
-        starCaptions: {1: "¡Malísimo!", 2: "Malo", 3: "Ni ni", 4: "Bueno", 5: "¡Buenísimo!"},
         size: 'lg',
-
+        starCaptions: {1: "¡Malísimo!", 2: "Malo", 3: "Ni ni", 4: "Bueno", 5: "¡Buenísimo!"},
         step: 1
     });
 
@@ -46,7 +46,7 @@ function setupElements() {
 }
 
 function showTweet() {
-    $tweet.html(tweets[index].text_tweet.replace(/\n/mg, '<br/>')).text();
+    $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
 }
 
 function getRandomTweets() {
@@ -60,7 +60,7 @@ function vote(voteOption) {
     var oldIndex = index;
     index = (index + 1) % tweets.length;
 
-    $.post('vote', {tweet_id: tweets[oldIndex].id_tweet, vote: voteOption}, function (tweet) {
+    $.post('vote', {tweet_id: tweets[oldIndex].id, vote: voteOption}, function (tweet) {
         tweets[oldIndex] = tweet;
     }, 'json');
 
