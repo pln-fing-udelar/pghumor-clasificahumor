@@ -7,7 +7,7 @@ web:
     - DB_USER=root
     - DB_NAME=pghumor
     #,classifyhumor.com,www.classifyhumor.com as well:
-    - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
+#    - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com # After it's bought.
 #    #,classifyhumor.com,www.classifyhumor.com as well:
 #    - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
 #    - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
