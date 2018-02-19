@@ -40,7 +40,7 @@ This intended to run Flask in debug mode, auto-detecting changes.
     FLASK_SECRET_KEY=SET_VALUE
     MYSQL_ROOT_PASSWORD=SET_VALUE
     
-    FLASK_APP=app/main.py
+    FLASK_APP=clasificahumor/main.py
     FLASK_DEBUG=1
     DB_HOST=SET_VALUE
     DB_USER=SET_VALUE
