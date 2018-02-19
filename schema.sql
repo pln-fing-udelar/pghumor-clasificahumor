@@ -4,8 +4,8 @@ USE pghumor;
 
 CREATE TABLE accounts (
   account_id BIGINT UNSIGNED NOT NULL,
-  name VARCHAR(100) NOT NULL,
-  followers BIGINT NOT NULL,
+  name VARCHAR(100),
+  followers BIGINT,
   PRIMARY KEY (account_id)
 ) ENGINE InnoDB DEFAULT CHARSET utf8;
 
