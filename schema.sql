@@ -1,4 +1,4 @@
-CREATE DATABASE pghumor DEFAULT CHARSET utf8;
+CREATE DATABASE pghumor DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE pghumor;
 
@@ -7,7 +7,7 @@ CREATE TABLE accounts (
   name VARCHAR(100),
   followers BIGINT,
   PRIMARY KEY (account_id)
-) ENGINE InnoDB DEFAULT CHARSET utf8;
+) ENGINE InnoDB;
 
 CREATE TABLE tweets (
   tweet_id BIGINT UNSIGNED NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE tweets (
   lang ENUM('es', 'en') NOT NULL,
   PRIMARY KEY (tweet_id),
   FOREIGN KEY (account_id) REFERENCES accounts (account_id)
-) ENGINE InnoDB DEFAULT CHARSET utf8;
+) ENGINE InnoDB;
 
 CREATE TABLE votes (
   tweet_id BIGINT UNSIGNED NOT NULL,
@@ -27,4 +27,4 @@ CREATE TABLE votes (
   INDEX (tweet_id),
   INDEX (session_id),
   FOREIGN KEY (tweet_id) REFERENCES tweets (tweet_id)
-) ENGINE InnoDB DEFAULT CHARSET utf8;
+) ENGINE InnoDB;
