@@ -46,7 +46,11 @@ function setupElements() {
 }
 
 function showTweet() {
-    $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
+    if (tweets.length === 0) {
+        console.error("No hay tweets para mostrar.");
+    } else {
+        $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
+    }
 }
 
 function getRandomTweets() {
