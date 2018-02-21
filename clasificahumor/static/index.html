@@ -40,12 +40,19 @@
 
   <div class="container">
     <div id="home-content" class="content">
-      <p id="tweet" class="lead"></p>
+      <h1>Votá humor</h1>
+      <h2>Clasificá el tweet como "No Humoristico" o decí qué tan gracioso te parece!</h2>
+
+      <div id="tweet">
+        <img id="tweet-logo" src="img/twitter.ico" />
+        <p id="tweet-text"></p>
+      </div>
+
       <input id="rating" type="number" class="rating" step="1" data-size="lg" title="Rating" />
-      <button type="button" class="btn btn-lg btn-danger" onclick="vote('x');">No es Humor</button>
-      <button type="button" class="btn btn-lg btn-default" onclick="vote('n');">Saltear</button>
+      <button type="button" class="btn btn-lg btn-default" onclick="vote('x');">No es Humor</button>
+      <button type="button" class="btn btn-lg btn-link" onclick="vote('n');">Saltear</button>
       <div class="clear"></div>
-      <h1><span id="caption" class="label"></span></h1>
+      <span id="caption" class="label"></span>
     </div>
 
     <div id="about-us-content" class="content">
@@ -70,10 +77,6 @@
       </p>
     </div>
   </div>
-
-  <hr>
-
-  <footer><p>&copy; pgHumor 2014-2018</p></footer>
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"
           integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>

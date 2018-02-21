@@ -37,7 +37,7 @@ $(document).ready(function () {
 });
 
 function setupElements() {
-    $tweet = $('#tweet');
+    $tweet = $('#tweet-text');
     $rating = $('#rating');
     $caption = $('#caption');
     $homeContent = $('#home-content');

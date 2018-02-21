@@ -49,8 +49,6 @@ def tweets_route() -> Response:
 def vote_and_get_new_tweet_route() -> Response:
     session_id = request.cookies.get('session')
 
-    app.logger.info(request.form)
-
     if 'tweet_id' in request.form and 'vote' in request.form:
         database.add_vote(session_id, request.form['tweet_id'], request.form['vote'])
 

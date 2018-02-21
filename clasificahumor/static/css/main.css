@@ -1,5 +1,5 @@
 body {
-    padding-top: 50px;
+    margin-top: 20px;
 }
 
 .content {
@@ -11,12 +11,42 @@ body {
     clear: both;
 }
 
-#about-us-content {
-    display: none;
+h1 {
+	font-size: 30px;
 }
 
-h1 {
-	font-size: 56px;
+h2 {
+	font-size: 20px;
+    color: #777777;
+}
+
+#tweet {
+    border-radius: 5px;
+    border: 1px solid #e1e8ed;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px 20px 12px 20px;
+}
+
+#tweet-logo {
+    height: 20px;
+    width: 20px;
+    float: right;
+}
+
+#tweet-text {
+    color: #1c2022;
+    cursor: text;
+    font-family: Helvetica, Roboto, "Segoe UI", Calibri, sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    margin-right: 25px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#about-us-content {
+    display: none;
 }
 
 footer {
