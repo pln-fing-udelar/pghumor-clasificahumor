@@ -1,5 +1,6 @@
 from datetime import timedelta
 import os
+from typing import Any, Dict, List
 
 from flask import Flask, jsonify, request, Response, send_from_directory, session
 
@@ -11,6 +12,17 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY')
 app.config['SESSION_TYPE'] = 'filesystem'
 
 BATCH_SIZE = 3
+
+
+def stringify_tweet_ids(tweets: List[Dict[str, Any]]) -> None:
+    """
+    Converts the tweet field 'id' from number to string for each dict tweet in the tweets list.
+
+    Tweet IDs in string format should be used in Javascript instead of numbers.
+    See https://developer.twitter.com/en/docs/basics/twitter-ids
+    """
+    for tweet in tweets:
+        tweet['id'] = str(tweet['id'])
 
 
 @app.before_request
@@ -28,6 +40,8 @@ def tweets_route() -> Response:
     if len(tweets) < BATCH_SIZE:
         tweets = tweets + database.random_tweets(BATCH_SIZE - len(tweets))
 
+    stringify_tweet_ids(tweets)
+
     return jsonify(tweets)
 
 
@@ -44,6 +58,8 @@ def vote_and_get_new_tweet_route() -> Response:
 
     if not tweets:
         tweets = database.random_tweets(1)
+
+    stringify_tweet_ids(tweets)
 
     return jsonify(tweets[0] if tweets else {})
 
