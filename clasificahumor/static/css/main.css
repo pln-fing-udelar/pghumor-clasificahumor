@@ -1,54 +1,80 @@
 body {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .content {
-    padding: 40px 15px;
-    text-align: center;
+  padding: 40px 15px;
+  text-align: center;
 }
 
 #home-content {
-    clear: both;
+  clear: both;
 }
 
 h1 {
-	font-size: 30px;
+  font-size: 30px;
 }
 
 h2 {
-	font-size: 20px;
-    color: #777777;
+  font-size: 20px;
+  color: #777777;
 }
 
 #tweet {
-    border-radius: 5px;
-    border: 1px solid #e1e8ed;
-    max-width: 500px;
-    margin: 30px auto;
-    padding: 20px 20px 12px 20px;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+  display: flex;
+  margin: 30px auto;
+  max-width: 500px;
+  min-height: 150px;
+  padding: 20px;
 }
 
 #tweet-logo {
-    height: 20px;
-    width: 20px;
-    float: right;
+  float: right;
+  height: 20px;
+  margin-left: auto;
+  width: 20px;
 }
 
 #tweet-text {
-    color: #1c2022;
-    cursor: text;
-    font-family: Helvetica, Roboto, "Segoe UI", Calibri, sans-serif;
-    font-size: 16px;
-    line-height: 1.4;
-    margin-right: 25px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+  color: #1c2022;
+  cursor: text;
+  font-family: Helvetica, Roboto, "Segoe UI", Calibri, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: auto;
+  white-space: pre-wrap;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+#buttons {
+  margin-top: 60px;
+}
+
+.button-group {
+  display: inline-block;
+  margin-left: 50px;
+}
+
+.btn-ranking {
+  color: #e3e3e3;
+  padding: 0;
+}
+
+.btn-ranking:hover, .btn-ranking:focus, .btn-ranking:active, .btn-ranking.active {
+    color: #fde16d;
+}
+
+.btn-ranking i {
+  font-size: 75px;
 }
 
 #about-us-content {
-    display: none;
+  display: none;
 }
 
 footer {
-    text-align: center;
+  text-align: center;
 }

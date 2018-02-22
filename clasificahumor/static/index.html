@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link href="css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/main.css" rel="stylesheet" />
 </head>
 
@@ -41,17 +41,45 @@
   <div class="container">
     <div id="home-content" class="content">
       <h1>Votá humor</h1>
-      <h2>Clasificá el tweet como "No Humoristico" o decí qué tan gracioso te parece!</h2>
+      <h2>¡Clasificá el tweet como "No es humoristico" o decí qué tan gracioso te parece!</h2>
 
       <div id="tweet">
-        <img id="tweet-logo" src="img/twitter.ico" />
         <p id="tweet-text"></p>
+        <img id="tweet-logo" src="img/twitter.ico" />
       </div>
 
-      <input id="rating" type="number" class="rating" step="1" data-size="lg" title="Rating" />
-      <button type="button" class="btn btn-lg btn-default" onclick="vote('x');">No es Humor</button>
-      <button type="button" class="btn btn-lg btn-link" onclick="vote('n');">Saltear</button>
+      <div id="buttons">
+        <div class="button-group">
+          <p>Es humorístico. ¿Qué tan gracioso?</p>
+
+          <button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('1');">
+            <i class="material-icons md-48">sentiment_very_dissatisfied</i>
+          </button>
+          <button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('2');">
+            <i class="material-icons md-48">sentiment_dissatisfied</i>
+          </button>
+          <button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('3');">
+            <i class="material-icons md-48">sentiment_neutral</i>
+          </button>
+          <button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('4');">
+            <i class="material-icons md-48">sentiment_satisfied</i>
+          </button>
+          <button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('5');">
+            <i class="material-icons md-48">sentiment_very_satisfied</i>
+          </button>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn btn-lg btn-default" onclick="vote('x');">No es humorístico</button>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn btn-lg btn-link" onclick="vote('n');">Saltear</button>
+        </div>
+      </div>
+
       <div class="clear"></div>
+
       <span id="caption" class="label"></span>
     </div>
 
@@ -87,7 +115,6 @@
           integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
   </script>
   <script src="js/main.js"></script>
-  <script src="js/star-rating.min.js" type="text/javascript"></script>
 
   <!--suppress CommaExpressionJS, JSUnresolvedFunction, JSValidateTypes -->
   <script>
