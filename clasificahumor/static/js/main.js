@@ -1,4 +1,5 @@
 var $tweet;
+var $rating;
 var $caption;
 var $homeContent;
 var $aboutUsContent;
@@ -11,11 +12,33 @@ var page = 0;
 
 $(document).ready(function () {
     setupElements();
+
     getRandomTweets();
+
+    $rating.rating({
+        captionElement: '#caption',
+        clearCaption: '',
+        emptyStar: '<i class="glyphicon glyphicon-star" style="color: #e3e3e3"></i>',
+        showClear: false,
+        size: 'lg',
+        starCaptions: {1: "¡Malísimo!", 2: "Malo", 3: "Ni ni", 4: "Bueno", 5: "¡Buenísimo!"},
+        step: 1
+    });
+
+    $rating.on('rating.change', function (event, value) {
+        vote(value);
+        setTimeout(function () {
+            $caption.text("¡Gracias!");
+            setTimeout(function () {
+                $rating.rating('clear');
+            }, 800);
+        }, 700);
+    });
 });
 
 function setupElements() {
     $tweet = $('#tweet-text');
+    $rating = $('#rating');
     $caption = $('#caption');
     $homeContent = $('#home-content');
     $aboutUsContent = $('#about-us-content');

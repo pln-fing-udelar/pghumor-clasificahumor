@@ -49,6 +49,10 @@ h2 {
   word-wrap: break-word;
 }
 
+#caption {
+  font-size: 30px;
+}
+
 #buttons {
   margin-top: 60px;
 }
@@ -56,6 +60,7 @@ h2 {
 .button-group {
   display: inline-block;
   margin-left: 50px;
+  vertical-align: middle;
 }
 
 .btn-ranking {
