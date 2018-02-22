@@ -53,6 +53,10 @@ h2 {
   font-size: 30px;
 }
 
+#hidden-caption {
+  visibility: hidden;
+}
+
 #buttons {
   margin-top: 60px;
 }

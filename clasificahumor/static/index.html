@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link href="css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/main.css" rel="stylesheet" />
 </head>
 
@@ -42,47 +41,43 @@
   <div class="container">
     <div id="home-content" class="content">
       <h1>Clasificá humor y divertite</h1>
-      <h2>¡Clasificá el tweet como "No es humoristico" o decí qué tan gracioso te parece!</h2>
+      <h2>¡Clasificá el tweet como no humoristico o decí qué tan gracioso te parece!</h2>
 
       <div id="tweet">
         <p id="tweet-text"></p>
         <img id="tweet-logo" src="img/twitter.ico" />
       </div>
 
-      <div id="buttons">
-        <div class="button-group">
-          <p>El tweet pretende ser humorístico. ¿Qué tan gracioso es?</p>
+      <div style="display: inline-grid; text-align: left;">
+        <p style="display: inline-block; margin-bottom: 30px; margin-top: 20px;">¿El tweet pretende ser humorístico?</p>
 
-          <input id="rating" type="number" class="rating" step="1" data-size="lg" title="Rating" />
+        <ul style="list-style-type: none; display: inline-grid; padding: 0;">
 
-          <!--<button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('1');">-->
-            <!--<i class="material-icons md-48">sentiment_very_dissatisfied</i>-->
-          <!--</button>-->
-          <!--<button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('2');">-->
-            <!--<i class="material-icons md-48">sentiment_dissatisfied</i>-->
-          <!--</button>-->
-          <!--<button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('3');">-->
-            <!--<i class="material-icons md-48">sentiment_neutral</i>-->
-          <!--</button>-->
-          <!--<button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('4');">-->
-            <!--<i class="material-icons md-48">sentiment_satisfied</i>-->
-          <!--</button>-->
-          <!--<button type="button" class="btn btn-lg btn-link btn-ranking" onclick="vote('5');">-->
-            <!--<i class="material-icons md-48">sentiment_very_satisfied</i>-->
-          <!--</button>-->
+          <li style="display: inline-block;">
+            <button type="button" class="btn btn-lg btn-default" style="min-width: 100px;" onclick="vote('x');">No</button>
+          </li>
 
-          <div class="clear"></div>
+          <li style="display: inline-block;">
+            <div style="display: inline-flex;">
+              <!--<input type="checkbox" id="is-humorous" style="margin: auto;" onchange="$('#funniness').css('visibility', this.checked ? 'visible' : 'hidden');">-->
+              <!--<label for="is-humorous" style="margin: auto auto auto 5px;">Sí.</label>-->
+              <button type="button" class="btn btn-lg btn-default" style="height: fit-content; align-self: center; min-width: 100px;" onclick="$('#funniness').css('visibility', 'visible');">Sí</button>
 
-          <span id="caption" class="label"></span>
-        </div>
+              <div id="funniness" style="display: inline-flex; visibility: hidden;">
+                <p style="margin: auto auto auto 20px;">¿Qué tan gracioso?</p>
 
-        <div class="button-group">
-          <button type="button" class="btn btn-lg btn-default" onclick="vote('x');">No es humorístico</button>
-        </div>
+                <div style="margin-left: 10px; display: grid;">
+                  <input id="rating" type="number" class="rating" step="1" data-size="lg" title="Rating" />
+                  <span id="caption" class="label"></span>
+                </div>
+              </div>
+            </div>
+          </li>
 
-        <div class="button-group">
-          <button type="button" class="btn btn-lg btn-link" onclick="vote('n');">Saltear</button>
-        </div>
+          <li style="display: inline-block;">
+            <button type="button" class="btn btn-lg btn-link" style="min-width: 100px;" onclick="vote('n');">Saltear</button>
+          </li>
+        </ul>
       </div>
     </div>
 
