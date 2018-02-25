@@ -48,25 +48,25 @@
         <img id="tweet-logo" src="img/twitter.ico" />
       </div>
 
-      <div style="display: inline-grid; text-align: left;">
-        <p style="display: inline-block; margin-bottom: 30px; margin-top: 20px;">¿El tweet pretende ser humorístico?</p>
+      <div id="options-container">
+        <p id="options-question">¿El tweet pretende ser humorístico?</p>
 
-        <ul style="list-style-type: none; display: inline-grid; padding: 0;">
+        <ul id="options-answers">
 
-          <li style="display: inline-block;">
-            <button type="button" class="btn btn-lg btn-default" style="min-width: 100px;" onclick="vote('x');">No</button>
+          <li class="option-answer">
+            <button id="not-humor" type="button" class="btn btn-lg btn-default">No</button>
           </li>
 
-          <li style="display: inline-block;">
-            <div style="display: inline-flex;">
+          <li class="option-answer">
+            <div id="humorous-container">
               <!--<input type="checkbox" id="is-humorous" style="margin: auto;" onchange="$('#funniness').css('visibility', this.checked ? 'visible' : 'hidden');">-->
               <!--<label for="is-humorous" style="margin: auto auto auto 5px;">Sí.</label>-->
-              <button type="button" class="btn btn-lg btn-default" style="height: fit-content; align-self: center; min-width: 100px;" onclick="$('#funniness').css('visibility', 'visible');">Sí</button>
+              <!--button id="humorous" type="button" class="btn btn-lg btn-default" onclick="$('#funniness').css('visibility', 'visible');">Sí</button-->
 
-              <div id="funniness" style="display: inline-flex; visibility: hidden;">
-                <p style="margin: auto auto auto 20px;">¿Qué tan gracioso?</p>
+              <div id="funniness-container">
+                <p id="funniness-question">Sí. ¿Qué tan gracioso?</p>
 
-                <div style="margin-left: 10px; display: grid;">
+                <div id="funniness-options-container">
                   <input id="rating" type="number" class="rating" step="1" data-size="lg" title="Rating" />
                   <span id="caption" class="label"></span>
                 </div>
@@ -74,8 +74,8 @@
             </div>
           </li>
 
-          <li style="display: inline-block;">
-            <button type="button" class="btn btn-lg btn-link" style="min-width: 100px;" onclick="vote('n');">Saltear</button>
+          <li class="option-answer">
+            <button id="skip" type="button" class="btn btn-lg btn-link">Saltear</button>
           </li>
         </ul>
       </div>

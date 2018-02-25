@@ -49,6 +49,56 @@ h2 {
   word-wrap: break-word;
 }
 
+#options-container {
+  display: inline-grid;
+  text-align: left;
+}
+
+#options-question {
+  display: inline-block;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+#options-answers {
+  display: inline-grid;
+  /*list-style-type: none;*/
+  padding: 0;
+}
+
+.option-answer {
+  /*display: inline-block;*/
+}
+
+#not-humor {
+  min-width: 100px;
+}
+
+#humorous {
+  height: fit-content;
+  align-self: center;
+  min-width: 100px;
+}
+
+#humorous-container {
+  display: inline-flex;
+}
+
+#funniness-container {
+  display: inline-flex;
+  /*visibility: hidden;*/
+}
+
+#funniness-question {
+  margin: auto auto auto 20px;
+}
+
+#funniness-options-container {
+  display: grid;
+  margin-left: 25px;
+  margin-top: 50px;
+}
+
 #caption {
   font-size: 30px;
 }
@@ -57,27 +107,8 @@ h2 {
   visibility: hidden;
 }
 
-#buttons {
-  margin-top: 60px;
-}
-
-.button-group {
-  display: inline-block;
-  margin-left: 50px;
-  vertical-align: middle;
-}
-
-.btn-ranking {
-  color: #e3e3e3;
-  padding: 0;
-}
-
-.btn-ranking:hover, .btn-ranking:focus, .btn-ranking:active, .btn-ranking.active {
-    color: #fde16d;
-}
-
-.btn-ranking i {
-  font-size: 75px;
+#skip {
+  min-width: 100px;
 }
 
 #about-us-content {

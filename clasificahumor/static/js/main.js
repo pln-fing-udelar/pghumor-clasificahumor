@@ -1,7 +1,9 @@
+var $homeContent;
 var $tweet;
+var $notHumor;
 var $rating;
 var $caption;
-var $homeContent;
+var $skip;
 var $aboutUsContent;
 var $aboutUsLink;
 
@@ -14,6 +16,10 @@ $(document).ready(function () {
     setupElements();
 
     getRandomTweets();
+
+    $notHumor.click(function() {
+        vote('x');
+    });
 
     $rating.rating({
         captionElement: '#caption',
@@ -28,12 +34,18 @@ $(document).ready(function () {
     $rating.on('rating:change', function (event, value) {
         vote(value);
     });
+
+    $skip.click(function () {
+        vote('n');
+    })
 });
 
 function setupElements() {
     $tweet = $('#tweet-text');
+    $notHumor = $('#not-humor');
     $rating = $('#rating');
     $caption = $('#caption');
+    $skip = $('#skip');
     $homeContent = $('#home-content');
     $aboutUsContent = $('#about-us-content');
     $aboutUsLink = $('#about-us-link');
@@ -64,7 +76,9 @@ function vote(voteOption) {
 
     showTweet();
 
-    $('#funniness').css('visibility', 'hidden');
+    $rating.rating('reset');
+
+    //$('#funniness').css('visibility', 'hidden');
 }
 
 function showHome() {
