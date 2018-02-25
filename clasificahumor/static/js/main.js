@@ -7,6 +7,14 @@ var $skip;
 var $aboutUsContent;
 var $aboutUsLink;
 
+var voteCodeToText = {
+    1: "¡Horrible!",
+    2: "Malo",
+    3: "Regular",
+    4: "Bueno",
+    5: "¡Buenísimo!"
+};
+
 var tweets = [];
 var index = 0;
 
@@ -27,7 +35,7 @@ $(document).ready(function () {
         emptyStar: '<i class="glyphicon glyphicon-star" style="color: #e3e3e3"></i>',
         showClear: false,
         size: 'lg',
-        starCaptions: {1: "¡Horrible!", 2: "Malo", 3: "Regular", 4: "Bueno", 5: "¡Buenísimo!"},
+        starCaptions: voteCodeToText,
         step: 1
     });
 
@@ -78,7 +86,33 @@ function vote(voteOption) {
 
     $rating.rating('reset');
 
+    $.mdtoast(toastText(voteOption), {
+        duration: 3000
+        /*action: function() {
+            //undo();
+            toast.hide();
+        },
+        actionText: "Deshacer",
+        interaction: true*/
+    });
+
     //$('#funniness').css('visibility', 'hidden');
+}
+
+function toastText(voteOption) {
+    if (voteOption === 'x') {
+        return "Clasificado como no humorístico. ¡Gracias!";
+    } else if (voteOption === 'n') {
+        return "Tweet salteado. ¡Gracias!";
+    } else {
+        return "Clasificado como "
+            + removeNonWords(voteCodeToText[Number(voteOption)]).toLowerCase()
+            + ". ¡Gracias!";
+    }
+}
+
+function removeNonWords(text) {
+    return text.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g, "");
 }
 
 function showHome() {
