@@ -25,7 +25,7 @@ $(document).ready(function () {
 
     getRandomTweets();
 
-    $notHumor.click(function() {
+    $notHumor.click(function () {
         vote('x');
     });
 
@@ -45,6 +45,10 @@ $(document).ready(function () {
 
     $skip.click(function () {
         vote('n');
+    });
+
+    $(".btn").mouseup(function () {
+        $(this).blur();
     })
 });
 
