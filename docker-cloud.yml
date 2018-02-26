@@ -6,7 +6,7 @@ web:
     - DB_HOST=database
     - DB_USER=root
     - DB_NAME=pghumor
-    #,classifyhumor.com,www.classifyhumor.com as well:
+#    #,classifyhumor.com,www.classifyhumor.com as well:
 #    - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com # After it's bought.
 #    #,classifyhumor.com,www.classifyhumor.com as well:
 #    - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
@@ -15,7 +15,7 @@ web:
     - database
   restart: always
 database:
-  image: mysql:8
+  image: mysql:5
   environment:
     - MYSQL_ROOT_PASSWORD
   volumes:

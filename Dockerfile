@@ -7,4 +7,5 @@ COPY Pipfile* /app/
 RUN set -ex && pipenv install --deploy --system
 
 COPY uwsgi.ini .
+COPY prestart.sh .
 COPY clasificahumor clasificahumor

@@ -1,0 +1,61 @@
+version: '3'
+services:
+  web:
+    image: plnfingudelar/clasificahumor
+    environment:
+      - FLASK_SECRET_KEY
+      - MYSQL_ROOT_PASSWORD
+      - DB_HOST=database
+      - DB_USER=root
+      - DB_NAME=pghumor
+#      #,classifyhumor.com,www.classifyhumor.com as well:
+#      - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com # After it's bought.
+#      #,classifyhumor.com,www.classifyhumor.com as well:
+#      - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
+#      - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
+    ports:
+      - '80:80'
+    networks:
+      - net
+  database:
+    image: mysql:5
+    environment:
+      - MYSQL_ROOT_PASSWORD
+    volumes:
+      - data:/var/lib/mysql
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+#  lb:
+#    image: dockercloud/haproxy
+#    ports:
+#      - '80:80'
+#    networks:
+#      - net
+#    deploy:
+#      placement:
+#        constraints: [node.role == manager]
+#  nginx-proxy:
+#    image: jwilder/nginx-proxy
+#    labels:
+#      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+#    ports:
+#      - '80:80'
+#      - '443:443'
+#    volumes:
+#      - /etc/nginx/certs # :ro
+#      - /etc/nginx/vhost.d
+#      - /usr/share/nginx/html
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+#    restart: always
+#  letsencrypt:
+#    image: jrcs/letsencrypt-nginx-proxy-companion
+#    volumes_from:
+#      - nginx-proxy
+#    restart: always
+networks:
+  net:
+volumes:
+  data:
