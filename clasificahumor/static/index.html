@@ -14,7 +14,6 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link href="css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="css/mdtoast.min.css">
   <link href="css/main.css" rel="stylesheet" />
 </head>
@@ -42,7 +41,6 @@
   <div class="container">
     <div id="home-content" class="content">
       <h1>Clasificá tweets y divertite</h1>
-      <!--<h2>¡Clasificá el tweet como no humoristico o decí qué tan gracioso te parece!</h2>-->
 
       <div id="tweet">
         <p id="tweet-text"></p>
@@ -60,16 +58,15 @@
 
           <li class="option-answer">
             <div id="humorous-container">
-              <!--<input type="checkbox" id="is-humorous" style="margin: auto;" onchange="$('#funniness').css('visibility', this.checked ? 'visible' : 'hidden');">-->
-              <!--<label for="is-humorous" style="margin: auto auto auto 5px;">Sí.</label>-->
-              <!--button id="humorous" type="button" class="btn btn-lg btn-default" onclick="$('#funniness').css('visibility', 'visible');">Sí</button-->
-
+              <button id="humor" type="button" class="btn btn-lg btn-link" disabled="disabled">Sí</button>
               <div id="funniness-container">
-                <p id="funniness-question">Sí. ¿Qué tan gracioso?</p>
-
-                <div id="funniness-options-container">
-                  <input id="rating" type="number" class="rating" step="1" data-size="lg" title="Rating" />
-                  <span id="caption" class="label"></span>
+                <p id="funniness-question">¿Qué tan gracioso es?</p>
+                <div id="rating-faces">
+                  <button id="vote-1" type="button" class="btn btn-lg btn-link btn-ranking">😐</button>
+                  <button id="vote-2" type="button" class="btn btn-lg btn-link btn-ranking">🙂</button>
+                  <button id="vote-3" type="button" class="btn btn-lg btn-link btn-ranking">😃</button>
+                  <button id="vote-4" type="button" class="btn btn-lg btn-link btn-ranking">😁</button>
+                  <button id="vote-5" type="button" class="btn btn-lg btn-link btn-ranking">🤣</button>
                 </div>
               </div>
             </div>
@@ -114,8 +111,6 @@
           integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
   </script>
   <script src="js/main.js"></script>
-  <!-- Star rating should go after main, so styles are properly applied. -->
-  <script src="js/star-rating.min.js" type="text/javascript"></script>
   <script type="text/javascript" src="js/mdtoast.min.js"></script>
 
   <!--suppress CommaExpressionJS, JSUnresolvedFunction, JSValidateTypes -->

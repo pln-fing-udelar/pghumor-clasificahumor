@@ -1,8 +1,11 @@
 var $homeContent;
 var $tweet;
 var $notHumor;
-var $rating;
-var $caption;
+var $vote1;
+var $vote2;
+var $vote3;
+var $vote4;
+var $vote5;
 var $skip;
 var $aboutUsContent;
 var $aboutUsLink;
@@ -29,18 +32,24 @@ $(document).ready(function () {
         vote('x');
     });
 
-    $rating.rating({
-        captionElement: '#caption',
-        clearCaptionClass: 'hidden-caption',
-        emptyStar: '<i class="glyphicon glyphicon-star" style="color: #e3e3e3"></i>',
-        showClear: false,
-        size: 'lg',
-        starCaptions: voteCodeToText,
-        step: 1
+    $vote1.click(function () {
+        vote('1');
     });
 
-    $rating.on('rating:change', function (event, value) {
-        vote(value);
+    $vote2.click(function () {
+        vote('2');
+    });
+
+    $vote3.click(function () {
+        vote('3');
+    });
+
+    $vote4.click(function () {
+        vote('4');
+    });
+
+    $vote5.click(function () {
+        vote('5');
     });
 
     $skip.click(function () {
@@ -55,8 +64,11 @@ $(document).ready(function () {
 function setupElements() {
     $tweet = $('#tweet-text');
     $notHumor = $('#not-humor');
-    $rating = $('#rating');
-    $caption = $('#caption');
+    $vote1 = $('#vote-1');
+    $vote2 = $('#vote-2');
+    $vote3 = $('#vote-3');
+    $vote4 = $('#vote-4');
+    $vote5 = $('#vote-5');
     $skip = $('#skip');
     $homeContent = $('#home-content');
     $aboutUsContent = $('#about-us-content');
@@ -88,8 +100,6 @@ function vote(voteOption) {
 
     showTweet();
 
-    $rating.rating('reset');
-
     $.mdtoast(toastText(voteOption), {
         duration: 3000
         /*action: function() {
@@ -99,8 +109,6 @@ function vote(voteOption) {
         actionText: "Deshacer",
         interaction: true*/
     });
-
-    //$('#funniness').css('visibility', 'hidden');
 }
 
 function toastText(voteOption) {

@@ -41,7 +41,8 @@ h2 {
   color: #1c2022;
   cursor: text;
   font-family: Helvetica, Roboto, "Segoe UI", Calibri, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
+  font-style: italic;
   line-height: 1.4;
   margin: auto;
   white-space: pre-wrap;
@@ -62,16 +63,17 @@ h2 {
 
 #options-answers {
   display: inline-grid;
-  /*list-style-type: none;*/
+  list-style-type: none;
   padding: 0;
 }
 
-.option-answer {
-  /*display: inline-block;*/
+#not-humor, #humor, #skip {
+  min-width: 100px;
 }
 
-#not-humor {
-  min-width: 100px;
+#humor {
+  color: black;
+  cursor: default;
 }
 
 #humorous {
@@ -82,33 +84,39 @@ h2 {
 
 #humorous-container {
   display: inline-flex;
+  flex-wrap: wrap;
 }
 
 #funniness-container {
   display: inline-flex;
-  /*visibility: hidden;*/
+  flex-wrap: wrap;
+  margin: auto;
 }
 
 #funniness-question {
-  margin: auto auto auto 20px;
+  margin: auto;
 }
 
-#funniness-options-container {
-  display: grid;
-  margin-left: 25px;
-  margin-top: 50px;
+#rating-faces {
+  margin: auto;
+  padding-left: 10px;
 }
 
-#caption {
-  font-size: 30px;
+.btn-ranking {
+  color: #333333;
+  font-size: 40px;
+  padding: 0;
+  text-decoration: none;
 }
 
-#hidden-caption {
-  visibility: hidden;
+.btn-ranking:hover, .btn-ranking:focus, .btn-ranking:active, .btn-ranking.active {
+  color: #e3ca62;
+  text-decoration: none;
 }
 
 #skip {
-  min-width: 100px;
+  font-size: 14px;
+  text-decoration: none;
 }
 
 #about-us-content {
