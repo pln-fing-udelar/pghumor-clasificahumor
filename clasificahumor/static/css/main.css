@@ -70,8 +70,7 @@ h2 {
   padding: 0;
 }
 
-/* If I use the class instead of 'li', the "display: inline;" doesn't work. */
-li {
+.answer {
   display: inline;
   margin: 0 20px 20px 20px;
 }
