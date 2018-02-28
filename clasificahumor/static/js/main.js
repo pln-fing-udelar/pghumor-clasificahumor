@@ -28,9 +28,44 @@ var page = 0;
 
 $(document).ready(function () {
     setupElements();
-
     getRandomTweets();
+    setUiListeners();
+    moveToolboxIfOutside();
+});
 
+function setupElements() {
+    $tweet = $('#tweet-text');
+    $humor = $('#humor');
+    $showToolbox = $('#show-toolbox');
+    $toolbox = $('#toolbox');
+    $vote1 = $('#vote-1');
+    $vote2 = $('#vote-2');
+    $vote3 = $('#vote-3');
+    $vote4 = $('#vote-4');
+    $vote5 = $('#vote-5');
+    $notHumor = $('#not-humor');
+    $skip = $('#skip');
+    $homeContent = $('#home-content');
+    $aboutUsContent = $('#about-us-content');
+    $aboutUsLink = $('#about-us-link');
+}
+
+function showTweet() {
+    if (tweets.length === 0) {
+        console.error("No hay tweets para mostrar.");
+    } else {
+        $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
+    }
+}
+
+function getRandomTweets() {
+    $.getJSON('tweets', function (data) {
+        tweets = data;
+        showTweet();
+    });
+}
+
+function setUiListeners() {
     if (canHover()) {
         $humor.addClass('btn-not-clickable');
     } else {
@@ -67,42 +102,8 @@ $(document).ready(function () {
         vote('n');
     });
 
-    $("button").mouseup(function () {
+    $('button').on('mouseup touchend', function () {
         $(this).blur();
-    });
-
-    moveToolboxIfOutside();
-});
-
-function setupElements() {
-    $tweet = $('#tweet-text');
-    $humor = $('#humor');
-    $showToolbox = $('#show-toolbox');
-    $toolbox = $('#toolbox');
-    $vote1 = $('#vote-1');
-    $vote2 = $('#vote-2');
-    $vote3 = $('#vote-3');
-    $vote4 = $('#vote-4');
-    $vote5 = $('#vote-5');
-    $notHumor = $('#not-humor');
-    $skip = $('#skip');
-    $homeContent = $('#home-content');
-    $aboutUsContent = $('#about-us-content');
-    $aboutUsLink = $('#about-us-link');
-}
-
-function showTweet() {
-    if (tweets.length === 0) {
-        console.error("No hay tweets para mostrar.");
-    } else {
-        $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
-    }
-}
-
-function getRandomTweets() {
-    $.getJSON('tweets', function (data) {
-        tweets = data;
-        showTweet();
     });
 }
 
