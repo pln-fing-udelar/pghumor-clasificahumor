@@ -31,9 +31,13 @@ $(document).ready(function () {
 
     getRandomTweets();
 
-    $humor.click(function () {
-        $showToolbox.prop('checked', ! $showToolbox.prop('checked'));
-    });
+    if (canHover()) {
+        $humor.addClass('btn-not-clickable');
+    } else {
+        $humor.click(function () {
+            $showToolbox.prop('checked', !$showToolbox.prop('checked'));
+        });
+    }
 
     $notHumor.click(function () {
         vote('x');
@@ -163,6 +167,10 @@ function moveToolboxIfOutside() {
 
 function addPxToLeft(element, translation) {
     element.css('left', (parseInt(element.css('left')) + translation).toString() + "px");
+}
+
+function canHover() {
+    return window.matchMedia('(hover: hover)').matches;
 }
 
 function showAboutUs() {

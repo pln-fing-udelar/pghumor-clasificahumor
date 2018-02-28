@@ -75,19 +75,29 @@ h2 {
   margin: 0 20px 20px 20px;
 }
 
-#not-humor, #humor, #skip {
+.btn-answer {
   min-width: 100px;
 }
 
-#humor {
-  color: black;
+.btn-not-clickable,
+.btn-not-clickable:focus,
+.btn-not-clickable:hover,
+.btn-not-clickable:active,
+.btn-not-clickable.active.focus,
+.btn-not-clickable.active:focus,
+.btn-not-clickable.active:hover,
+.btn-not-clickable:active.focus,
+.btn-not-clickable:active:focus,
+.btn-not-clickable:active:hover,
+.open > .dropdown-toggle.btn-not-clickable.focus,
+.open > .dropdown-toggle.btn-not-clickable:focus,
+.open > .dropdown-toggle.btn-not-clickable:hover {
+  background-color: #fff;
+  border-color: #ccc;
+  box-shadow: none;
+  color: #333;
   cursor: default;
-}
-
-#humorous {
-  height: fit-content;
-  align-self: center;
-  min-width: 100px;
+  outline: none;
 }
 
 #humor-container {
