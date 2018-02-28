@@ -59,12 +59,20 @@ h2 {
   display: inline-block;
   margin-bottom: 30px;
   margin-top: 20px;
+  text-align: center;
 }
 
 #options-answers {
-  display: inline-grid;
+  display: flex;
   list-style-type: none;
   padding: 0;
+}
+
+/* If I use the class instead of 'li', it doesn't work. */
+li {
+  display: inline;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 #not-humor, #humor, #skip {
@@ -95,23 +103,6 @@ h2 {
 
 #funniness-question {
   margin: auto;
-}
-
-#rating-faces {
-  margin: auto;
-  padding-left: 10px;
-}
-
-.btn-ranking {
-  color: #333333;
-  font-size: 40px;
-  padding: 0;
-  text-decoration: none;
-}
-
-.btn-ranking:hover, .btn-ranking:focus, .btn-ranking:active, .btn-ranking.active {
-  color: #e3ca62;
-  text-decoration: none;
 }
 
 #skip {

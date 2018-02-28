@@ -1,5 +1,7 @@
 var $homeContent;
 var $tweet;
+var $humor;
+var $showToolbox;
 var $notHumor;
 var $vote1;
 var $vote2;
@@ -11,8 +13,8 @@ var $aboutUsContent;
 var $aboutUsLink;
 
 var voteCodeToText = {
-    1: "¡Horrible!",
-    2: "Malo",
+    1: "Nada gracioso",
+    2: "Poco gracioso",
     3: "Regular",
     4: "Bueno",
     5: "¡Buenísimo!"
@@ -27,6 +29,10 @@ $(document).ready(function () {
     setupElements();
 
     getRandomTweets();
+
+    $humor.click(function () {
+        $showToolbox.prop('checked', ! $showToolbox.prop('checked'));
+    });
 
     $notHumor.click(function () {
         vote('x');
@@ -56,13 +62,15 @@ $(document).ready(function () {
         vote('n');
     });
 
-    $(".btn").mouseup(function () {
+    $("button").mouseup(function () {
         $(this).blur();
     })
 });
 
 function setupElements() {
     $tweet = $('#tweet-text');
+    $humor = $('#humor');
+    $showToolbox = $('#show-toolbox');
     $notHumor = $('#not-humor');
     $vote1 = $('#vote-1');
     $vote2 = $('#vote-2');

@@ -1,0 +1,183 @@
+.vote,
+.field-reactions,
+.field-reactions:checked:focus ~ .text-desc {
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.humorous-container:hover .vote,
+.field-reactions:checked ~ .vote {
+  clip: auto;
+  overflow: visible;
+  opacity: 1;
+}
+
+.main-title {
+  background: #3a5795;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.vote {
+  border: none;
+  background: transparent url('../img/reactions.png');
+  display: block;
+  cursor: pointer;
+  height: 48px;
+  position: absolute;
+  width: 48px;
+  z-index: 11;
+  transform-origin: 50% 100%;
+  transform: scale(0.1);
+  transition: all 0.3s;
+  outline: none;
+  will-change: transform;
+  opacity: 0;
+}
+
+.humorous-container {
+  position: relative;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  visibility: hidden;
+}
+
+.field-reactions:focus ~ .label-reactions {
+  border-color: rgba(88, 144, 255, 0.3);
+}
+
+.field-reactions:checked:focus ~ .label-reactions {
+  border-color: transparent;
+}
+
+.label-reactions {
+  display: block;
+  margin: 0 auto;
+  color: transparent;
+  cursor: pointer;
+}
+
+.toolbox {
+  background: #fff;
+  height: 52px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.15);
+  width: 250px;
+  border-radius: 40px;
+  top: -50px;
+  left: -75px;
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.legend-reaction {
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: #fff;
+  display: inline-block;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  line-height: 20px;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 6px;
+  transition: opacity 50ms ease;
+  left: 50%;
+  position: absolute;
+  text-align: center;
+  top: -28px;
+  transform: translateX(-50%);
+}
+
+.reactions {
+  position: relative;
+  top: -47px;
+  left: -75px;
+}
+
+.humorous-container:hover .vote,
+.field-reactions:checked ~ .vote {
+  transform: scale(0.8) translateY(-65px);
+}
+
+.humorous-container:hover .vote:hover,
+.humorous-container:hover .vote:focus,
+.field-reactions:checked ~ .vote:hover,
+.field-reactions:checked ~ .vote:focus {
+  transition: all 0.2s ease-in;
+  transform: scale(1) translateY(-60px);
+}
+
+.humorous-container:hover .vote:hover .legend-reaction,
+.humorous-container:hover .vote:focus .legend-reaction,
+.field-reactions:checked ~ .vote:hover .legend-reaction,
+.field-reactions:checked ~ .vote:focus .legend-reaction {
+  opacity: 1;
+}
+
+.humorous-container:hover .toolbox,
+.field-reactions:checked ~ .toolbox {
+  opacity: 1;
+}
+
+.humorous-container:hover .toolbox,
+.field-reactions:checked ~ .toolbox,
+.field-reactions:checked ~ .overlay {
+  visibility: visible;
+}
+
+.humorous-container:hover #vote-2,
+.field-reactions:checked ~ #vote-2 {
+  transition-delay: 0.03s;
+}
+
+.humorous-container:hover #vote-3,
+.field-reactions:checked ~ #vote-3 {
+  transition-delay: 0.06s;
+}
+
+.humorous-container:hover #vote-4,
+.field-reactions:checked ~ #vote-4 {
+  transition-delay: 0.09s;
+}
+
+.humorous-container:hover #vote-5,
+.field-reactions:checked ~ #vote-5 {
+  transition-delay: 0.12s;
+}
+
+#vote-2 {
+  background-position: 0 -48px;
+  left: 50px;
+}
+
+#vote-3 {
+  background-position: 0 -96px;
+  left: 100px;
+}
+
+#vote-4 {
+  background-position: 0 -144px;
+  left: 150px;
+}
+
+#vote-5 {
+  background-position: 0 -192px;
+  left: 200px;
+}
