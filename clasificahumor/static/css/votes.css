@@ -1,5 +1,5 @@
 .vote,
-.field-reactions {
+#show-toolbox {
   clip: rect(1px, 1px, 1px, 1px);
   overflow: hidden;
   position: absolute;
@@ -7,25 +7,16 @@
   left: 0;
 }
 
-.humorous-container:hover .vote,
-.field-reactions:checked ~ .vote {
+#humor-container:hover .vote,
+#show-toolbox:checked ~ .vote {
   clip: auto;
   overflow: visible;
   opacity: 1;
 }
 
-.main-title {
-  background: #3a5795;
-  padding: 10px;
-  color: #fff;
-  text-align: center;
-  font-size: 16px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-}
-
 .vote {
   border: none;
-  background: transparent url('../img/reactions.png');
+  background: transparent url('../img/votes.png');
   display: block;
   cursor: pointer;
   height: 48px;
@@ -40,11 +31,11 @@
   opacity: 0;
 }
 
-.humorous-container {
+#humor-container {
   position: relative;
 }
 
-.overlay {
+#overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -54,22 +45,22 @@
   visibility: hidden;
 }
 
-.field-reactions:focus ~ .label-reactions {
+#show-toolbox:focus ~ #label-votes {
   border-color: rgba(88, 144, 255, 0.3);
 }
 
-.field-reactions:checked:focus ~ .label-reactions {
+#show-toolbox:checked:focus ~ #label-votes {
   border-color: transparent;
 }
 
-.label-reactions {
+#label-votes {
   display: block;
   margin: 0 auto;
   color: transparent;
   cursor: pointer;
 }
 
-.toolbox {
+#toolbox {
   background: #fff;
   height: 52px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.15);
@@ -83,7 +74,12 @@
   transition: opacity 0.15s;
 }
 
-.legend-reaction {
+#votes {
+  position: absolute;
+  left: -75px;
+}
+
+.legend-vote {
   background: rgba(0, 0, 0, 0.75);
   border-radius: 10px;
   box-sizing: border-box;
@@ -104,60 +100,54 @@
   transform: translateX(-50%);
 }
 
-.reactions {
-  position: relative;
-  top: -47px;
-  left: -75px;
-}
-
-.humorous-container:hover .vote,
-.field-reactions:checked ~ .vote {
+#humor-container:hover .vote,
+#show-toolbox:checked ~ .vote {
   transform: scale(0.8) translateY(-65px);
 }
 
-.humorous-container:hover .vote:hover,
-.humorous-container:hover .vote:focus,
-.field-reactions:checked ~ .vote:hover,
-.field-reactions:checked ~ .vote:focus {
+#humor-container:hover .vote:hover,
+#humor-container:hover .vote:focus,
+#show-toolbox:checked ~ .vote:hover,
+#show-toolbox:checked ~ .vote:focus {
   transition: all 0.2s ease-in;
   transform: scale(1) translateY(-60px);
 }
 
-.humorous-container:hover .vote:hover .legend-reaction,
-.humorous-container:hover .vote:focus .legend-reaction,
-.field-reactions:checked ~ .vote:hover .legend-reaction,
-.field-reactions:checked ~ .vote:focus .legend-reaction {
+#humor-container:hover .vote:hover .legend-vote,
+#humor-container:hover .vote:focus .legend-vote,
+#show-toolbox:checked ~ .vote:hover .legend-vote,
+#show-toolbox:checked ~ .vote:focus .legend-vote {
   opacity: 1;
 }
 
-.humorous-container:hover .toolbox,
-.field-reactions:checked ~ .toolbox {
+#humor-container:hover #toolbox,
+#show-toolbox:checked ~ #toolbox {
   opacity: 1;
 }
 
-.humorous-container:hover .toolbox,
-.field-reactions:checked ~ .toolbox,
-.field-reactions:checked ~ .overlay {
+#humor-container:hover #toolbox,
+#show-toolbox:checked ~ #toolbox,
+#show-toolbox:checked ~ #overlay {
   visibility: visible;
 }
 
-.humorous-container:hover #vote-2,
-.field-reactions:checked ~ #vote-2 {
+#humor-container:hover #vote-2,
+#show-toolbox:checked ~ #vote-2 {
   transition-delay: 0.03s;
 }
 
-.humorous-container:hover #vote-3,
-.field-reactions:checked ~ #vote-3 {
+#humor-container:hover #vote-3,
+#show-toolbox:checked ~ #vote-3 {
   transition-delay: 0.06s;
 }
 
-.humorous-container:hover #vote-4,
-.field-reactions:checked ~ #vote-4 {
+#humor-container:hover #vote-4,
+#show-toolbox:checked ~ #vote-4 {
   transition-delay: 0.09s;
 }
 
-.humorous-container:hover #vote-5,
-.field-reactions:checked ~ #vote-5 {
+#humor-container:hover #vote-5,
+#show-toolbox:checked ~ #vote-5 {
   transition-delay: 0.12s;
 }
 

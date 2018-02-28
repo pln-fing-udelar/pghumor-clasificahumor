@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/mdtoast.min.css">
-  <link href="css/reactions.css" rel="stylesheet" />
+  <link href="css/votes.css" rel="stylesheet" />
   <link href="css/main.css" rel="stylesheet" />
 </head>
 
@@ -48,35 +48,35 @@
         <img id="tweet-logo" src="img/twitter.ico" />
       </div>
 
-      <div id="options-container">
-        <p id="options-question">¿El tweet pretende ser humorístico?</p>
+      <div id="form-container">
+        <p id="question">¿El tweet pretende ser humorístico?</p>
 
-        <ul id="options-answers">
+        <ul id="answers">
 
-          <li class="option-answer">
-            <div class="humorous-container">
-              <input type="checkbox" id="show-toolbox" class="field-reactions">
-              <label for="show-toolbox" class="label-reactions">
-                <button id="humor" type="button" class="btn btn-lg btn-default">Sí</button>
+          <li id="humor-answer" class="answer">
+            <div id="humor-container">
+              <input id="show-toolbox" type="checkbox">
+              <label id="label-votes" for="show-toolbox">
+                <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
               </label>
-              <div class="toolbox"></div>
-              <label class="overlay" for="show-toolbox"></label>
-              <div class="reactions">
-                <button id="vote-1" class="vote"><span class="legend-reaction">Nada gracioso</span></button>
-                <button id="vote-2" class="vote"><span class="legend-reaction">Poco gracioso</span></button>
-                <button id="vote-3" class="vote"><span class="legend-reaction">Regular</span></button>
-                <button id="vote-4" class="vote"><span class="legend-reaction">Bueno</span></button>
-                <button id="vote-5" class="vote"><span class="legend-reaction">¡Buenísimo!</span></button>
+              <div id="toolbox"></div>
+              <label id="overlay" for="show-toolbox"></label>
+              <div id="votes">
+                <button id="vote-1" class="vote"><span class="legend-vote">Nada gracioso</span></button>
+                <button id="vote-2" class="vote"><span class="legend-vote">Poco gracioso</span></button>
+                <button id="vote-3" class="vote"><span class="legend-vote">Regular</span></button>
+                <button id="vote-4" class="vote"><span class="legend-vote">Bueno</span></button>
+                <button id="vote-5" class="vote"><span class="legend-vote">¡Buenísimo!</span></button>
               </div>
             </div>
           </li>
 
-          <li class="option-answer">
-            <button id="not-humor" type="button" class="btn btn-lg btn-default">No</button>
+          <li id="not-humor-answer" class="answer">
+            <button id="not-humor" type="button" class="btn btn-lg btn-default btn-answer">No</button>
           </li>
 
-          <li class="option-answer">
-            <button id="skip" type="button" class="btn btn-lg btn-link">Saltear</button>
+          <li class="answer">
+            <button id="skip" type="button" class="btn btn-lg btn-link btn-answer">Saltear</button>
           </li>
         </ul>
       </div>

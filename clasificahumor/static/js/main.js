@@ -74,7 +74,7 @@ function setupElements() {
     $tweet = $('#tweet-text');
     $humor = $('#humor');
     $showToolbox = $('#show-toolbox');
-    $toolbox = $('.toolbox');
+    $toolbox = $('#toolbox');
     $vote1 = $('#vote-1');
     $vote2 = $('#vote-2');
     $vote3 = $('#vote-3');

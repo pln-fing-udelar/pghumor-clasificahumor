@@ -50,19 +50,19 @@ h2 {
   word-wrap: break-word;
 }
 
-#options-container {
+#form-container {
   display: inline-grid;
   text-align: left;
 }
 
-#options-question {
+#question {
   display: inline-block;
   margin-bottom: 30px;
   margin-top: 20px;
   text-align: center;
 }
 
-#options-answers {
+#answers {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -91,7 +91,7 @@ li {
   min-width: 100px;
 }
 
-#humorous-container {
+#humor-container {
   display: inline-flex;
   flex-wrap: wrap;
 }
@@ -108,6 +108,9 @@ li {
 
 #skip {
   font-size: 14px;
+  margin: 16px 16px 16px 10px;
+  min-width: 0;
+  padding: 0;
   text-decoration: none;
 }
 
