@@ -2,12 +2,13 @@ var $homeContent;
 var $tweet;
 var $humor;
 var $showToolbox;
-var $notHumor;
+var $toolbox;
 var $vote1;
 var $vote2;
 var $vote3;
 var $vote4;
 var $vote5;
+var $notHumor;
 var $skip;
 var $aboutUsContent;
 var $aboutUsLink;
@@ -64,19 +65,22 @@ $(document).ready(function () {
 
     $("button").mouseup(function () {
         $(this).blur();
-    })
+    });
+
+    moveToolboxIfOutside();
 });
 
 function setupElements() {
     $tweet = $('#tweet-text');
     $humor = $('#humor');
     $showToolbox = $('#show-toolbox');
-    $notHumor = $('#not-humor');
+    $toolbox = $('.toolbox');
     $vote1 = $('#vote-1');
     $vote2 = $('#vote-2');
     $vote3 = $('#vote-3');
     $vote4 = $('#vote-4');
     $vote5 = $('#vote-5');
+    $notHumor = $('#not-humor');
     $skip = $('#skip');
     $homeContent = $('#home-content');
     $aboutUsContent = $('#about-us-content');
@@ -142,6 +146,23 @@ function showHome() {
         $aboutUsContent.css('display', 'none');
         $homeContent.css('display', 'block');
     }
+}
+
+function moveToolboxIfOutside() {
+    var x = $toolbox[0].getBoundingClientRect().x;
+    if (x < 0) {
+        var translation = - x + 10;
+        addPxToLeft($toolbox, translation);
+        addPxToLeft($vote1, translation);
+        addPxToLeft($vote2, translation);
+        addPxToLeft($vote3, translation);
+        addPxToLeft($vote4, translation);
+        addPxToLeft($vote5, translation);
+    }
+}
+
+function addPxToLeft(element, translation) {
+    element.css('left', (parseInt(element.css('left')) + translation).toString() + "px");
 }
 
 function showAboutUs() {

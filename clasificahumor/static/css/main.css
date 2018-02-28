@@ -64,15 +64,16 @@ h2 {
 
 #options-answers {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
   list-style-type: none;
   padding: 0;
 }
 
-/* If I use the class instead of 'li', it doesn't work. */
+/* If I use the class instead of 'li', the "display: inline;" doesn't work. */
 li {
   display: inline;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin: 0 20px 20px 20px;
 }
 
 #not-humor, #humor, #skip {

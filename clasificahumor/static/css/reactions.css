@@ -1,6 +1,5 @@
 .vote,
-.field-reactions,
-.field-reactions:checked:focus ~ .text-desc {
+.field-reactions {
   clip: rect(1px, 1px, 1px, 1px);
   overflow: hidden;
   position: absolute;
