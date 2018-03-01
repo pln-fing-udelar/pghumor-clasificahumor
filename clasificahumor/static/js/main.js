@@ -1,7 +1,7 @@
 var $homeContent;
 var $tweet;
+var $humorContainer;
 var $humor;
-var $showToolbox;
 var $toolbox;
 var $vote1;
 var $vote2;
@@ -35,8 +35,8 @@ $(document).ready(function () {
 
 function setupElements() {
     $tweet = $('#tweet-text');
+    $humorContainer = $('#humor-container');
     $humor = $('#humor');
-    $showToolbox = $('#show-toolbox');
     $toolbox = $('#toolbox');
     $vote1 = $('#vote-1');
     $vote2 = $('#vote-2');
@@ -69,9 +69,6 @@ function setUiListeners() {
     if (canHover()) {
         $humor.addClass('btn-not-clickable');
     } else {
-        $humor.click(function () {
-            $showToolbox.prop('checked', !$showToolbox.prop('checked'));
-        });
         $('.btn-default.btn-answer').addClass('btn-default-answer-mobile');
         $('.btn-link.btn-answer').addClass('btn-link-answer-mobile');
     }

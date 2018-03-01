@@ -1,5 +1,4 @@
-.vote,
-#show-toolbox {
+.vote {
   clip: rect(1px, 1px, 1px, 1px);
   overflow: hidden;
   position: absolute;
@@ -7,8 +6,7 @@
   left: 0;
 }
 
-#humor-container:hover .vote,
-#show-toolbox:checked ~ .vote {
+#humor-container:hover .vote {
   clip: auto;
   overflow: visible;
   opacity: 1;
@@ -33,31 +31,6 @@
 
 #humor-container {
   position: relative;
-}
-
-#overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9;
-  visibility: hidden;
-}
-
-#show-toolbox:focus ~ #label-votes {
-  border-color: rgba(88, 144, 255, 0.3);
-}
-
-#show-toolbox:checked:focus ~ #label-votes {
-  border-color: transparent;
-}
-
-#label-votes {
-  display: block;
-  margin: 0 auto;
-  color: transparent;
-  cursor: pointer;
 }
 
 #toolbox {
@@ -100,54 +73,39 @@
   transform: translateX(-50%);
 }
 
-#humor-container:hover .vote,
-#show-toolbox:checked ~ .vote {
+#humor-container:hover .vote {
   transform: scale(0.8) translateY(-65px);
 }
 
 #humor-container:hover .vote:hover,
-#humor-container:hover .vote:focus,
-#show-toolbox:checked ~ .vote:hover,
-#show-toolbox:checked ~ .vote:focus {
+#humor-container:hover .vote:focus {
   transition: all 0.2s ease-in;
   transform: scale(1) translateY(-60px);
 }
 
 #humor-container:hover .vote:hover .legend-vote,
-#humor-container:hover .vote:focus .legend-vote,
-#show-toolbox:checked ~ .vote:hover .legend-vote,
-#show-toolbox:checked ~ .vote:focus .legend-vote {
+#humor-container:hover .vote:focus .legend-vote {
   opacity: 1;
 }
 
-#humor-container:hover #toolbox,
-#show-toolbox:checked ~ #toolbox {
+#humor-container:hover #toolbox {
   opacity: 1;
-}
-
-#humor-container:hover #toolbox,
-#show-toolbox:checked ~ #toolbox,
-#show-toolbox:checked ~ #overlay {
   visibility: visible;
 }
 
-#humor-container:hover #vote-2,
-#show-toolbox:checked ~ #vote-2 {
+#humor-container:hover #vote-2 {
   transition-delay: 0.03s;
 }
 
-#humor-container:hover #vote-3,
-#show-toolbox:checked ~ #vote-3 {
+#humor-container:hover #vote-3 {
   transition-delay: 0.06s;
 }
 
-#humor-container:hover #vote-4,
-#show-toolbox:checked ~ #vote-4 {
+#humor-container:hover #vote-4 {
   transition-delay: 0.09s;
 }
 
-#humor-container:hover #vote-5,
-#show-toolbox:checked ~ #vote-5 {
+#humor-container:hover #vote-5 {
   transition-delay: 0.12s;
 }
 
