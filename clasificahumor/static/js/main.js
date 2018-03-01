@@ -72,6 +72,8 @@ function setUiListeners() {
         $humor.click(function () {
             $showToolbox.prop('checked', !$showToolbox.prop('checked'));
         });
+        $('.btn-default.btn-answer').addClass('btn-default-answer-mobile');
+        $('.btn-link.btn-answer').addClass('btn-link-answer-mobile');
     }
 
     $notHumor.click(function () {
@@ -102,7 +104,7 @@ function setUiListeners() {
         vote('n');
     });
 
-    $('button').on('mouseup touchend', function () {
+    $('button').mouseup(function () {
         $(this).blur();
     });
 }
@@ -156,7 +158,7 @@ function showHome() {
 function moveToolboxIfOutside() {
     var x = $toolbox[0].getBoundingClientRect().x;
     if (x < 0) {
-        var translation = - x + 10;
+        var translation = -x + 10;
         addPxToLeft($toolbox, translation);
         addPxToLeft($vote1, translation);
         addPxToLeft($vote2, translation);
