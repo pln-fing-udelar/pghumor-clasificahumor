@@ -78,7 +78,8 @@
 }
 
 #humor-container:hover .vote:hover,
-#humor-container:hover .vote:focus {
+#humor-container:hover .vote:focus,
+.vote-hover {
   transition: all 0.2s ease-in;
   transform: scale(1) translateY(-60px);
 }

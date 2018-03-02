@@ -119,14 +119,29 @@ function setUiListeners() {
     $('button').mouseup(function () {
         $(this).blur();
     });
+
+    $('*').bind('touchmove', function (event) {
+        $('.vote').removeClass('vote-hover');
+        if (mouseHitElement(event.touches[0], $vote1[0])) {
+            $('.vote').addClass('vote-hover');
+        }
+    });
+
+    $('*').bind('touchend', function () {
+        $('.vote').removeClass('vote-hover');
+    });
 }
 
 function effectiveClickOnVote(event) {
-    var rect = $humor[0].getBoundingClientRect();
-    return event.x < rect.left
-        || event.x > rect.right
-        || event.y > rect.bottom
-        || event.y < rect.top;
+    return !mouseHitElement(event, $humor[0]);
+}
+
+function mouseHitElement(event, element) {
+    var rect = element.getBoundingClientRect();
+    return event.clientX > rect.left
+        && event.clientX < rect.right
+        && event.clientY < rect.bottom
+        && event.clientY > rect.top;
 }
 
 function vote(voteOption) {
