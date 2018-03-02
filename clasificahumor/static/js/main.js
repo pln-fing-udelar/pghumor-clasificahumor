@@ -77,23 +77,38 @@ function setUiListeners() {
         vote('x');
     });
 
-    $vote1.click(function () {
+    $vote1.click(function (event) {
+        if (!effectiveClickOnVote(event)) {
+            return false;
+        }
         vote('1');
     });
 
     $vote2.click(function () {
+        if (!effectiveClickOnVote(event)) {
+            return false;
+        }
         vote('2');
     });
 
     $vote3.click(function () {
+        if (!effectiveClickOnVote(event)) {
+            return false;
+        }
         vote('3');
     });
 
     $vote4.click(function () {
+        if (!effectiveClickOnVote(event)) {
+            return false;
+        }
         vote('4');
     });
 
     $vote5.click(function () {
+        if (!effectiveClickOnVote(event)) {
+            return false;
+        }
         vote('5');
     });
 
@@ -104,6 +119,14 @@ function setUiListeners() {
     $('button').mouseup(function () {
         $(this).blur();
     });
+}
+
+function effectiveClickOnVote(event) {
+    var rect = $humor[0].getBoundingClientRect();
+    return event.x < rect.left
+        || event.x > rect.right
+        || event.y > rect.bottom
+        || event.y < rect.top;
 }
 
 function vote(voteOption) {
