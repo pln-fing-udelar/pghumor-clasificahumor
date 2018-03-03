@@ -1,7 +1,6 @@
 var $star;
 var $homeContent;
 var $tweet;
-var $humorContainer;
 var $humor;
 var $toolbox;
 var $voteClass;
@@ -10,10 +9,13 @@ var $vote2;
 var $vote3;
 var $vote4;
 var $vote5;
+var $legendVote;
 var $notHumor;
 var $skip;
 var $aboutUsContent;
 var $aboutUsLink;
+
+var legendsShownForFirstTime = false;
 
 var voteCodeToText = {
     1: "Nada gracioso",
@@ -39,7 +41,6 @@ function setupElements() {
     $star = $('*');
     $homeContent = $('#home-content');
     $tweet = $('#tweet-text');
-    $humorContainer = $('#humor-container');
     $humor = $('#humor');
     $toolbox = $('#toolbox');
     $voteClass = $('.vote');
@@ -48,6 +49,7 @@ function setupElements() {
     $vote3 = $('#vote-3');
     $vote4 = $('#vote-4');
     $vote5 = $('#vote-5');
+    $legendVote = $('.legend-vote');
     $notHumor = $('#not-humor');
     $skip = $('#skip');
     $aboutUsContent = $('#about-us-content');
@@ -70,6 +72,17 @@ function getRandomTweets() {
 }
 
 function setUiListeners() {
+    $humor.click(function () {
+        if (!legendsShownForFirstTime) {
+            $legendVote.fadeTo(400, 1, function () {
+                setTimeout(function () {
+                    $legendVote.fadeTo(400, 0);
+                }, 1000);
+            });
+            legendsShownForFirstTime = true;
+        }
+    });
+
     $notHumor.click(function () {
         vote('x');
     });
