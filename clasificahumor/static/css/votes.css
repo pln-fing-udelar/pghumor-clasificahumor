@@ -27,6 +27,7 @@
   outline: none;
   will-change: transform;
   opacity: 0;
+  visibility: hidden;
 }
 
 #humor-container {
@@ -75,13 +76,14 @@
 
 #humor-container:hover .vote {
   transform: scale(0.8) translateY(-65px);
+  visibility: visible;
 }
 
 #humor-container:hover .vote:hover,
-#humor-container:hover .vote:focus,
-.vote-hover {
-  transition: all 0.2s ease-in;
+#humor-container:hover .vote:focus {
+  transition: all 0.1s ease-in;
   transform: scale(1) translateY(-60px);
+  visibility: visible;
 }
 
 #humor-container:hover .vote:hover .legend-vote,

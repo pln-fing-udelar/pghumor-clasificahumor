@@ -79,36 +79,20 @@ h2 {
   min-width: 100px;
 }
 
-.btn-default-answer-mobile:hover {
-  background-color: #fff;
-  border-color: #ccc;
-  color: #333;
-}
-
-.btn-link-answer-mobile:active,
-.btn-link-answer-mobile:focus {
-  color: #23527c;
-}
-
-.btn-link-answer-mobile:hover {
-  color: #337ab7;
-}
-
-.btn-not-clickable,
-.btn-not-clickable:focus,
-.btn-not-clickable:hover,
-.btn-not-clickable:active,
-.btn-not-clickable.active.focus,
-.btn-not-clickable.active:focus,
-.btn-not-clickable.active:hover,
-.btn-not-clickable:active.focus,
-.btn-not-clickable:active:focus,
-.btn-not-clickable:active:hover,
-.open > .dropdown-toggle.btn-not-clickable.focus,
-.open > .dropdown-toggle.btn-not-clickable:focus,
-.open > .dropdown-toggle.btn-not-clickable:hover {
-  background-color: #fff;
-  border-color: #ccc;
+#humor:focus,
+#humor:hover,
+#humor:active,
+#humor.active.focus,
+#humor.active:focus,
+#humor.active:hover,
+#humor:active.focus,
+#humor:active:focus,
+#humor:active:hover,
+.open > .dropdown-toggle#humor.focus,
+.open > .dropdown-toggle#humor:focus,
+.open > .dropdown-toggle#humor:hover {
+  background-color: #fafafa;
+  border-color: #ddd;
   box-shadow: none;
   color: #333;
   cursor: default;

@@ -1,8 +1,10 @@
+var $star;
 var $homeContent;
 var $tweet;
 var $humorContainer;
 var $humor;
 var $toolbox;
+var $voteClass;
 var $vote1;
 var $vote2;
 var $vote3;
@@ -34,10 +36,13 @@ $(document).ready(function () {
 });
 
 function setupElements() {
+    $star = $('*');
+    $homeContent = $('#home-content');
     $tweet = $('#tweet-text');
     $humorContainer = $('#humor-container');
     $humor = $('#humor');
     $toolbox = $('#toolbox');
+    $voteClass = $('.vote');
     $vote1 = $('#vote-1');
     $vote2 = $('#vote-2');
     $vote3 = $('#vote-3');
@@ -45,7 +50,6 @@ function setupElements() {
     $vote5 = $('#vote-5');
     $notHumor = $('#not-humor');
     $skip = $('#skip');
-    $homeContent = $('#home-content');
     $aboutUsContent = $('#about-us-content');
     $aboutUsLink = $('#about-us-link');
 }
@@ -66,49 +70,27 @@ function getRandomTweets() {
 }
 
 function setUiListeners() {
-    if (canHover()) {
-        $humor.addClass('btn-not-clickable');
-    } else {
-        $('.btn-default.btn-answer').addClass('btn-default-answer-mobile');
-        $('.btn-link.btn-answer').addClass('btn-link-answer-mobile');
-    }
-
     $notHumor.click(function () {
         vote('x');
     });
 
-    $vote1.click(function (event) {
-        if (!effectiveClickOnVote(event)) {
-            return false;
-        }
+    $vote1.click(function () {
         vote('1');
     });
 
     $vote2.click(function () {
-        if (!effectiveClickOnVote(event)) {
-            return false;
-        }
         vote('2');
     });
 
     $vote3.click(function () {
-        if (!effectiveClickOnVote(event)) {
-            return false;
-        }
         vote('3');
     });
 
     $vote4.click(function () {
-        if (!effectiveClickOnVote(event)) {
-            return false;
-        }
         vote('4');
     });
 
     $vote5.click(function () {
-        if (!effectiveClickOnVote(event)) {
-            return false;
-        }
         vote('5');
     });
 
@@ -119,29 +101,6 @@ function setUiListeners() {
     $('button').mouseup(function () {
         $(this).blur();
     });
-
-    $('*').bind('touchmove', function (event) {
-        $('.vote').removeClass('vote-hover');
-        if (mouseHitElement(event.touches[0], $vote1[0])) {
-            $('.vote').addClass('vote-hover');
-        }
-    });
-
-    $('*').bind('touchend', function () {
-        $('.vote').removeClass('vote-hover');
-    });
-}
-
-function effectiveClickOnVote(event) {
-    return !mouseHitElement(event, $humor[0]);
-}
-
-function mouseHitElement(event, element) {
-    var rect = element.getBoundingClientRect();
-    return event.clientX > rect.left
-        && event.clientX < rect.right
-        && event.clientY < rect.bottom
-        && event.clientY > rect.top;
 }
 
 function vote(voteOption) {
@@ -205,10 +164,6 @@ function moveToolboxIfOutside() {
 
 function addPxToLeft(element, translation) {
     element.css('left', (parseInt(element.css('left')) + translation).toString() + "px");
-}
-
-function canHover() {
-    return window.matchMedia('(hover: hover)').matches;
 }
 
 function showAboutUs() {
