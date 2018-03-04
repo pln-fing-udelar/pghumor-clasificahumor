@@ -18,14 +18,13 @@ def _connect():
 _connect()
 
 
-def _cursor():
+def _reconnect_if_necessary():
     # In case of a _mysql_exceptions.OperationalError: (2006, 'MySQL server has gone away')
     # See https://stackoverflow.com/a/982873/1165181
     try:
-        return db.cursor()
+        db.ping()
     except MySQLdb.OperationalError:
         _connect()
-        return db.cursor()
 
 
 # TODO: test with not voted tweets to see what happens. Create tests?
@@ -39,7 +38,8 @@ def random_least_voted_unseen_tweets(session_id: str, batch_size: int) -> List[D
     :param batch_size: Size of the list to return
     :return: Random list of the least voted unseen tweets with size batch_size
     """
-    with _cursor() as cursor:
+    _reconnect_if_necessary()
+    with db.cursor() as cursor:
         cursor.execute('SELECT t.tweet_id, text'
                        ' FROM tweets t'
                        '   LEFT JOIN (SELECT tweet_id, session_id FROM votes WHERE session_id != %(session_id)s) a'
@@ -60,7 +60,8 @@ def random_tweets(batch_size: int) -> List[Dict[str, Any]]:
     :param batch_size: Size of the list to return
     :return: Random list of tweets with size batch_size
     """
-    with _cursor() as cursor:
+    _reconnect_if_necessary()
+    with db.cursor() as cursor:
         cursor.execute('SELECT t.tweet_id, text'
                        ' FROM tweets t'
                        ' ORDER BY RAND()'
@@ -80,7 +81,8 @@ def add_vote(session_id: str, tweet_id: str, vote: str) -> None:
     :param vote: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
     """
     if vote in ['1', '2', '3', '4', '5', 'x', 'n']:
-        with _cursor() as cursor:
+        _reconnect_if_necessary()
+        with db.cursor() as cursor:
             cursor.execute('INSERT INTO votes (tweet_id, session_id, vote)'
                            ' VALUES (%(tweet_id)s, %(session_id)s, %(vote)s)',
                            {'tweet_id': tweet_id, 'session_id': session_id, 'vote': vote})
