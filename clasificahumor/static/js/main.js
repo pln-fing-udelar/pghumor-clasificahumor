@@ -74,9 +74,9 @@ function getRandomTweets() {
 function setUiListeners() {
     $humor.click(function () {
         if (!legendsShownForFirstTime) {
-            $legendVote.fadeTo(400, 1, function () {
+            $legendVote.stop().fadeTo('slow', 1, function () {
                 setTimeout(function () {
-                    $legendVote.fadeTo(400, 0, function () {
+                    $legendVote.stop().fadeTo('slow', 0, function () {
                         $legendVote.css('opacity', '');
                     });
                 }, 1000);
