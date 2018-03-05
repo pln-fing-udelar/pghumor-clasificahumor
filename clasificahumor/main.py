@@ -31,6 +31,12 @@ def make_session_permanent() -> None:
     app.permanent_session_lifetime = timedelta(weeks=1000)
 
 
+@app.after_request
+def add_header(response):
+    response.cache_control.max_age = 300
+    return response
+
+
 @app.route('/tweets')
 def tweets_route() -> Response:
     session_id = request.cookies.get('session')
