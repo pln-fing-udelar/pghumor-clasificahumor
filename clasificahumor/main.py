@@ -3,6 +3,7 @@ import os
 from typing import Any, Dict, List
 
 from flask import Flask, jsonify, request, Response, send_from_directory, session
+from raven.contrib.flask import Sentry
 
 from clasificahumor import database
 
@@ -10,6 +11,8 @@ app = Flask(__name__)
 
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 app.config['SESSION_TYPE'] = 'filesystem'
+
+sentry = Sentry(app)
 
 BATCH_SIZE = 3
 
