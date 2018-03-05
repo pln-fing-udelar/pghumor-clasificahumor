@@ -23,6 +23,7 @@ CREATE TABLE votes (
   tweet_id BIGINT UNSIGNED NOT NULL,
   session_id CHAR(100) NOT NULL,
   vote CHAR(1) NOT NULL,
+  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (tweet_id, session_id),
   INDEX (tweet_id),
   INDEX (session_id),
