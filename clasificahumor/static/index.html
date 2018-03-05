@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="TODO">
-  <meta name="author" content="TODO">
+  <meta name="description" content="Web destinada a armar una base de datos de opiniones sobre humor para poder hacer investigación sobre Humor Computacional.">
+  <meta name="author" content="Santiago Castro, Matías Cubero y el Grupo PLN, UdelaR">
   <link rel="apple-touch-icon" href="img/favicon.png">
 
   <title>Clasificá tweets y divertite</title>
@@ -20,25 +20,6 @@
 </head>
 
 <body>
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">pgHumor</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a id="home-link" class="navbar-brand" href="#" onclick="showHome()">Home</a>
-      </div>
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li id="about-us-link"><a href="#" onclick="showAboutUs();">¿Quiénes somos?</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
   <div class="container">
     <div id="home-content" class="content">
       <h1>Clasificá tweets y divertite</h1>
@@ -78,26 +59,69 @@
       </div>
     </div>
 
-    <div id="about-us-content" class="content">
-      <p class="lead">
-        El fin de esta página es armar una base de datos de opiniones sobre chistes para en el futuro poder
-        hacer investigación sobre <a href="https://es.wikipedia.org/wiki/Humor_computacional">Humor Computacional</a>.
-      </p>
-      <p class="lead">
-        Por ejemplo, puede usarse para predecir si un tweet es humorístico o no, qué tan gracioso le puede
-        resultar a la gente o inclusive para generar humor :O
-      </p>
-      <p class="lead">
-        La página fue originalmente creada en 2014 por dos estudiantes del proyecto de grado
-        <a href="https://github.com/pln-fing-udelar/pghumor">pgHumor</a>
-        (<a href="https://github.com/bryant1410">Santiago Castro</a> y
-        <a href="https://www.fing.edu.uy/~mcubero/">Matías Cubero</a>) de Ingeniería en Computación
-        – Universidad de la República, Uruguay, apoyados por la <a href="http://www.anii.org.uy">ANII</a>, y en 2018 se
-        volvió a lanzar para conseguir más votos :D
-      </p>
-      <p class="lead">
-        Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad. ¡¡¡MUCHAS GRACIAS!!!
-      </p>
+    <button id="help" class="btn btn-link" type="button" data-toggle="modal" data-target="#about">
+      Ayuda
+    </button>
+  </div>
+
+  <div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">Ayuda</h4>
+        </div>
+        <div class="modal-body">
+          <h4>Instrucciones</h4>
+
+          <p>
+            Dado el tweet que se muestra en pantalla, ¿lo considerás humorístico? En caso positivo, apretá el
+            botón "Sí", y elegí qué tan gracioso le parece del 1 al 5 (representado por los 5 emojis).
+            En caso que no, apretá en "No". Si no estás seguro, poné "Saltear". Luego de esto, se mostrará otro tweet y
+            se repite el procedimiento de anotación.
+          </p>
+
+          <hr>
+
+          <h4>Sobre el proyecto</h4>
+
+          <p>
+            El fin de esta página es armar una base de datos de opiniones sobre humor durante marzo de 2018,
+            y así en el futuro poder hacer investigación sobre
+            <a href="https://es.wikipedia.org/wiki/Humor_computacional">Humor Computacional</a>.
+          </p>
+          <p>
+            Por ejemplo, va a usarse como conjunto de datos para
+            <a href="https://www.fing.edu.uy/inco/grupos/pln/haha/" target="_blank">la competencia HAHA 2018</a>,
+            organizada por el
+            <a href="https://www.fing.edu.uy/inco/grupos/pln" target="_blank">Grupo de Procesamiento de Lenguaje Natural
+              (PLN)</a> de la
+            <a href="https://www.fing.edu.uy" target="_blank">Facultad de Ingeniería</a> de la
+            <a href="http://www.universidad.edu.uy/" target="_blank">Universidad de la República</a>, Uruguay.
+            La competencia consiste básicamente en predecir si un tweet es humorístico o no y qué tan gracioso le puede
+            resultar a la gente 😲 Si te interesa, podés participar.
+          </p>
+          <p>
+            La página fue originalmente creada en 2014 por dos estudiantes de Ingeniería en Computación,
+            (<a href="https://github.com/bryant1410" target="_blank">Santiago Castro</a> y
+            <a href="https://www.fing.edu.uy/~mcubero/" target="_blank">Matías Cubero</a>)
+            en el contexto del proyecto de grado
+            <a href="https://github.com/pln-fing-udelar/pghumor" target="_blank">pgHumor</a>
+            – Universidad de la República, Uruguay, apoyados por la
+            <a href="http://www.anii.org.uy" target="_blank">ANII</a>, y en 2018 se vuelve a lanzar para tener más
+            anotaciones y de mejor calidad 😊
+          </p>
+          <p>El código de este proyecto
+            <a href="https://github.com/pln-fing-udelar/pghumor-clasificahumor" target="_blank">se encuentra disponible
+              en GitHub</a>.
+          </p>
+          <p>
+            Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad. ¡¡¡MUCHAS GRACIAS!!!
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -106,8 +130,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
           integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
   </script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+          integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
   </script>
   <script src="js/main.js"></script>
   <script type="text/javascript" src="js/mdtoast.min.js"></script>

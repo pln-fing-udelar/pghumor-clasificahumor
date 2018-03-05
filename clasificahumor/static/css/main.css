@@ -1,14 +1,6 @@
-body {
-  margin-top: 20px;
-}
-
-.content {
-  padding: 40px 15px;
-  text-align: center;
-}
-
 #home-content {
   clear: both;
+  text-align: center;
 }
 
 h1 {
@@ -18,6 +10,14 @@ h1 {
 h2 {
   font-size: 20px;
   color: #777777;
+}
+
+#help {
+  bottom: 0;
+  color: #333333;
+  left: 50%;
+  position: fixed;
+  transform: translateX(-50%);
 }
 
 #tweet {
