@@ -39,7 +39,8 @@ def make_session_permanent() -> None:
 
 @app.after_request
 def add_header(response):
-    response.cache_control.max_age = 300
+    response.cache_control.max_age = 0
+    response.cache_control.no_cache = True
     return response
 
 
