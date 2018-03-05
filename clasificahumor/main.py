@@ -1,4 +1,5 @@
 from datetime import timedelta
+import logging
 import os
 from typing import Any, Dict, List
 
@@ -12,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 app.config['SESSION_TYPE'] = 'filesystem'
 
-sentry = Sentry(app)
+Sentry(app, logging=True, level=logging.ERROR)
 
 BATCH_SIZE = 3
 
@@ -74,4 +75,5 @@ def vote_and_get_new_tweet_route() -> Response:
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def static_files_route(path) -> Response:
+    None.get()
     return send_from_directory('static', path)
