@@ -5,9 +5,22 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Web destinada a armar una base de datos de opiniones sobre humor para poder hacer investigación sobre Humor Computacional.">
+  <meta name="description" content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional.">
   <meta name="author" content="Santiago Castro, Matías Cubero y el Grupo PLN, UdelaR">
   <link rel="apple-touch-icon" href="img/favicon.png">
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Clasificá tweets y divertite" />
+  <meta property="og:image" content="http://clasificahumor.com/img/og.png" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:title" content="Clasificá tweets y divertite" />
+  <meta property="og:description" content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional." />
+  <meta property="og:url" content="http://clasificahumor.com/" />
+  <meta property="fb:app_id" content="1223095247821615" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PLN_UdelaR" />
+  <meta name="twitter:creator" content="@PLN_UdelaR" />
 
   <title>Clasificá tweets y divertite</title>
 
@@ -20,6 +33,28 @@
 </head>
 
 <body>
+  <script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1223095247821615',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.10'
+    });
+
+    FB.AppEvents.logPageView();
+
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
   <div class="container">
     <div id="home-content" class="content">
       <h1>Clasificá tweets y divertite</h1>
