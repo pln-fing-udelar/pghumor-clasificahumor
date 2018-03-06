@@ -27,7 +27,6 @@ def _reconnect_if_necessary():
         _connect()
 
 
-# TODO: test with not voted tweets to see what happens. Create tests?
 def random_least_voted_unseen_tweets(session_id: str, batch_size: int) -> List[Dict[str, Any]]:
     """
     Returns a random list of the least voted unseen tweets (by the session) with size batch_size.
@@ -48,7 +47,7 @@ def random_least_voted_unseen_tweets(session_id: str, batch_size: int) -> List[D
                        '     ON t.tweet_id = b.tweet_id'
                        ' WHERE a.tweet_id IS NULL'
                        ' GROUP BY t.tweet_id'
-                       ' ORDER BY COUNT(*), RAND()'
+                       ' ORDER BY weight DESC, COUNT(*), RAND()'
                        ' LIMIT %(limit)s',
                        {'session_id': session_id, 'limit': batch_size})
         return [{'id': id_, 'text': text} for id_, text in cursor.fetchall()]

@@ -15,6 +15,7 @@ CREATE TABLE tweets (
   account_id BIGINT UNSIGNED NOT NULL,
   origin ENUM('hose', 'humorous account') NOT NULL,
   lang ENUM('es', 'en') NOT NULL,
+  weight TINYINT UNSIGNED DEFAULT 1,
   PRIMARY KEY (tweet_id),
   FOREIGN KEY (account_id) REFERENCES accounts (account_id)
 ) ENGINE InnoDB;
