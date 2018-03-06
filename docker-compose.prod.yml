@@ -1,9 +1,10 @@
 version: '3'
 services:
   web:
-    - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
-    - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
-    - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
+    environment:
+      - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
+      - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
+      - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
     restart: always
   database:
     restart: always
