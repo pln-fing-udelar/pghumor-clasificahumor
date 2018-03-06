@@ -42,10 +42,13 @@ def random_least_voted_unseen_tweets(session_id: str, batch_size: int) -> List[D
     with db.cursor() as cursor:
         cursor.execute('SELECT t.tweet_id, text'
                        ' FROM tweets t'
-                       '   LEFT JOIN (SELECT tweet_id, session_id FROM votes WHERE session_id != %(session_id)s) a'
+                       '   LEFT JOIN (SELECT tweet_id FROM votes WHERE session_id = %(session_id)s) a'
                        '     ON t.tweet_id = a.tweet_id'
+                       '   LEFT JOIN votes b'
+                       '     ON t.tweet_id = b.tweet_id'
+                       ' WHERE a.tweet_id IS NULL'
                        ' GROUP BY t.tweet_id'
-                       ' ORDER BY COUNT(a.session_id), RAND()'
+                       ' ORDER BY COUNT(*), RAND()'
                        ' LIMIT %(limit)s',
                        {'session_id': session_id, 'limit': batch_size})
         return [{'id': id_, 'text': text} for id_, text in cursor.fetchall()]
@@ -74,7 +77,8 @@ def add_vote(session_id: str, tweet_id: str, vote: str) -> None:
     """
     Adds a vote for a tweet by a determined session.
 
-    If the vote is not one of ['1', '2', '3', '4', '5', 'x', 'n'], it will do nothing.
+    If the vote is not one of ['1', '2', '3', '4', '5', 'x', 'n'], it will do nothing. If the session had already voted,
+    the new vote will be ignored.
 
     :param session_id: Session ID
     :param tweet_id: Tweet ID
