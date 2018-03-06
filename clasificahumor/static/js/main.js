@@ -85,11 +85,7 @@ function setupPlaceload() {
         .config({spaceBetween: '7px'})
         .line(function (element) {
             return element.width(40).height(15);
-        }).fold(function (err) {
-            console.log('error: ', err)
-        }, function (allElements) {
-            console.log('allElements: ', allElements);
-        });
+        }).fold(function (err) {}, function (allElements) {});
 }
 
 function getRandomTweets() {

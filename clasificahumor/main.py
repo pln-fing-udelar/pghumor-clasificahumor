@@ -1,9 +1,11 @@
 from datetime import timedelta
 import logging
 import os
+import random
+import string
 from typing import Any, Dict, List
 
-from flask import Flask, jsonify, request, Response, send_from_directory, session
+from flask import Flask, jsonify, request, Response, send_from_directory
 from raven.contrib.flask import Sentry
 
 from clasificahumor import database
@@ -31,22 +33,31 @@ def stringify_tweet_ids(tweets: List[Dict[str, Any]]) -> None:
         tweet['id'] = str(tweet['id'])
 
 
-@app.before_request
-def make_session_permanent() -> None:
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(weeks=1000)
+def generate_id():
+    # https://stackoverflow.com/a/2257449/1165181
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=100))
+
+
+def get_session_id():
+    id_ = request.cookies.get('id')
+    if not id_:  # Prefer checking here and not using 'default', as it would do the function call to "generate_id".
+        id_ = generate_id()
+    return id_
 
 
 @app.after_request
 def add_header(response):
     response.cache_control.max_age = 0
     response.cache_control.no_cache = True
+
+    response.set_cookie('id', get_session_id(), max_age=int(timedelta(weeks=1000).total_seconds()))
+
     return response
 
 
 @app.route('/tweets')
 def tweets_route() -> Response:
-    session_id = request.cookies.get('session')
+    session_id = get_session_id()
 
     tweets = database.random_least_voted_unseen_tweets(session_id, BATCH_SIZE)
 
@@ -60,7 +71,7 @@ def tweets_route() -> Response:
 
 @app.route('/vote', methods=['POST'])
 def vote_and_get_new_tweet_route() -> Response:
-    session_id = request.cookies.get('session')
+    session_id = get_session_id()
 
     if 'tweet_id' in request.form and 'vote' in request.form:
         database.add_vote(session_id, request.form['tweet_id'], request.form['vote'])

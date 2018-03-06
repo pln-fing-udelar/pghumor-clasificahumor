@@ -84,5 +84,6 @@ def add_vote(session_id: str, tweet_id: str, vote: str) -> None:
         _reconnect_if_necessary()
         with db.cursor() as cursor:
             cursor.execute('INSERT INTO votes (tweet_id, session_id, vote)'
-                           ' VALUES (%(tweet_id)s, %(session_id)s, %(vote)s)',
+                           ' VALUES (%(tweet_id)s, %(session_id)s, %(vote)s)'
+                           ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id',
                            {'tweet_id': tweet_id, 'session_id': session_id, 'vote': vote})
