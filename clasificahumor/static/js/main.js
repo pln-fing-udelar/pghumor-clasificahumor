@@ -28,14 +28,20 @@ var voteCodeToText = {
 var tweets = [];
 var index = 0;
 
-var page = 0;
-
 $(document).ready(function () {
+    setupSentry();
     setupElements();
     getRandomTweets();
     setUiListeners();
     moveToolboxIfOutside();
 });
+
+function setupSentry() {
+    // The following key is public.
+    Raven.config('https://3afb3f9917f44b2a87e6fbb070a8977b@sentry.io/298102', {
+        ignoreUrls: ['localhost', '127.0.0.1']
+    }).install();
+}
 
 function setupElements() {
     $star = $('*');
@@ -155,15 +161,6 @@ function removeNonWords(text) {
     return text.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g, "");
 }
 
-function showHome() {
-    if (page !== 0) {
-        page = 0;
-        $aboutUsLink.removeClass();
-        $aboutUsContent.css('display', 'none');
-        $homeContent.css('display', 'block');
-    }
-}
-
 function moveToolboxIfOutside() {
     var x = $toolbox[0].getBoundingClientRect().x;
     if (x < 0) {
@@ -179,13 +176,4 @@ function moveToolboxIfOutside() {
 
 function addPxToLeft(element, translation) {
     element.css('left', (parseInt(element.css('left')) + translation).toString() + "px");
-}
-
-function showAboutUs() {
-    if (page !== 1) {
-        page = 1;
-        $aboutUsLink.addClass('active');
-        $aboutUsContent.css('display', 'initial');
-        $homeContent.css('display', 'none');
-    }
 }
