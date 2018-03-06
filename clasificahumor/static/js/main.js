@@ -85,7 +85,9 @@ function setupPlaceload() {
         .config({spaceBetween: '7px'})
         .line(function (element) {
             return element.width(40).height(15);
-        }).fold(function (err) {}, function (allElements) {});
+        }).fold(function (err) {
+    }, function (allElements) {
+    });
 }
 
 function getRandomTweets() {
@@ -152,15 +154,7 @@ function vote(voteOption) {
 
     showTweet();
 
-    $.mdtoast(toastText(voteOption), {
-        duration: 3000
-        /*action: function() {
-            //undo();
-            toast.hide();
-        },
-        actionText: "Deshacer",
-        interaction: true*/
-    });
+    $.mdtoast(toastText(voteOption), {duration: 3000});
 }
 
 function toastText(voteOption) {
