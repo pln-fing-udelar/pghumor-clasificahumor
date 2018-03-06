@@ -31,6 +31,7 @@ var index = 0;
 $(document).ready(function () {
     setupSentry();
     setupElements();
+    setupPlaceload();
     getRandomTweets();
     setUiListeners();
     moveToolboxIfOutside();
@@ -68,6 +69,27 @@ function showTweet() {
     } else {
         $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
     }
+}
+
+function setupPlaceload() {
+    Placeload
+        .$('#tweet-text')
+        .config({speed: '1s'})
+        .line(function (element) {
+            return element.width(100).height(15);
+        })
+        .config({spaceBetween: '7px'})
+        .line(function (element) {
+            return element.width(100).height(15);
+        })
+        .config({spaceBetween: '7px'})
+        .line(function (element) {
+            return element.width(40).height(15);
+        }).fold(function (err) {
+            console.log('error: ', err)
+        }, function (allElements) {
+            console.log('allElements: ', allElements);
+        });
 }
 
 function getRandomTweets() {
