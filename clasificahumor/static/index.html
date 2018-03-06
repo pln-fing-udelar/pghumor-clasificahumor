@@ -33,70 +33,113 @@
 </head>
 
 <body>
+  <!--suppress JSUnresolvedFunction, JSUnresolvedVariable -->
   <script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1223095247821615',
-      cookie     : true,
-      xfbml      : true,
-      version    : 'v2.10'
-    });
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '1223095247821615',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v2.10'
+      });
 
-    FB.AppEvents.logPageView();
+      FB.AppEvents.logPageView();
 
-  };
+    };
 
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/es_LA/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
 
-  <div class="container">
-    <div id="home-content" class="content">
-      <h1>Clasificá tweets y divertite</h1>
+  <script>window.twttr = (function(d, s, id) {
+    //noinspection ES6ConvertVarToLetConst
+    var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+    t._e = [];
+    t.ready = function(f) {
+        t._e.push(f);
+    };
+    return t;
+}(document, "script", "twitter-wjs"));</script>
 
-      <div id="tweet">
-        <p id="tweet-text"></p>
-        <img id="tweet-logo" src="img/twitter.ico" />
-      </div>
+  <div class="main-content">
+    <div class="container">
+      <div id="home-content" class="content">
+        <h1>Clasificá tweets y divertite</h1>
 
-      <div id="form-container">
-        <p id="question">¿El tweet pretende ser humorístico?</p>
+        <div id="tweet">
+          <p id="tweet-text"></p>
+          <img id="tweet-logo" src="img/twitter.ico" />
+        </div>
 
-        <ul id="answers">
+        <div id="form-container">
+          <p id="question">¿El tweet pretende ser humorístico?</p>
 
-          <li id="humor-answer" class="answer">
-            <div id="humor-container">
-              <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
-              <div id="toolbox"></div>
-              <div id="votes">
-                <button id="vote-1" class="vote"><span class="legend-vote">Nada gracioso</span></button>
-                <button id="vote-2" class="vote"><span class="legend-vote">Poco gracioso</span></button>
-                <button id="vote-3" class="vote"><span class="legend-vote">Regular</span></button>
-                <button id="vote-4" class="vote"><span class="legend-vote">Bueno</span></button>
-                <button id="vote-5" class="vote"><span class="legend-vote">¡Buenísimo!</span></button>
+          <ul id="answers">
+
+            <li id="humor-answer" class="answer">
+              <div id="humor-container">
+                <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
+                <div id="toolbox"></div>
+                <div id="votes">
+                  <button id="vote-1" class="vote"><span class="legend-vote">Nada gracioso</span></button>
+                  <button id="vote-2" class="vote"><span class="legend-vote">Poco gracioso</span></button>
+                  <button id="vote-3" class="vote"><span class="legend-vote">Regular</span></button>
+                  <button id="vote-4" class="vote"><span class="legend-vote">Bueno</span></button>
+                  <button id="vote-5" class="vote"><span class="legend-vote">¡Buenísimo!</span></button>
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
 
-          <li id="not-humor-answer" class="answer">
-            <button id="not-humor" type="button" class="btn btn-lg btn-default btn-answer">No</button>
-          </li>
+            <li id="not-humor-answer" class="answer">
+              <button id="not-humor" type="button" class="btn btn-lg btn-default btn-answer">No</button>
+            </li>
 
-          <li class="answer">
-            <button id="skip" type="button" class="btn btn-lg btn-link btn-answer">Saltear</button>
-          </li>
-        </ul>
+            <li class="answer">
+              <button id="skip" type="button" class="btn btn-lg btn-link btn-answer">Saltear</button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <button id="help" class="btn btn-link" type="button" data-toggle="modal" data-target="#about">
-      Ayuda
-    </button>
+    <footer class="container">
+      <div class="row">
+        <div id="social-buttons-container" class="col-xs-6">
+          <div class="fb-share-button" data-href="http://clasificahumor.com" data-layout="button_count"
+               data-size="small" data-mobile-iframe="true">
+            <a class="fb-xfbml-parse-ignore" target="_blank"
+               href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fclasificahumor.com&amp;src=sdkpreparse">
+              Compartir
+            </a>
+          </div>
+          <a class="twitter-share-button"
+             href="https://twitter.com/intent/tweet?text=Clasificá%20tweets%20y%20divertite&via=PLN_UdelaR"
+             data-size="small">
+            Twittear
+          </a>
+          <a href="whatsapp://send" data-text="Clasificá tweets y divertite" data-href="" class="wa_btn wa_btn_s"
+             style="display:none">
+            Compartir
+          </a>
+        </div>
+        <div class="col-xs-6">
+          <button id="help" class="btn btn-link" type="button" data-toggle="modal" data-target="#about">
+            Ayuda
+          </button>
+        </div>
+      </div>
+    </footer>
   </div>
 
   <div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -156,6 +199,9 @@
             Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad. ¡¡¡MUCHAS GRACIAS!!!
           </p>
         </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
       </div>
     </div>
   </div>
@@ -171,6 +217,10 @@
   <script src="https://cdn.ravenjs.com/3.23.1/raven.min.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="js/mdtoast.min.js"></script>
   <script src="js/main.js"></script>
+
+  <!--suppress CommaExpressionJS -->
+  <script type="text/javascript">	if(typeof wabtn4fg==="undefined")	{wabtn4fg=1;h=document.head||document.getElementsByTagName("head")[0],s=document.createElement("script");s.type="text/javascript";s.src="//cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js";h.appendChild(s)}</script>
+
 
   <!--suppress CommaExpressionJS, JSUnresolvedFunction, JSValidateTypes -->
   <script>

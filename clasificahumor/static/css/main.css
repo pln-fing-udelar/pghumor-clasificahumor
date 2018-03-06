@@ -1,3 +1,14 @@
+body {
+  height: 100%;
+  position: relative;
+}
+
+.main-content {
+  min-height: 100vh;
+  overflow: hidden;
+  padding-bottom: 50px;
+}
+
 #home-content {
   clear: both;
   text-align: center;
@@ -10,14 +21,6 @@ h1 {
 h2 {
   font-size: 20px;
   color: #777777;
-}
-
-#help {
-  bottom: 0;
-  color: #333333;
-  left: 50%;
-  position: fixed;
-  transform: translateX(-50%);
 }
 
 #tweet {
@@ -117,7 +120,7 @@ h2 {
 #skip {
   font-size: 14px;
   margin: 16px 16px 16px 10px;
-  min-width: 0;
+  min-width: 100px;
   padding: 0;
   text-decoration: none;
 }
@@ -127,5 +130,37 @@ h2 {
 }
 
 footer {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
   text-align: center;
+}
+
+.row {
+  align-items: flex-end;
+  display: flex;
+}
+
+#social-buttons-container {
+  margin-bottom: 6px;
+}
+
+.fb-share-button {
+  margin-bottom: 3px;
+  margin-right: 3px;
+  vertical-align: bottom;
+}
+
+.fb_iframe_widget_fluid {
+  display: inline-block !important;
+}
+
+.twitter-share-button {
+  margin-bottom: 3px;
+  vertical-align: bottom;
+}
+
+.wa_btn {
+  vertical-align: bottom;
 }
