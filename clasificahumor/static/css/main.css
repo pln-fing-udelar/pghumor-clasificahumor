@@ -102,6 +102,13 @@ h2 {
   outline: none;
 }
 
+#not-humor.no-hover:hover {
+  background-color: #fff;
+  border-color: #ccc;
+  color: #333;
+  transition-delay: 75ms;
+}
+
 #humor-container {
   display: inline-flex;
   flex-wrap: wrap;

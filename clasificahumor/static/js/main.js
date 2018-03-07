@@ -122,6 +122,11 @@ function setUiListeners() {
 
     $notHumor.click(function () {
         vote('x');
+        $notHumor.addClass('no-hover');
+    });
+
+    $notHumor.on('mousemove mouswdown', function() {
+        $notHumor.removeClass('no-hover');
     });
 
     $vote1.click(function () {
