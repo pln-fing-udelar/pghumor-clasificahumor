@@ -2,6 +2,7 @@ var $star;
 var $homeContent;
 var $tweet;
 var $humor;
+var $votesAndToolbox;
 var $toolbox;
 var $voteClass;
 var $vote1;
@@ -49,6 +50,7 @@ function setupElements() {
     $homeContent = $('#home-content');
     $tweet = $('#tweet-text');
     $humor = $('#humor');
+    $votesAndToolbox = $('#votes,#toolbox');
     $toolbox = $('#toolbox');
     $voteClass = $('.vote');
     $vote1 = $('#vote-1');
@@ -67,7 +69,10 @@ function showTweet() {
     if (tweets.length === 0) {
         console.error("No hay tweets para mostrar.");
     } else {
-        $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
+        $tweet.fadeOut(200, function () {
+            $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
+            $tweet.fadeIn(200);
+        });
     }
 }
 
@@ -109,6 +114,10 @@ function setUiListeners() {
             });
             legendsShownForFirstTime = true;
         }
+    });
+
+    $humor.hover(function () {
+        $votesAndToolbox.css('display', '');
     });
 
     $notHumor.click(function () {
@@ -155,6 +164,8 @@ function vote(voteOption) {
     showTweet();
 
     $.mdtoast(toastText(voteOption), {duration: 3000});
+
+    $votesAndToolbox.fadeOut();
 }
 
 function toastText(voteOption) {
