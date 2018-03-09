@@ -27,29 +27,39 @@ def _reconnect_if_necessary():
         _connect()
 
 
-def random_least_voted_unseen_tweets(session_id: str, batch_size: int) -> List[Dict[str, Any]]:
+def random_least_voted_unseen_tweets(session_id: str, batch_size: int, ignore_tweet_ids: List[int]=None
+                                     ) -> List[Dict[str, Any]]:
     """
-    Returns a random list of the least voted unseen tweets (by the session) with size batch_size.
+    Returns a random list of the least voted unseen tweets (by the session) with size batch_size, ignoring certain list
+    of tweet IDs.
 
-    Each tweet is represented as a dictionary with the fields 'id' and 'text'.
+    If there are fewer than batch_size tweets that hold the condition, the response is padded with random tweets.
+
+    Each tweet in the result is represented as a dictionary with the fields 'id' and 'text'.
 
     :param session_id: Session ID
     :param batch_size: Size of the list to return
+    :param ignore_tweet_ids: List of tweet IDs to ignore, not returning them in the result
     :return: Random list of the least voted unseen tweets with size batch_size
     """
     _reconnect_if_necessary()
     with db.cursor() as cursor:
+        if ignore_tweet_ids is None:
+            ignore_tweet_ids = []
+
+        ignore_tweet_ids = [str(tweet_id) for tweet_id in ignore_tweet_ids]
+
         cursor.execute('SELECT t.tweet_id, text'
                        ' FROM tweets t'
                        '   LEFT JOIN (SELECT tweet_id FROM votes WHERE session_id = %(session_id)s) a'
                        '     ON t.tweet_id = a.tweet_id'
                        '   LEFT JOIN votes b'
                        '     ON t.tweet_id = b.tweet_id'
-                       ' WHERE a.tweet_id IS NULL'
+                       ' WHERE a.tweet_id IS NULL AND FIND_IN_SET(t.tweet_id, %(ignore_tweet_ids)s) = 0'
                        ' GROUP BY t.tweet_id'
                        ' ORDER BY weight DESC, COUNT(*), RAND()'
                        ' LIMIT %(limit)s',
-                       {'session_id': session_id, 'limit': batch_size})
+                       {'session_id': session_id, 'limit': batch_size, 'ignore_tweet_ids': ','.join(ignore_tweet_ids)})
         return [{'id': id_, 'text': text} for id_, text in cursor.fetchall()]
 
 

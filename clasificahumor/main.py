@@ -76,7 +76,9 @@ def vote_and_get_new_tweet_route() -> Response:
     if 'tweet_id' in request.form and 'vote' in request.form:
         database.add_vote(session_id, request.form['tweet_id'], request.form['vote'])
 
-    tweets = database.random_least_voted_unseen_tweets(session_id, 1)
+    ignore_tweet_ids = [int(tweet_id) for tweet_id in request.form.getlist('ignore_tweet_ids[]')]
+
+    tweets = database.random_least_voted_unseen_tweets(session_id, 1, ignore_tweet_ids)
 
     if not tweets:
         tweets = database.random_tweets(1)

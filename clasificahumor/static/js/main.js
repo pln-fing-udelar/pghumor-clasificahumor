@@ -125,7 +125,7 @@ function setUiListeners() {
         $notHumor.addClass('no-hover');
     });
 
-    $notHumor.on('mousemove mouswdown', function() {
+    $notHumor.on('mousemove mouswdown', function () {
         $notHumor.removeClass('no-hover');
     });
 
@@ -162,7 +162,13 @@ function vote(voteOption) {
     var oldIndex = index;
     index = (index + 1) % tweets.length;
 
-    $.post('vote', {tweet_id: tweets[oldIndex].id, vote: voteOption}, function (tweet) {
+    var otherIndex = (index + 1) % tweets.length;
+
+    $.post('vote', {
+        tweet_id: tweets[oldIndex].id,
+        vote: voteOption,
+        ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id]
+    }, function (tweet) {
         tweets[oldIndex] = tweet;
     }, 'json');
 
