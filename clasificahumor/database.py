@@ -100,3 +100,11 @@ def add_vote(session_id: str, tweet_id: str, vote: str) -> None:
                            ' VALUES (%(tweet_id)s, %(session_id)s, %(vote)s)'
                            ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id',
                            {'tweet_id': tweet_id, 'session_id': session_id, 'vote': vote})
+
+
+def vote_count() -> int:
+    """Returns the vote count, not including skips."""
+    _reconnect_if_necessary()
+    with db.cursor() as cursor:
+        cursor.execute('SELECT COUNT(*) FROM votes WHERE vote != \'n\'')
+        return cursor.fetchone()[0]

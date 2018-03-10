@@ -88,6 +88,11 @@ def vote_and_get_new_tweet_route() -> Response:
     return jsonify(tweets[0] if tweets else {})
 
 
+@app.route('/vote-count')
+def vote_count_route() -> Response:
+    return jsonify(database.vote_count())
+
+
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def static_files_route(path) -> Response:
