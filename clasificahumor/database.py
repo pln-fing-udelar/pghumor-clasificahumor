@@ -40,7 +40,7 @@ def random_least_voted_unseen_tweets(session_id: str, batch_size: int, ignore_tw
                        '     ON t.tweet_id = b.tweet_id'
                        ' WHERE a.tweet_id IS NULL AND FIND_IN_SET(t.tweet_id, %(ignore_tweet_ids)s) = 0'
                        ' GROUP BY t.tweet_id'
-                       ' ORDER BY weight DESC, COUNT(*), RAND()'
+                       ' ORDER BY weight DESC, COUNT(b.tweet_id), RAND()'
                        ' LIMIT %(limit)s',
                        {'session_id': session_id, 'limit': batch_size, 'ignore_tweet_ids': ','.join(ignore_tweet_ids)})
         return [{'id': id_, 'text': text} for id_, text in cursor.fetchall()]
