@@ -12,9 +12,9 @@ mycli = "*"
 
 [packages]
 
-flask = "*"
-mysqlclient = "*"
+Flask = "*"
 raven = {extras = ["flask"]}
+SQLAlchemy = {extras = ["mysql"]}
 
 
 [requires]

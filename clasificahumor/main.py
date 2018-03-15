@@ -10,14 +10,19 @@ from raven.contrib.flask import Sentry
 
 from clasificahumor import database
 
-app = Flask(__name__)
 
-app.secret_key = os.getenv('FLASK_SECRET_KEY')
-app.config['SESSION_TYPE'] = 'filesystem'
+def create_app() -> Flask:
+    app_ = Flask(__name__)
 
-Sentry(app, logging=True, level=logging.ERROR)
-# Remember to consider using enable-threads in uWSGI:
-# https://docs.sentry.io/clients/python/advanced/#a-note-on-uwsgi
+    app_.secret_key = os.getenv('FLASK_SECRET_KEY')
+    app_.config['SESSION_TYPE'] = 'filesystem'
+
+    Sentry(app_, logging=True, level=logging.ERROR)
+
+    return app_
+
+
+app = create_app()
 
 BATCH_SIZE = 3
 
@@ -90,7 +95,7 @@ def vote_and_get_new_tweet_route() -> Response:
 
 @app.route('/vote-count')
 def vote_count_route() -> Response:
-    return jsonify(database.vote_count())
+    return jsonify(database.vote_count_without_skips())
 
 
 @app.route('/', defaults={'path': 'index.html'})
