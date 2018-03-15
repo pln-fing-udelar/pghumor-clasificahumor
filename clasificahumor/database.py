@@ -23,6 +23,7 @@ STATEMENT_RANDOM_TWEETS = sqlalchemy.sql.text('SELECT t.tweet_id, text'
 STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote)'
                                          ' VALUES (:tweet_id, :session_id, :vote)'
                                          ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
+STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*) FROM votes')
 STATEMENT_VOTE_COUNT_WITHOUT_SKIPS = sqlalchemy.sql.text('SELECT COUNT(*) FROM votes WHERE vote != \'n\'')
 
 
@@ -95,3 +96,13 @@ def vote_count_without_skips() -> int:
     """Returns the vote count, not including skips."""
     with engine.connect() as connection:
         return connection.execute(STATEMENT_VOTE_COUNT_WITHOUT_SKIPS).fetchone()[0]
+
+
+def stats() -> Dict[str, int]:
+    """Returns the vote count, vote count without skips and TODO"""
+    with engine.connect() as connection:
+        # TODO
+        return {
+            "votos": connection.execute(STATEMENT_VOTE_COUNT).fetchone()[0],
+            "votos sin contar los 'Saltear'": connection.execute(STATEMENT_VOTE_COUNT_WITHOUT_SKIPS).fetchone()[0]
+        }

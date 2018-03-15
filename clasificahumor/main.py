@@ -98,6 +98,11 @@ def vote_count_route() -> Response:
     return jsonify(database.vote_count_without_skips())
 
 
+@app.route('/stats')
+def stats_route() -> Response:
+    return jsonify(database.stats())
+
+
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def static_files_route(path) -> Response:
