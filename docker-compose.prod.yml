@@ -8,6 +8,8 @@ services:
       - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
       - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
       - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
+    networks:
+      - reverse_proxy_net
     restart: always
   database:
     restart: always
@@ -24,7 +26,7 @@ services:
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
-      - net
+      - reverse_proxy_net
     restart: always
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
@@ -34,8 +36,10 @@ services:
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - net
+      - reverse_proxy_net
     restart: always
+networks:
+  reverse_proxy_net:
 volumes:
   certs:
   html:
