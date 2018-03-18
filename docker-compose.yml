@@ -3,17 +3,15 @@ services:
   web:
     build: .
     environment:
+      - FLASK_SECRET_KEY
       - DB_HOST=database
       - DB_USER=root
+      - DB_PASS
       - DB_NAME=pghumor
-    env_file:
-      - docker.env
     networks:
       - net
   database:
     image: mysql:5
-    env_file:
-      - docker.env
     volumes:
       - data:/var/lib/mysql
     networks:

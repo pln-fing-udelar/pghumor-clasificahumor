@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-url=localhost:8000
+url=localhost:5000
 
 # Take into account not to surpass the uwsgi listen queue size.
 

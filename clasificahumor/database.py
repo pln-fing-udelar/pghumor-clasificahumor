@@ -28,8 +28,8 @@ STATEMENT_VOTE_COUNT_WITHOUT_SKIPS = sqlalchemy.sql.text('SELECT COUNT(*) FROM v
 
 
 def create_engine():
-    return sqlalchemy.create_engine(f'mysql://{os.getenv("DB_USER")}:{os.getenv("MYSQL_ROOT_PASSWORD")}'
-                                    f'@{os.getenv("DB_HOST")}/{os.getenv("DB_NAME")}?charset=utf8mb4', pool_size=10,
+    return sqlalchemy.create_engine(f'mysql://{os.getenv("DB_USER")}:{os.getenv("DB_PASS")}@{os.getenv("DB_HOST")}'
+                                    f'/{os.getenv("DB_NAME")}?charset=utf8mb4', pool_size=10,
                                     pool_recycle=3600)
 
 

@@ -1,16 +1,13 @@
 version: '3'
 services:
   web:
+    build:
+      dockerfile: Dockerfile.prod
     environment:
-      - FLASK_APP=clasificahumor/main.py
-      - FLASK_DEBUG=1
       - FLASK_SECRET_KEY=ze4f2fWLmEY9dADjhwvhym3U
       - DB_PASS=123123
     ports:
-      - '5000:5000'
-    volumes:
-      - ./clasificahumor:/usr/src/app/clasificahumor
+      - '5000:80'
   database:
     environment:
       - MYSQL_ROOT_PASSWORD=123123
-      - MYSQL_DATABASE=pghumor

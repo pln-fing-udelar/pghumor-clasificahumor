@@ -1,12 +1,15 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.6
+FROM python:3.6
 
 RUN set -ex && pip install pipenv --upgrade
 
-COPY Pipfile* /app/
+WORKDIR /usr/src/app
+
+COPY Pipfile* ./
 
 RUN set -ex && pipenv install --deploy --system
 
-COPY uwsgi.conf /etc/nginx/conf.d/
-COPY uwsgi.ini .
-COPY prestart.sh .
 COPY clasificahumor clasificahumor
+
+EXPOSE 5000
+
+CMD ["flask", "run", "-h", "0.0.0.0"]

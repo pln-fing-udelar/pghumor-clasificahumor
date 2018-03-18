@@ -1,7 +1,10 @@
 version: '3'
 services:
   web:
+    build:
+      dockerfile: Dockerfile.prod
     environment:
+      - SENTRY_DSN
       - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
       - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
       - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
@@ -33,10 +36,7 @@ services:
     networks:
       - net
     restart: always
-networks:
-  net:
 volumes:
   certs:
-  data:
   html:
   vhost:
