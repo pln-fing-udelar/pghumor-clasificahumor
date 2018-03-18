@@ -25,6 +25,17 @@ STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_i
                                          ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
 STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*) FROM votes')
 STATEMENT_VOTE_COUNT_WITHOUT_SKIPS = sqlalchemy.sql.text('SELECT COUNT(*) FROM votes WHERE vote != \'n\'')
+STATEMENT_HISTOGRAM = sqlalchemy.sql.text('SELECT c, COUNT(*) as freq'
+                                          ' FROM (SELECT COUNT(v.tweet_id) c'
+                                          '        FROM tweets t'
+                                          '          LEFT JOIN (SELECT tweet_id FROM votes WHERE vote != \'n\') v'
+                                          '            ON t.tweet_id = v.tweet_id'
+                                          '        WHERE weight = 1'
+                                          '          AND t.tweet_id != 968699034540978176'  # The old test tweet.
+                                          '        GROUP BY t.tweet_id) a'
+                                          ' GROUP BY c'
+                                          ' ORDER BY c')
+STATEMENT_VOTE_COUNT_PER_CATEGORY = sqlalchemy.sql.text('SELECT vote, COUNT(*) FROM votes GROUP BY vote ORDER BY vote')
 
 
 def create_engine():
@@ -98,11 +109,13 @@ def vote_count_without_skips() -> int:
         return connection.execute(STATEMENT_VOTE_COUNT_WITHOUT_SKIPS).fetchone()[0]
 
 
-def stats() -> Dict[str, int]:
-    """Returns the vote count, vote count without skips and TODO"""
+def stats() -> Dict[str, Any]:
+    """Returns the vote count, vote count without skips, vote count histogram and votes per category."""
     with engine.connect() as connection:
         # TODO
         return {
-            "votos": connection.execute(STATEMENT_VOTE_COUNT).fetchone()[0],
-            "votos sin contar los 'Saltear'": connection.execute(STATEMENT_VOTE_COUNT_WITHOUT_SKIPS).fetchone()[0]
+            "votes": connection.execute(STATEMENT_VOTE_COUNT).fetchone()[0],
+            "votes-without-skips": connection.execute(STATEMENT_VOTE_COUNT_WITHOUT_SKIPS).fetchone()[0],
+            "histogram": dict(connection.execute(STATEMENT_HISTOGRAM).fetchall()),
+            "votes-per-category": dict(connection.execute(STATEMENT_VOTE_COUNT_PER_CATEGORY).fetchall()),
         }

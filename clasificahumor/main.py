@@ -5,7 +5,7 @@ import random
 import string
 from typing import Any, Dict, List
 
-from flask import Flask, jsonify, request, Response, send_from_directory
+from flask import Flask, jsonify, render_template, request, Response, send_from_directory
 from raven.contrib.flask import Sentry
 
 from clasificahumor import database
@@ -100,7 +100,17 @@ def vote_count_route() -> Response:
 
 @app.route('/stats')
 def stats_route() -> Response:
-    return jsonify(database.stats())
+    stats = database.stats()
+    stats['histogram'] = [["Cantidad de votos", "Cantidad de tweets"]] + \
+                         [[str(a), b] for a, b in stats['histogram'].items()]
+
+    stats['votes-per-category']['No humor'] = stats['votes-per-category']['x']
+    del stats['votes-per-category']['x']
+    stats['votes-per-category']['Saltear'] = stats['votes-per-category']['n']
+    del stats['votes-per-category']['n']
+    stats['votes-per-category'] = [["Voto", "Cantidad de tweets"]] + \
+                                  [[str(a), b] for a, b in stats['votes-per-category'].items()]
+    return render_template('stats.html', stats=stats)
 
 
 @app.route('/', defaults={'path': 'index.html'})

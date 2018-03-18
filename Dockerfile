@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 COPY Pipfile* ./
 
-RUN set -ex && pipenv install --deploy --system
+RUN set -ex && pipenv install --dev --deploy --system
 
 COPY clasificahumor clasificahumor
 
