@@ -10,7 +10,7 @@ STATEMENT_RANDOM_LEAST_VOTED_UNSEEN_TWEETS = \
                         ' FROM tweets t'
                         '   LEFT JOIN (SELECT tweet_id FROM votes WHERE session_id = :session_id) a'
                         '     ON t.tweet_id = a.tweet_id'
-                        '   LEFT JOIN votes b'
+                        '   LEFT JOIN (SELECT tweet_id FROM votes WHERE vote != \'n\') b'
                         '     ON t.tweet_id = b.tweet_id'
                         ' WHERE a.tweet_id IS NULL AND FIND_IN_SET(t.tweet_id, :ignore_tweet_ids) = 0'
                         ' GROUP BY t.tweet_id'

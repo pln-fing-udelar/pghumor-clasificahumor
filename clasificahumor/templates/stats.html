@@ -26,25 +26,25 @@
 
     <p>Cantidad de votos, sin salteos: {{ stats['votes-without-skips'] }}</p>
 
-    <h2>Votos que pasan los tweets de prueba</h2>
-
-    <p>Votos, que no son salteos, cuya sesión cumpla haber pasado los tweets de prueba.</p>
-
-    <p>
-      Para ver si pasaron los tweets de prueba, primero recordar que originalmente eran 3: uno de no humor, luego uno
-      de humor y finalmente otro de no humor. En el medio de la votación se cambió el de humor por otro tweet de humor,
-      por considerarse un poco ambiguo. Entonces, el criterio para pasar los tweets de prueba es que se hayan
-      clasificado correctamente los dos no humorísticos y que si votaron el nuevo tweet de prueba de humor, que esté
-      bien votado.
-    </p>
-
     <p>Distribución de votos por tweet (sin los 4 de prueba):</p>
 
     <div id="chart-histogram" style="width: 900px; height: 500px;"></div>
 
-    <h2>Votos por categoría</h2>
+    <p>Votos por categoría:</p>
 
     <div id="chart-votes-per-category" style="width: 900px; height: 500px;"></div>
+
+{#    <h2>Votos que pasan los tweets de prueba</h2>#}
+{##}
+{#    <p>Votos, que no son salteos, cuya sesión cumpla haber pasado los tweets de prueba.</p>#}
+{##}
+{#    <p>#}
+{#      Para ver si pasaron los tweets de prueba, primero recordar que originalmente eran 3: uno de no humor, luego uno#}
+{#      de humor y finalmente otro de no humor. En el medio de la votación se cambió el de humor por otro tweet de humor,#}
+{#      por considerarse un poco ambiguo. Entonces, el criterio para pasar los tweets de prueba es que se hayan#}
+{#      clasificado correctamente los dos no humorísticos y que si votaron el nuevo tweet de prueba de humor, que esté#}
+{#      bien votado.#}
+{#    </p>#}
   </div>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
