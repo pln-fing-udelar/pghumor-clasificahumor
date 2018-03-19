@@ -23,12 +23,56 @@ STATEMENT_RANDOM_TWEETS = sqlalchemy.sql.text('SELECT t.tweet_id, text'
 STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote)'
                                          ' VALUES (:tweet_id, :session_id, :vote)'
                                          ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
-STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*) FROM votes')
-STATEMENT_VOTE_COUNT_WITHOUT_SKIPS = sqlalchemy.sql.text('SELECT COUNT(*) FROM votes WHERE vote != \'n\'')
+STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*)'
+                                           ' FROM votes v'
+                                           '   LEFT JOIN (SELECT session_id'
+                                           '               FROM votes'
+                                           '               WHERE tweet_id = 965857626843172864 AND vote = \'x\') s1'
+                                           '     ON v.session_id = s1.session_id'
+                                           '   LEFT JOIN (SELECT session_id'
+                                           '               FROM votes'
+                                           '               WHERE tweet_id = 965758586747047936 AND vote = \'x\') s2'
+                                           '     ON v.session_id = s2.session_id'
+                                           '   LEFT JOIN (SELECT session_id'
+                                           '               FROM votes'
+                                           '               WHERE tweet_id = 301481614033170432) s3'
+                                           '     ON v.session_id = s3.session_id'
+                                           ' WHERE (:without_skips = FALSE OR vote != \'n\')'
+                                           '   AND (:pass_test = FALSE'
+                                           '     OR (s1.session_id IS NOT NULL'
+                                           '       AND s2.session_id IS NOT NULL'
+                                           '       AND (s3.session_id IS NULL OR (s3.session_id != \'x\''
+                                           '         AND s3.session_id != \'n\'))))')
+STATEMENT_SESSION_COUNT = sqlalchemy.sql.text('SELECT COUNT(DISTINCT v.session_id)'
+                                              ' FROM votes v'
+                                              '   LEFT JOIN (SELECT session_id'
+                                              '               FROM votes'
+                                              '               WHERE tweet_id = 965857626843172864 AND vote = \'x\') s1'
+                                              '     ON v.session_id = s1.session_id'
+                                              '   LEFT JOIN (SELECT session_id'
+                                              '               FROM votes'
+                                              '               WHERE tweet_id = 965758586747047936 AND vote = \'x\') s2'
+                                              '     ON v.session_id = s2.session_id'
+                                              '   LEFT JOIN (SELECT session_id'
+                                              '               FROM votes'
+                                              '               WHERE tweet_id = 301481614033170432) s3'
+                                              '     ON v.session_id = s3.session_id'
+                                              ' WHERE (:without_skips = FALSE OR vote != \'n\')'
+                                              '   AND (:pass_test = FALSE'
+                                              '     OR (s1.session_id IS NOT NULL'
+                                              '       AND s2.session_id IS NOT NULL'
+                                              '       AND (s3.session_id IS NULL OR (s3.session_id != \'x\''
+                                              '         AND s3.session_id != \'n\'))))')
+STATEMENT_TEST_TWEETS_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(v.tweet_id) AS c'
+                                                       ' FROM tweets t'
+                                                       '   LEFT JOIN votes v ON t.tweet_id = v.tweet_id'
+                                                       ' WHERE weight > 1 OR t.tweet_id = 968699034540978176'
+                                                       ' GROUP BY t.tweet_id'
+                                                       ' ORDER BY c DESC')
 STATEMENT_HISTOGRAM = sqlalchemy.sql.text('SELECT c, COUNT(*) as freq'
                                           ' FROM (SELECT COUNT(v.tweet_id) c'
                                           '        FROM tweets t'
-                                          '          LEFT JOIN (SELECT tweet_id FROM votes WHERE vote != \'n\') v'
+                                          '          LEFT JOIN (SELECT tweet_id FROM votes) v'  # WHERE vote != \'n\'
                                           '            ON t.tweet_id = v.tweet_id'
                                           '        WHERE weight = 1'
                                           '          AND t.tweet_id != 968699034540978176'  # The old test tweet.
@@ -106,16 +150,28 @@ def add_vote(session_id: str, tweet_id: str, vote: str) -> None:
 def vote_count_without_skips() -> int:
     """Returns the vote count, not including skips."""
     with engine.connect() as connection:
-        return connection.execute(STATEMENT_VOTE_COUNT_WITHOUT_SKIPS).fetchone()[0]
+        return connection.execute(STATEMENT_VOTE_COUNT, {'without_skips': True, 'pass_test': False}).fetchone()[0]
 
 
 def stats() -> Dict[str, Any]:
     """Returns the vote count, vote count without skips, vote count histogram and votes per category."""
     with engine.connect() as connection:
-        # TODO
         return {
-            "votes": connection.execute(STATEMENT_VOTE_COUNT).fetchone()[0],
-            "votes-without-skips": connection.execute(STATEMENT_VOTE_COUNT_WITHOUT_SKIPS).fetchone()[0],
-            "histogram": dict(connection.execute(STATEMENT_HISTOGRAM).fetchall()),
-            "votes-per-category": dict(connection.execute(STATEMENT_VOTE_COUNT_PER_CATEGORY).fetchall()),
+            'votes': connection.execute(STATEMENT_VOTE_COUNT, {'without_skips': False,
+                                                               'pass_test': False}).fetchone()[0],
+            'sessions': connection.execute(STATEMENT_SESSION_COUNT, {'without_skips': False,
+                                                                     'pass_test': False}).fetchone()[0],
+            'test-tweets-vote-count': [t[0] for t in connection.execute(STATEMENT_TEST_TWEETS_VOTE_COUNT).fetchall()],
+            'histogram': dict(connection.execute(STATEMENT_HISTOGRAM).fetchall()),
+            'votes-per-category': dict(connection.execute(STATEMENT_VOTE_COUNT_PER_CATEGORY).fetchall()),
+
+            'votes-without-skips': connection.execute(STATEMENT_VOTE_COUNT, {'without_skips': True,
+                                                                             'pass_test': False}).fetchone()[0],
+            'sessions-without-skips': connection.execute(STATEMENT_SESSION_COUNT, {'without_skips': True,
+                                                                                   'pass_test': False}).fetchone()[0],
+
+            'votes-pass-test': connection.execute(STATEMENT_VOTE_COUNT, {'without_skips': True,
+                                                                         'pass_test': True}).fetchone()[0],
+            'sessions-pass-test': connection.execute(STATEMENT_SESSION_COUNT, {'without_skips': True,
+                                                                               'pass_test': True}).fetchone()[0],
         }

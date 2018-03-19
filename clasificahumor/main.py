@@ -101,6 +101,11 @@ def vote_count_route() -> Response:
 @app.route('/stats')
 def stats_route() -> Response:
     stats = database.stats()
+
+    stats['votes-not-consider-test'] = stats['votes'] - sum(stats['test-tweets-vote-count'])
+
+    stats['test-tweets-vote-count'] = ', '.join(str(c) for c in stats['test-tweets-vote-count'])
+
     stats['histogram'] = [["Cantidad de votos", "Cantidad de tweets"]] + \
                          [[str(a), b] for a, b in stats['histogram'].items()]
 
@@ -110,6 +115,7 @@ def stats_route() -> Response:
     del stats['votes-per-category']['n']
     stats['votes-per-category'] = [["Voto", "Cantidad de tweets"]] + \
                                   [[str(a), b] for a, b in stats['votes-per-category'].items()]
+
     return render_template('stats.html', stats=stats)
 
 
