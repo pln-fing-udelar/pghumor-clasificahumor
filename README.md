@@ -56,7 +56,7 @@ instance generated with the Docker setup.
 
 You need a data to mess with.
 There's [a dump with the downloaded tweets in the HUMOR
-repo](https://github.com/pln-fing-udelar/humor/blob/master/extraction/dump.sql).
+repo](https://github.com/pln-fing-udelar/humor/blob/master/extraction/dump-tweets-without-votes.sql).
 
 First, create a database with the options
 `DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci`. It could be
