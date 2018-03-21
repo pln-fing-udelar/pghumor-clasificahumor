@@ -14,7 +14,7 @@ from clasificahumor import database
 def create_app() -> Flask:
     app_ = Flask(__name__)
 
-    app_.secret_key = os.getenv('FLASK_SECRET_KEY')
+    app_.secret_key = os.environ['FLASK_SECRET_KEY']
     app_.config['SESSION_TYPE'] = 'filesystem'
 
     Sentry(app_, logging=True, level=logging.ERROR)

@@ -48,7 +48,7 @@ vars values):
     flask run
     ```
 
-4. Setup a MySQL instance and create a database. It could be the
+4. Setup a MySQL instance. It could be the
 instance generated with the Docker setup.
 
 
@@ -57,6 +57,15 @@ instance generated with the Docker setup.
 You need a data to mess with.
 There's [a dump with the downloaded tweets in the HUMOR
 repo](https://github.com/pln-fing-udelar/humor/blob/master/extraction/dump.sql).
+
+First, create a database with the options
+`DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci`. It could be
+created with [schema.sql](schema.sql):
+
+```shell
+mysql -u $USER -p < schema.sql
+```
+
 To load a database dump, run in another shell:
 
 ```shell

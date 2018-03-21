@@ -14,6 +14,7 @@ services:
     image: mysql:5
     volumes:
       - data:/var/lib/mysql
+      - ./mysql-charset.cnf:/etc/mysql/conf.d/mysql-charset.cnf
     networks:
       - net
 networks:
