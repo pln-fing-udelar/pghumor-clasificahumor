@@ -75,6 +75,12 @@ mysql -u $USER -p database < dump.sql
 You can prefix `docker-compose exec database` to the command to run it
 in the database Docker container.
 
+### Known problem
+
+Sometimes the tweets text after loading the dump has emojis encoding
+problems with. You can use the [update_tweets_text script](https://github.com/pln-fing-udelar/humor/blob/master/extraction/update_tweets_text.py)
+to solve it.
+
 ## Testing
 
 To run it using a WSGI server, just like in production, do:
