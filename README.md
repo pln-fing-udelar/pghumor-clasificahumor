@@ -17,7 +17,7 @@ You need Docker and Docker Compose for this. To run the Flask
 development server in debug mode, auto-detecting changes:
 
 ```shell
-docker-compose --build
+docker-compose up --build
 ```
 
 ### Pipenv
