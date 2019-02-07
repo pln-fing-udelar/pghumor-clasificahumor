@@ -48,7 +48,7 @@ vars values):
     flask run
     ```
 
-4. Setup a MySQL instance. It could be the
+4. Setup a MySQL 5.7 instance. It could be the
 instance generated with the Docker setup.
 
 
