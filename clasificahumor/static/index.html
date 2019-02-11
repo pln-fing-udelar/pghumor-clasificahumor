@@ -33,7 +33,7 @@
 </head>
 
 <body>
-  <!--suppress JSUnresolvedFunction, JSUnresolvedVariable -->
+  <!--suppress JSUnresolvedFunction, JSUnresolvedVariable, ES6ModulesDependencies, ES6ConvertVarToLetConst -->
   <script>
     window.fbAsyncInit = function() {
       FB.init({
@@ -44,7 +44,6 @@
       });
 
       FB.AppEvents.logPageView();
-
     };
 
     (function(d, s, id){
@@ -79,7 +78,7 @@
 
         <div id="tweet">
           <p id="tweet-text"></p>
-          <img id="tweet-logo" src="img/twitter.ico" />
+          <img id="tweet-logo" src="img/twitter.ico" alt="Twitter"/>
         </div>
 
         <div id="form-container">
@@ -166,30 +165,21 @@
           <h4>Sobre el proyecto</h4>
 
           <p>
-            El fin de esta página es armar una base de datos de opiniones sobre humor durante marzo de 2018,
-            y así en el futuro poder hacer investigación sobre
-            <a href="https://es.wikipedia.org/wiki/Humor_computacional">Humor Computacional</a>.
+            El fin de esta página es armar una base de datos de opiniones sobre humor durante febrero de 2019,
+            y así hacer investigación sobre
+            <a href="https://es.wikipedia.org/wiki/Humor_computacional" target="_blank">Humor Computacional</a>.
           </p>
           <p>
             Por ejemplo, va a usarse como conjunto de datos para
-            <a href="https://www.fing.edu.uy/inco/grupos/pln/haha/" target="_blank">la competencia HAHA 2018</a>,
+            <a href="https://www.fing.edu.uy/inco/grupos/pln/haha/" target="_blank">la competencia HAHA 2019 (2ª
+              edición)</a>,
             organizada por el
             <a href="https://www.fing.edu.uy/inco/grupos/pln" target="_blank">Grupo de Procesamiento de Lenguaje Natural
               (PLN)</a> de la
             <a href="https://www.fing.edu.uy" target="_blank">Facultad de Ingeniería</a> de la
             <a href="http://www.universidad.edu.uy/" target="_blank">Universidad de la República</a>, Uruguay.
-            La competencia consiste básicamente en predecir si un tweet es humorístico o no y qué tan gracioso le puede
-            resultar a la gente 😲 Si te interesa, podés participar.
-          </p>
-          <p>
-            La página fue originalmente creada en 2014 por dos estudiantes de Ingeniería en Computación,
-            (<a href="https://github.com/bryant1410" target="_blank">Santiago Castro</a> y
-            <a href="https://www.fing.edu.uy/~mcubero/" target="_blank">Matías Cubero</a>)
-            en el contexto del proyecto de grado
-            <a href="https://github.com/pln-fing-udelar/pghumor" target="_blank">pgHumor</a>
-            – Universidad de la República, Uruguay, apoyados por la
-            <a href="http://www.anii.org.uy" target="_blank">ANII</a>, y en 2018 se vuelve a lanzar para tener más
-            anotaciones y de mejor calidad 😊
+            La competencia consiste básicamente en predecir si un tweet es humorístico o no, y también decir qué tan
+            gracioso le puede resultar a la gente 😲 Si te interesa, podés participar.
           </p>
           <p>El código de este proyecto
             <a href="https://github.com/pln-fing-udelar/pghumor-clasificahumor" target="_blank">se encuentra disponible
@@ -197,6 +187,28 @@
           </p>
           <p>
             Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad. ¡¡¡MUCHAS GRACIAS!!!
+          </p>
+
+          <h4>Historia del proyecto</h4>
+
+          <p>
+            La página fue creada en 2014 por dos estudiantes de Ingeniería en Computación,
+            (<a href="https://github.com/bryant1410" target="_blank">Santiago Castro</a> y
+            <a href="https://www.fing.edu.uy/~mcubero/" target="_blank">Matías Cubero</a>)
+            originalmente para el proyecto de grado
+            <a href="https://github.com/pln-fing-udelar/pghumor" target="_blank">pgHumor</a>
+            – Universidad de la República, Uruguay, apoyados por la
+            <a href="http://www.anii.org.uy" target="_blank">ANII</a>. En 2018 se volvió a lanzar para tener más
+            anotaciones y de mejor calidad 😊, para la 1ª edición de la competencia HAHA.
+          </p>
+
+          <h4>Cookies</h4>
+
+          <p>
+            Este sitio usa cookies para hacer un seguimiento de qué tweets ya clasificó cada persona, y evitar mostrar
+            repetidos. También usa <a href="https://analytics.google.com/analytics/web/" target="_blank">Google
+            Analytics</a> para
+            saber información general sobre los anotadores (país, idioma, género, rango etario, etc).
           </p>
         </div>
       <div class="modal-footer">
@@ -220,8 +232,7 @@
   <script type="text/javascript" src="js/main.js"></script>
 
   <!--suppress CommaExpressionJS -->
-  <script type="text/javascript">	if(typeof wabtn4fg==="undefined")	{wabtn4fg=1;h=document.head||document.getElementsByTagName("head")[0],s=document.createElement("script");s.type="text/javascript";s.src="//cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js";h.appendChild(s)}</script>
-
+  <script type="text/javascript">if(typeof wabtn4fg==="undefined")	{wabtn4fg=1;h=document.head||document.getElementsByTagName("head")[0],s=document.createElement("script");s.type="text/javascript";s.src="//cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js";h.appendChild(s)}</script>
 
   <!--suppress CommaExpressionJS, JSUnresolvedFunction, JSValidateTypes -->
   <script>

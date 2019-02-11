@@ -13,8 +13,6 @@ var $vote5;
 var $legendVote;
 var $notHumor;
 var $skip;
-var $aboutUsContent;
-var $aboutUsLink;
 
 var legendsShownForFirstTime = false;
 
@@ -61,8 +59,6 @@ function setupElements() {
     $legendVote = $('.legend-vote');
     $notHumor = $('#not-humor');
     $skip = $('#skip');
-    $aboutUsContent = $('#about-us-content');
-    $aboutUsLink = $('#about-us-link');
 }
 
 function showTweet() {
