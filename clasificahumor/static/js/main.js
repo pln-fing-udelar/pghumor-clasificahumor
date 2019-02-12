@@ -13,6 +13,7 @@ let $vote5;
 let $legendVote;
 let $notHumor;
 let $skip;
+let $isOffensive;
 
 let legendsShownForFirstTime = false;
 
@@ -59,6 +60,7 @@ function setupElements() {
     $legendVote = $('.legend-vote');
     $notHumor = $('#not-humor');
     $skip = $('#skip');
+    $isOffensive = $('#is-offensive');
 }
 
 function showTweet() {
@@ -164,6 +166,7 @@ function vote(voteOption) {
         tweet_id: tweets[oldIndex].id,
         vote: voteOption,
         ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
+        // is_offensive: $isOffensive.checked,
     }, function (tweet) {
         tweets[oldIndex] = tweet;
     }, 'json');
@@ -173,6 +176,8 @@ function vote(voteOption) {
     $.mdtoast(toastText(voteOption), {duration: 3000});
 
     $votesAndToolbox.fadeOut();
+
+    $isOffensive.prop('checked', false);
 }
 
 function toastText(voteOption) {
