@@ -33,7 +33,7 @@
 </head>
 
 <body>
-  <!--suppress JSUnresolvedFunction, JSUnresolvedVariable, ES6ModulesDependencies, ES6ConvertVarToLetConst -->
+  <!--suppress ES6ConvertVarToLetConst, ES6ModulesDependencies, JSUnresolvedFunction, JSUnresolvedVariable -->
   <script>
     window.fbAsyncInit = function() {
       FB.init({
@@ -55,6 +55,7 @@
      }(document, 'script', 'facebook-jssdk'));
   </script>
 
+  <!--suppress JSUnresolvedVariable -->
   <script>window.twttr = (function(d, s, id) {
     //noinspection ES6ConvertVarToLetConst
     var js, fjs = d.getElementsByTagName(s)[0],
@@ -85,7 +86,6 @@
           <p id="question">¿El tweet pretende ser humorístico?</p>
 
           <ul id="answers">
-
             <li id="humor-answer" class="answer">
               <div id="humor-container">
                 <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
@@ -231,7 +231,7 @@
   <script type="text/javascript" src="js/placeload.min.js"></script>
   <script type="text/javascript" src="js/main.js"></script>
 
-  <!--suppress CommaExpressionJS -->
+  <!--suppress CommaExpressionJS, JSUnresolvedVariable -->
   <script type="text/javascript">if(typeof wabtn4fg==="undefined")	{wabtn4fg=1;h=document.head||document.getElementsByTagName("head")[0],s=document.createElement("script");s.type="text/javascript";s.src="//cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js";h.appendChild(s)}</script>
 
   <!--suppress CommaExpressionJS, JSUnresolvedFunction, JSValidateTypes -->

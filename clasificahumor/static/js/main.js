@@ -1,22 +1,22 @@
-var $star;
-var $homeContent;
-var $tweet;
-var $humor;
-var $votesAndToolbox;
-var $toolbox;
-var $voteClass;
-var $vote1;
-var $vote2;
-var $vote3;
-var $vote4;
-var $vote5;
-var $legendVote;
-var $notHumor;
-var $skip;
+let $star;
+let $homeContent;
+let $tweet;
+let $humor;
+let $votesAndToolbox;
+let $toolbox;
+let $voteClass;
+let $vote1;
+let $vote2;
+let $vote3;
+let $vote4;
+let $vote5;
+let $legendVote;
+let $notHumor;
+let $skip;
 
-var legendsShownForFirstTime = false;
+let legendsShownForFirstTime = false;
 
-var voteCodeToText = {
+const voteCodeToText = {
     1: "Nada gracioso",
     2: "Poco gracioso",
     3: "Regular",
@@ -24,8 +24,8 @@ var voteCodeToText = {
     5: "¡Buenísimo!"
 };
 
-var tweets = [];
-var index = 0;
+let tweets = [];
+let index = 0;
 
 $(document).ready(function () {
     setupSentry();
@@ -155,15 +155,15 @@ function setUiListeners() {
 }
 
 function vote(voteOption) {
-    var oldIndex = index;
+    const oldIndex = index;
     index = (index + 1) % tweets.length;
 
-    var otherIndex = (index + 1) % tweets.length;
+    const otherIndex = (index + 1) % tweets.length;
 
     $.post('vote', {
         tweet_id: tweets[oldIndex].id,
         vote: voteOption,
-        ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id]
+        ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
     }, function (tweet) {
         tweets[oldIndex] = tweet;
     }, 'json');
@@ -192,9 +192,9 @@ function removeNonWords(text) {
 }
 
 function moveToolboxIfOutside() {
-    var x = $toolbox[0].getBoundingClientRect().x;
+    const x = $toolbox[0].getBoundingClientRect().x;
     if (x < 0) {
-        var translation = -x + 10;
+        const translation = -x + 10;
         addPxToLeft($toolbox, translation);
         addPxToLeft($vote1, translation);
         addPxToLeft($vote2, translation);
