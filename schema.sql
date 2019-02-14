@@ -25,6 +25,7 @@ CREATE TABLE votes (
   session_id CHAR(100) NOT NULL,
   vote CHAR(1) NOT NULL,
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_offensive BOOL DEFAULT 0,
   PRIMARY KEY (tweet_id, session_id),
   INDEX (tweet_id),
   INDEX (session_id),

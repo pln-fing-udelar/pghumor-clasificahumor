@@ -175,7 +175,7 @@ function vote(voteOption) {
         tweet_id: tweets[oldIndex].id,
         vote: voteOption,
         ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
-        // is_offensive: $isOffensive.checked,
+        is_offensive: $isOffensive.prop('checked'),
     }, function (tweet) {
         tweets[oldIndex] = tweet;
     }, 'json');

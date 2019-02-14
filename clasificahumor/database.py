@@ -20,8 +20,8 @@ STATEMENT_RANDOM_TWEETS = sqlalchemy.sql.text('SELECT t.tweet_id, text'
                                               ' FROM tweets t'
                                               ' ORDER BY RAND()'
                                               ' LIMIT :limit')
-STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote)'
-                                         ' VALUES (:tweet_id, :session_id, :vote)'
+STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote, is_offensive)'
+                                         ' VALUES (:tweet_id, :session_id, :vote, :is_offensive)'
                                          ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
 STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*)'
                                            ' FROM votes v'
@@ -131,7 +131,7 @@ def random_tweets(batch_size: int) -> List[Dict[str, Any]]:
         return [{'id': id_, 'text': text} for id_, text in result.fetchall()]
 
 
-def add_vote(session_id: str, tweet_id: str, vote: str) -> None:
+def add_vote(session_id: str, tweet_id: str, vote: str, is_offensive: bool) -> None:
     """
     Adds a vote for a tweet by a determined session.
 
@@ -141,10 +141,12 @@ def add_vote(session_id: str, tweet_id: str, vote: str) -> None:
     :param session_id: Session ID
     :param tweet_id: Tweet ID
     :param vote: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
+    :param is_offensive: If the tweet is considered offensive
     """
     if vote in ['1', '2', '3', '4', '5', 'x', 'n']:
         with engine.connect() as connection:
-            connection.execute(STATEMENT_ADD_VOTE, {'tweet_id': tweet_id, 'session_id': session_id, 'vote': vote})
+            connection.execute(STATEMENT_ADD_VOTE, {'tweet_id': tweet_id, 'session_id': session_id, 'vote': vote,
+                                                    'is_offensive': is_offensive})
 
 
 def vote_count_without_skips() -> int:
