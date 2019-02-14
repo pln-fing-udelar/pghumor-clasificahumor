@@ -14,6 +14,7 @@ let $legendVote;
 let $notHumor;
 let $skip;
 let $isOffensive;
+let emoji;
 
 let legendsShownForFirstTime = false;
 
@@ -32,6 +33,7 @@ $(document).ready(function () {
     setupSentry();
     setupElements();
     setupPlaceload();
+    setupEmojiConverter();
     getRandomTweets();
     setUiListeners();
     moveToolboxIfOutside();
@@ -68,7 +70,7 @@ function showTweet() {
         console.error("No hay tweets para mostrar.");
     } else {
         $tweet.fadeOut(200, function () {
-            $tweet.html(tweets[index].text.replace(/\n/mg, '<br/>')).text();
+            $tweet.html(emoji.replace_unified(tweets[index].text.replace(/\n/mg, '<br/>'))).text();
             $tweet.fadeIn(200);
         });
     }
@@ -91,6 +93,13 @@ function setupPlaceload() {
         }).fold(function (err) {
     }, function (allElements) {
     });
+}
+
+function setupEmojiConverter() {
+    // noinspection JSUnresolvedFunction
+    emoji = new EmojiConvertor();
+    emoji.img_set = 'twitter';
+    emoji.img_sets.twitter.path = 'https://raw.githubusercontent.com/iamcal/emoji-data/a97b2d2efa64535d6300660eb2cd15ecb584e79e/img-twitter-64/';
 }
 
 function getRandomTweets() {
