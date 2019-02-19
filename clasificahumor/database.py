@@ -158,7 +158,7 @@ def vote_count_without_skips() -> int:
 def stats() -> Dict[str, Any]:
     """Returns the vote count, vote count without skips, vote count histogram and votes per category."""
     with engine.connect() as connection:
-        return {
+        result = {
             'votes': connection.execute(STATEMENT_VOTE_COUNT, {'without_skips': False,
                                                                'pass_test': False}).fetchone()[0],
             'sessions': connection.execute(STATEMENT_SESSION_COUNT, {'without_skips': False,
@@ -177,3 +177,8 @@ def stats() -> Dict[str, Any]:
             'sessions-pass-test': connection.execute(STATEMENT_SESSION_COUNT, {'without_skips': True,
                                                                                'pass_test': True}).fetchone()[0],
         }
+
+    for category in ['1', '2', '3', '4', '5', 'x', 'n']:
+        result['votes-per-category'].setdefault(category, 0)
+
+    return result
