@@ -28,7 +28,7 @@
 
     <p>Cantidad total de votos: {{ stats['votes'] }}</p>
     <p>Cantidad de sesiones: {{ stats['sessions'] }}</p>
-    <p>Votos a los 4 tweets de prueba: {{ stats['test-tweets-vote-count'] }}</p>
+    <p>Votos a los 3 tweets de prueba: {{ stats['test-tweets-vote-count'] }}</p>
     <p>Votos que no fueron a los de prueba: {{ stats['votes-not-consider-test'] }}</p>
 
     <p>Distribución de votos por tweet (sin los de prueba):</p>
@@ -37,50 +37,21 @@
     <p>Votos por categoría:</p>
     <div id="chart-votes-per-category" class="chart"></div>
 
-    <p>Votos faltantes para llegar a 5 por tweet: {{ 'TODO' }}</p>
-
     <h2>Votos sin salteos</h2>
 
     <p>Cantidad de votos: {{ stats['votes-without-skips'] }}</p>
     <p>Cantidad de sesiones: {{ stats['sessions-without-skips'] }}</p>
-    <p>Votos a los 4 tweets de prueba: {{ 'TODO' }}</p>
-    <p>Votos que no fueron a los de prueba: {{ 'TODO' }}</p>
-
-    <p>Distribución de votos por tweet (sin los de prueba):</p>
-    <div id="chart-histogram-without-skips" class="chart"></div>
-
-    <p>Votos por categoría:</p>
-    <div id="chart-votes-per-category-without-skips" class="chart"></div>
-
-    <p>Votos faltantes para llegar a 5 por tweet: {{ 'TODO' }}</p>
 
     <h2>Votos que pasan los tweets de prueba y no son salteos</h2>
 
     <p>Votos, que no son salteos, cuya sesión cumpla haber pasado los tweets de prueba.</p>
 
-    <p>
-      Para ver si pasaron los tweets de prueba, primero recordar que originalmente eran 3: uno de no humor, luego uno
-      de humor y finalmente otro de no humor. En el medio de la votación se cambió el de humor por otro tweet de humor,
-      por considerarse un poco ambiguo. Entonces, el criterio para pasar los tweets de prueba es que se hayan
-      clasificado correctamente los dos no humorísticos y que si votó el nuevo tweet de prueba de humor entonces que
-      esté bien votado.
-    </p>
-
     <p>Cantidad de votos: {{ stats['votes-pass-test'] }}</p>
     <p>Cantidad de sesiones: {{ stats['sessions-pass-test'] }}</p>
-    <p>Votos a los 4 tweets de prueba: {{ 'TODO' }}</p>
-    <p>Votos que no fueron a los de prueba: {{ 'TODO' }}</p>
-
-    <p>Distribución de votos por tweet (sin los de prueba):</p>
-    <div id="chart-histogram-pass-test" class="chart"></div>
-
-    <p>Votos por categoría:</p>
-    <div id="chart-votes-per-category-pass-test" class="chart"></div>
-
-    <p>Votos faltantes para llegar a 5 por tweet: {{ 'TODO' }}</p>
   </div>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <!--suppress ES6ConvertVarToLetConst, JSUnresolvedFunction, JSUnresolvedVariable -->
   <script type="text/javascript">
     google.charts.load('current', {packages:['corechart']});
 
