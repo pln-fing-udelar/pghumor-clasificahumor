@@ -60,8 +60,8 @@ STATEMENT_SESSION_COUNT = sqlalchemy.sql.text('SELECT COUNT(DISTINCT v.session_i
                                               '                 AND vote != \'x\''
                                               '                 AND vote != \'n\') s3'
                                               '     ON v.session_id = s3.session_id'
-                                              ' WHERE (:without_skips = FALSE OR vote != \'n\')'
-                                              '   AND (:pass_test = FALSE'
+                                              ' WHERE (NOT :without_skips OR vote != \'n\')'
+                                              '   AND (NOT :pass_test'
                                               '     OR (s1.session_id IS NOT NULL'
                                               '       AND s2.session_id IS NOT NULL'
                                               '       AND s3.session_id IS NOT NULL))')
