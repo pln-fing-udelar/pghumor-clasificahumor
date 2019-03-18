@@ -11,10 +11,9 @@ services:
     networks:
       - net
   database:
-    image: mysql:5
+    build: db
     volumes:
       - data:/var/lib/mysql
-      - ./mysql-charset.cnf:/etc/mysql/conf.d/mysql-charset.cnf
     networks:
       - net
 networks:
