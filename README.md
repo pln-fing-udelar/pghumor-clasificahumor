@@ -16,7 +16,7 @@ the second one is for advanced use (such as debugging with an IDE).
 You need Docker and Docker Compose for this. To run the Flask
 development server in debug mode, auto-detecting changes:
 
-```shell
+```bash
 docker-compose up --build
 ```
 
@@ -24,7 +24,7 @@ docker-compose up --build
 
 1. Install the dependencies using [pipenv](https://docs.pipenv.org/):
 
-    ```shell
+    ```bash
     pipenv install
     ```
 
@@ -43,14 +43,13 @@ vars values):
 
 3. Run:
 
-    ```shell
+    ```bash
     pipenv shell  # It will load the environment, along with the .env file.
     flask run
     ```
 
 4. Setup a MySQL 5.7 instance. It could be the
 instance generated with the Docker setup.
-
 
 ## Tweets data
 
@@ -62,35 +61,43 @@ First, create a database with the options
 `DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci`. It could be
 created with [schema.sql](schema.sql):
 
-```shell
+```bash
 mysql -u $USER -p < schema.sql
 ```
 
 To load a database dump, run in another shell:
 
-```shell
+```bash
 mysql -u $USER -p database < dump.sql
 ```
 
 You can prefix `docker-compose exec database` to the command to run it
 in the database Docker container.
 
-### Known problem
-
-Sometimes the tweets text after loading the dump has emojis encoding
-problems with. You can use the [update_tweets_text script](https://github.com/pln-fing-udelar/humor/blob/master/extraction/update_tweets_text.py)
-to solve it.
-
 ## Testing
 
 To run it using a WSGI server, just like in production, do:
 
-```shell
+```bash
 docker-compose -f docker-compose.yml -f docker-compose.testing.yml up -d --build
 ```
 
 Then you can do some testing, such as running a load test:
 
-```shell
+```bash
 ./load_test.sh
+```
+
+## Manipulating production data
+
+To backup data in production:
+
+```bash
+docker exec clasificahumor_database_1 mysqldump -u root -p pghumor > dump.sql
+```
+
+To run a SQL script in production (e.g., to restore some data):
+
+```bash
+docker exec -i clasificahumor_database_1 mysql -u root -p pghumor < dump.sql
 ```
