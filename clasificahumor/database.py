@@ -76,7 +76,7 @@ STATEMENT_HISTOGRAM = sqlalchemy.sql.text('SELECT c, COUNT(*) as freq'
                                           '        FROM tweets t'
                                           '          LEFT JOIN (SELECT tweet_id FROM votes) v'  # WHERE vote != \'n\'
                                           '            ON t.tweet_id = v.tweet_id'
-                                          '        WHERE weight <= 1 AND tweet_id <> 1088158691633713152'
+                                          '        WHERE weight <= 1 AND t.tweet_id <> 1088158691633713152'
                                           '        GROUP BY t.tweet_id) a'
                                           ' GROUP BY c'
                                           ' ORDER BY c')
