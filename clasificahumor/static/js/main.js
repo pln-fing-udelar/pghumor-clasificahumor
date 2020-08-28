@@ -3,6 +3,8 @@ let $homeContent;
 let $tweet;
 let $humor;
 let $votesAndToolbox;
+let $votes_humor;
+let $votes_offensive;
 let $toolbox;
 let $voteClass;
 let $vote1;
@@ -10,6 +12,12 @@ let $vote2;
 let $vote3;
 let $vote4;
 let $vote5;
+let $voteo1;
+let $voteo2;
+let $voteo3;
+let $voteo4;
+let $voteo5;
+let $question;
 let $legendVote;
 let $notHumor;
 let $skip;
@@ -17,6 +25,9 @@ let $isOffensive;
 let emoji;
 
 let legendsShownForFirstTime = false;
+
+let mode = 'humor';
+let collectVotes = {};
 
 const voteCodeToText = {
     1: "Nada gracioso",
@@ -39,6 +50,20 @@ $(document).ready(function () {
     moveToolboxIfOutside();
 });
 
+function switchMode() {
+    if (mode == 'humor') {
+        mode = 'offensive';
+        $question.text("Is this text generally offensive?");
+    } else if (mode == 'offensive') {
+        mode = 'personal';
+        $question.text("Is this text personally offensive?");
+    } else if (mode == 'personal') {
+        mode = 'humor';
+        $question.text("Is the intention of this text to be humorous?");
+        collectVotes = {};
+    }
+}
+
 function setupSentry() {
     // The following key is public.
     Raven.config('https://3afb3f9917f44b2a87e6fbb070a8977b@sentry.io/298102', {
@@ -51,7 +76,9 @@ function setupElements() {
     $homeContent = $('#home-content');
     $tweet = $('#tweet-text');
     $humor = $('#humor');
-    $votesAndToolbox = $('#votes,#toolbox');
+    $votesAndToolbox = $('#votes_humor,#votes_offensive,#toolbox');
+    $votes_humor = $('#votes_humor');
+    $votes_offensive = $('#votes_offensive');
     $toolbox = $('#toolbox');
     $voteClass = $('.vote');
     $vote1 = $('#vote-1');
@@ -59,6 +86,12 @@ function setupElements() {
     $vote3 = $('#vote-3');
     $vote4 = $('#vote-4');
     $vote5 = $('#vote-5');
+    $voteo1 = $('#vote-o-1');
+    $voteo2 = $('#vote-o-2');
+    $voteo3 = $('#vote-o-3');
+    $voteo4 = $('#vote-o-4');
+    $voteo5 = $('#vote-o-5');
+    $question = $('#question');
     $legendVote = $('.legend-vote');
     $notHumor = $('#not-humor');
     $skip = $('#skip');
@@ -124,7 +157,16 @@ function setUiListeners() {
     });
 
     $humor.hover(function () {
-        $votesAndToolbox.css('display', '');
+        // $votesAndToolbox.css('display', '');
+        if (mode == 'humor') {
+            $toolbox.css('display','');
+            $votes_humor.css('display','');
+            $votes_offensive.css('display','none');
+        } else {
+            $toolbox.css('display','');
+            $votes_humor.css('display','none');
+            $votes_offensive.css('display','');
+        }
     });
 
     $notHumor.click(function () {
@@ -156,6 +198,26 @@ function setUiListeners() {
         vote('5');
     });
 
+    $voteo1.click(function () {
+        vote('1');
+    });
+
+    $voteo2.click(function () {
+        vote('2');
+    });
+
+    $voteo3.click(function () {
+        vote('3');
+    });
+
+    $voteo4.click(function () {
+        vote('4');
+    });
+
+    $voteo5.click(function () {
+        vote('5');
+    });
+
     $skip.click(function () {
         vote('n');
     });
@@ -166,27 +228,35 @@ function setUiListeners() {
 }
 
 function vote(voteOption) {
-    const oldIndex = index;
-    index = (index + 1) % tweets.length;
+    collectVotes[mode] = voteOption;
 
-    const otherIndex = (index + 1) % tweets.length;
+    if (mode == 'personal') {
+        const oldIndex = index;
+        index = (index + 1) % tweets.length;
 
-    $.post('vote', {
-        tweet_id: tweets[oldIndex].id,
-        vote: voteOption,
-        ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
-        is_offensive: $isOffensive.prop('checked'),
-    }, function (tweet) {
-        tweets[oldIndex] = tweet;
-    }, 'json');
+        const otherIndex = (index + 1) % tweets.length;
 
-    showTweet();
+        $.post('vote', {
+            tweet_id: tweets[oldIndex].id,
+            vote_humor: collectVotes['humor'],
+            vote_offensive: collectVotes['offensive'],
+            vote_personal: collectVotes['personal'],
+            ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
+            is_offensive: $isOffensive.prop('checked'),
+        }, function (tweet) {
+            tweets[oldIndex] = tweet;
+        }, 'json');
 
-    $.mdtoast(toastText(voteOption), {duration: 3000});
+        showTweet();
+
+        $.mdtoast(toastText(voteOption), {duration: 3000});
+    }
 
     $votesAndToolbox.fadeOut();
 
     $isOffensive.prop('checked', false);
+
+    switchMode();
 }
 
 function toastText(voteOption) {

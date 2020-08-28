@@ -31,3 +31,17 @@ CREATE TABLE votes (
   INDEX (session_id),
   FOREIGN KEY (tweet_id) REFERENCES tweets (tweet_id)
 ) ENGINE InnoDB;
+
+CREATE TABLE votes2020 (
+  tweet_id BIGINT UNSIGNED NOT NULL,
+  session_id CHAR(100) NOT NULL,
+  vote_humor CHAR(1) NOT NULL,
+  vote_offensive CHAR(1) NOT NULL,
+  vote_personal CHAR(1) NOT NULL,
+  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_offensive BOOL DEFAULT 0,
+  PRIMARY KEY (tweet_id, session_id),
+  INDEX (tweet_id),
+  INDEX (session_id),
+  FOREIGN KEY (tweet_id) REFERENCES tweets (tweet_id)
+) ENGINE InnoDB;

@@ -23,6 +23,9 @@ STATEMENT_RANDOM_TWEETS = sqlalchemy.sql.text('SELECT t.tweet_id, text'
 STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote, is_offensive)'
                                          ' VALUES (:tweet_id, :session_id, :vote, :is_offensive)'
                                          ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
+STATEMENT_ADD_VOTE_2020 = sqlalchemy.sql.text('INSERT INTO votes2020 (tweet_id, session_id, vote_humor, vote_offensive, vote_personal)'
+                                         ' VALUES (:tweet_id, :session_id, :vote_humor, :vote_offensive, :vote_personal)'
+                                         ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
 STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*)'
                                            ' FROM votes v'
                                            '   LEFT JOIN (SELECT session_id'
@@ -148,6 +151,21 @@ def add_vote(session_id: str, tweet_id: str, vote: str, is_offensive: bool) -> N
         with engine.connect() as connection:
             connection.execute(STATEMENT_ADD_VOTE, {'tweet_id': tweet_id, 'session_id': session_id, 'vote': vote,
                                                     'is_offensive': is_offensive})
+
+def add_vote_2020(session_id: str, tweet_id: str, vote_humor: str, vote_offensive: str, vote_personal: str) -> None:
+    """
+    Adds a vote for a tweet by a determined session.
+
+    :param session_id: Session ID
+    :param tweet_id: Tweet ID
+    :param vote_humor: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
+    :param vote_offensive: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
+    :param vote_personal: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
+    """
+    if vote_humor in ['1', '2', '3', '4', '5', 'x', 'n'] and vote_offensive in ['1', '2', '3', '4', '5', 'x', 'n'] and vote_personal in ['1', '2', '3', '4', '5', 'x', 'n']:
+        with engine.connect() as connection:
+            connection.execute(STATEMENT_ADD_VOTE_2020, {'tweet_id': tweet_id, 'session_id': session_id,
+                                                    'vote_humor': vote_humor, 'vote_offensive': vote_offensive, 'vote_personal': vote_personal})
 
 
 def vote_count_without_skips() -> int:

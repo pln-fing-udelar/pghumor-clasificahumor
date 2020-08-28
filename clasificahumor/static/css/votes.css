@@ -48,7 +48,12 @@
   transition: opacity 0.15s;
 }
 
-#votes {
+#votes_humor {
+  position: absolute;
+  left: -75px;
+}
+
+#votes_offensive {
   position: absolute;
   left: -75px;
 }
@@ -112,6 +117,22 @@
   transition-delay: 0.12s;
 }
 
+#humor-container:hover #vote-o-2 {
+  transition-delay: 0.03s;
+}
+
+#humor-container:hover #vote-o-3 {
+  transition-delay: 0.06s;
+}
+
+#humor-container:hover #vote-o-4 {
+  transition-delay: 0.09s;
+}
+
+#humor-container:hover #vote-o-5 {
+  transition-delay: 0.12s;
+}
+
 #vote-2 {
   background-position: 0 -48px;
   left: 50px;
@@ -129,5 +150,30 @@
 
 #vote-5 {
   background-position: 0 -192px;
+  left: 200px;
+}
+
+#vote-o-1 {
+  background-position: 0 -240px;
+  left: 0px;
+}
+
+#vote-o-2 {
+  background-position: 0 -288px;
+  left: 50px;
+}
+
+#vote-o-3 {
+  background-position: 0 -336px;
+  left: 100px;
+}
+
+#vote-o-4 {
+  background-position: 0 -384px;
+  left: 150px;
+}
+
+#vote-o-5 {
+  background-position: 0 -432px;
   left: 200px;
 }

@@ -84,19 +84,28 @@
         </div>
 
         <div id="form-container">
-          <p id="question">¿El tweet pretende ser humorístico?</p>
+          <p id="question">Is the intention of this text to be humorous?</p>
 
           <ul id="answers">
             <li id="humor-answer" class="answer">
               <div id="humor-container">
-                <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
-                <div id="toolbox"></div>
-                <div id="votes">
-                  <button id="vote-1" class="vote"><span class="legend-vote">Nada gracioso</span></button>
-                  <button id="vote-2" class="vote"><span class="legend-vote">Poco gracioso</span></button>
+                <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Yes</button>
+                <div id="toolbox">
+                </div>
+                <div id="votes_humor">
+                  <button id="vote-1" class="vote"><span class="legend-vote">Not funny</span></button>
+                  <button id="vote-2" class="vote"><span class="legend-vote">Somewhat funny</span></button>
                   <button id="vote-3" class="vote"><span class="legend-vote">Regular</span></button>
-                  <button id="vote-4" class="vote"><span class="legend-vote">Bueno</span></button>
-                  <button id="vote-5" class="vote"><span class="legend-vote">¡Buenísimo!</span></button>
+                  <button id="vote-4" class="vote"><span class="legend-vote">Good</span></button>
+                  <button id="vote-5" class="vote"><span class="legend-vote">¡Very good!</span></button>
+                </div>
+                <div id="votes_offensive">
+                  <button id="vote-o-1" class="vote"><span class="legend-vote">Option 1</span></button>
+                  <button id="vote-o-2" class="vote"><span class="legend-vote">Option 2</span></button>
+                  <button id="vote-o-3" class="vote"><span class="legend-vote">Option 3</span></button>
+                  <button id="vote-o-4" class="vote"><span class="legend-vote">Option 4</span></button>
+                  <button id="vote-o-5" class="vote"><span class="legend-vote">Option 5</span></button>                  
+
                 </div>
               </div>
             </li>
@@ -105,16 +114,6 @@
               <button id="not-humor" type="button" class="btn btn-lg btn-default btn-answer">No</button>
             </li>
 
-            <li class="answer">
-              <button id="skip" type="button" class="btn btn-lg btn-link btn-answer">Saltear</button>
-            </li>
-
-            <li class="answer">
-              <label id="is-offensive-label" for="is-offensive">
-                <input id="is-offensive" type="checkbox" />
-                Ofensivo
-              </label>
-            </li>
           </ul>
         </div>
       </div>

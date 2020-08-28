@@ -78,9 +78,8 @@ def tweets_route() -> Response:
 def vote_and_get_new_tweet_route() -> Response:
     session_id = get_session_id()
 
-    if 'tweet_id' in request.form and 'vote' in request.form and 'is_offensive' in request.form:
-        is_offensive = request.form['is_offensive'].lower() == 'true'
-        database.add_vote(session_id, request.form['tweet_id'], request.form['vote'], is_offensive)
+    if 'tweet_id' in request.form and 'vote_humor' in request.form and 'vote_offensive' in request.form and 'vote_personal' in request.form:
+        database.add_vote_2020(session_id, request.form['tweet_id'], request.form['vote_humor'], request.form['vote_offensive'], request.form['vote_personal'])
 
     ignore_tweet_ids = [int(tweet_id) for tweet_id in request.form.getlist('ignore_tweet_ids[]')]
 
