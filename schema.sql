@@ -39,7 +39,6 @@ CREATE TABLE votes2020 (
   vote_offensive CHAR(1) NOT NULL,
   vote_personal CHAR(1) NOT NULL,
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  is_offensive BOOL DEFAULT 0,
   PRIMARY KEY (tweet_id, session_id),
   INDEX (tweet_id),
   INDEX (session_id),

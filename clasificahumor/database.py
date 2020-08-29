@@ -162,7 +162,7 @@ def add_vote_2020(session_id: str, tweet_id: str, vote_humor: str, vote_offensiv
     :param vote_offensive: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
     :param vote_personal: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
     """
-    if vote_humor in ['1', '2', '3', '4', '5', 'x', 'n'] and vote_offensive in ['1', '2', '3', '4', '5', 'x', 'n'] and vote_personal in ['1', '2', '3', '4', '5', 'x', 'n']:
+    if vote_humor in ['1', '2', '3', '4', '5', 'd', 'n'] and vote_offensive in ['1', '2', '3', '4', '5', 'n'] and vote_personal in ['1', '2', '3', '4', '5', 'n']:
         with engine.connect() as connection:
             connection.execute(STATEMENT_ADD_VOTE_2020, {'tweet_id': tweet_id, 'session_id': session_id,
                                                     'vote_humor': vote_humor, 'vote_offensive': vote_offensive, 'vote_personal': vote_personal})

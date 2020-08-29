@@ -60,12 +60,20 @@ h2 {
 
 #question {
   display: inline-block;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   margin-top: 20px;
   text-align: center;
 }
 
 #answers {
+/*  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  list-style-type: none;
+  padding: 0;
+*/}
+
+.answers-cls {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -82,7 +90,7 @@ h2 {
   min-width: 100px;
 }
 
-#humor:focus,
+/*#humor:focus,
 #humor:hover,
 #humor:active,
 #humor.active.focus,
@@ -108,7 +116,7 @@ h2 {
   color: #333;
   transition-delay: 75ms;
 }
-
+*/
 #humor-container {
   display: inline-flex;
   flex-wrap: wrap;

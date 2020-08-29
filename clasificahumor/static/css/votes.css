@@ -1,15 +1,7 @@
-.vote {
-  clip: rect(1px, 1px, 1px, 1px);
-  overflow: hidden;
+/*.vote {
   position: absolute;
   top: 0;
   left: 0;
-}
-
-#humor-container:hover .vote {
-  clip: auto;
-  overflow: visible;
-  opacity: 1;
 }
 
 .vote {
@@ -21,39 +13,74 @@
   position: absolute;
   width: 48px;
   z-index: 11;
-  transform-origin: 50% 100%;
-  transform: scale(0.1);
-  transition: all 0.3s;
+  top: 48px;
   outline: none;
-  will-change: transform;
-  opacity: 0;
+}
+*/
+.vote-humor {
+  border: none;
+  background: transparent url('../img/votes.png');
+  display: block;
+  cursor: pointer;
+  height: 48px;
+  width: 48px;
+  z-index: 11;
+  outline: none;
+  transform: scale(0.7);
+}
+
+.vote-offensive {
+  border: none;
+  background: transparent url('../img/votes.png');
+  display: block;
+  cursor: pointer;
+  height: 48px;
+  width: 56px;
+  z-index: 11;
+  outline: none;
+  transform: scale(0.7);
+}
+
+.unselected {
+  transform: scale(0.75);
+}
+
+.selected {
+  transform: scale(1);
+}
+
+.toolbox-hidden {
   visibility: hidden;
+}
+
+.votes-hidden {
+  visibility: hidden;
+}
+
+.toolbox-visible {
+  visibility: visible;
+}
+
+.votes-visible {
+  visibility: visible;
 }
 
 #humor-container {
   position: relative;
 }
 
-#toolbox {
+.toolbox {
   background: #fff;
   height: 52px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.15);
   width: 250px;
   border-radius: 40px;
-  top: -50px;
+  top: 46px;
   left: -75px;
   position: absolute;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.15s;
 }
 
-#votes_humor {
-  position: absolute;
-  left: -75px;
-}
-
-#votes_offensive {
+#votes {
   position: absolute;
   left: -75px;
 }
@@ -71,7 +98,6 @@
   opacity: 0;
   overflow: hidden;
   padding: 0 6px;
-  transition: opacity 50ms ease;
   left: 50%;
   position: absolute;
   text-align: center;
@@ -79,101 +105,99 @@
   transform: translateX(-50%);
 }
 
-#humor-container:hover .vote {
-  transform: scale(0.8) translateY(-65px);
-  visibility: visible;
+.legend-wider {
+  width: 50px;
 }
 
-#humor-container:hover .vote:hover,
-#humor-container:hover .vote:focus {
-  transition: all 0.1s ease-in;
-  transform: scale(1) translateY(-60px);
-  visibility: visible;
+.humor-d {
+  background-position: 0 -480px;
+  /*left: 50px;*/
 }
 
-#humor-container:hover .vote:hover .legend-vote,
-#humor-container:hover .vote:focus .legend-vote {
-  opacity: 1;
-}
-
-#humor-container:hover #toolbox {
-  opacity: 1;
-  visibility: visible;
-}
-
-#humor-container:hover #vote-2 {
-  transition-delay: 0.03s;
-}
-
-#humor-container:hover #vote-3 {
-  transition-delay: 0.06s;
-}
-
-#humor-container:hover #vote-4 {
-  transition-delay: 0.09s;
-}
-
-#humor-container:hover #vote-5 {
-  transition-delay: 0.12s;
-}
-
-#humor-container:hover #vote-o-2 {
-  transition-delay: 0.03s;
-}
-
-#humor-container:hover #vote-o-3 {
-  transition-delay: 0.06s;
-}
-
-#humor-container:hover #vote-o-4 {
-  transition-delay: 0.09s;
-}
-
-#humor-container:hover #vote-o-5 {
-  transition-delay: 0.12s;
-}
-
-#vote-2 {
+.humor-2 {
   background-position: 0 -48px;
-  left: 50px;
+  /*left: 50px;*/
 }
 
-#vote-3 {
+.humor-3 {
   background-position: 0 -96px;
-  left: 100px;
+  /*left: 100px;*/
 }
 
-#vote-4 {
+.humor-4 {
   background-position: 0 -144px;
-  left: 150px;
+  /*left: 150px;*/
 }
 
-#vote-5 {
+.humor-5 {
   background-position: 0 -192px;
-  left: 200px;
+  /*left: 200px;*/
 }
 
-#vote-o-1 {
+.offensive-1 {
   background-position: 0 -240px;
-  left: 0px;
 }
 
-#vote-o-2 {
+.offensive-2 {
   background-position: 0 -288px;
-  left: 50px;
+  /*left: 55px;*/
 }
 
-#vote-o-3 {
+.offensive-3 {
   background-position: 0 -336px;
-  left: 100px;
+  /*left: 110px;*/
 }
 
-#vote-o-4 {
+.offensive-4 {
   background-position: 0 -384px;
-  left: 150px;
+  /*left: 165px;*/
 }
 
-#vote-o-5 {
+.offensive-5 {
   background-position: 0 -432px;
-  left: 200px;
+  /*left: 220px;*/
+}
+
+.toggle-button {
+    min-width: 100px;
+
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+    color: #333;
+    background-color: #fff;
+
+    display: inline-block;
+    margin: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid #ccc;
+
+    user-select: none;
+}
+
+.toggle-button:hover {
+    border-color: #999;
+}
+
+.toggle-button-down {
+    background-color: #e7e7e7;
+    border-color: #aaa;
+}
+
+.votes-panel {
+  display: flex;
+  background: #fff;
+  height: 52px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  border-radius: 40px;
+}
+
+.votes-panel-hidden {
+  visibility: hidden;
 }

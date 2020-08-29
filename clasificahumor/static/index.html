@@ -76,7 +76,7 @@
   <div class="main-content">
     <div class="container">
       <div id="home-content" class="content">
-        <h1>Clasificá tweets y divertite</h1>
+        <!-- <h1>Clasificá tweets y divertite</h1> -->
 
         <div id="tweet">
           <p id="tweet-text"></p>
@@ -85,41 +85,87 @@
 
         <div id="form-container">
           <p id="question">Is the intention of this text to be humorous?</p>
+          <ul class='answers-cls'>
 
-          <ul id="answers">
-            <li id="humor-answer" class="answer">
-              <div id="humor-container">
-                <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Yes</button>
-                <div id="toolbox">
-                </div>
-                <div id="votes_humor">
-                  <button id="vote-1" class="vote"><span class="legend-vote">Not funny</span></button>
-                  <button id="vote-2" class="vote"><span class="legend-vote">Somewhat funny</span></button>
-                  <button id="vote-3" class="vote"><span class="legend-vote">Regular</span></button>
-                  <button id="vote-4" class="vote"><span class="legend-vote">Good</span></button>
-                  <button id="vote-5" class="vote"><span class="legend-vote">¡Very good!</span></button>
-                </div>
-                <div id="votes_offensive">
-                  <button id="vote-o-1" class="vote"><span class="legend-vote">Option 1</span></button>
-                  <button id="vote-o-2" class="vote"><span class="legend-vote">Option 2</span></button>
-                  <button id="vote-o-3" class="vote"><span class="legend-vote">Option 3</span></button>
-                  <button id="vote-o-4" class="vote"><span class="legend-vote">Option 4</span></button>
-                  <button id="vote-o-5" class="vote"><span class="legend-vote">Option 5</span></button>                  
-
-                </div>
-              </div>
+            <li>
+              <div id="humor" class="toggle-button">Yes</div>
             </li>
 
-            <li id="not-humor-answer" class="answer">
-              <button id="not-humor" type="button" class="btn btn-lg btn-default btn-answer">No</button>
+            <li>
+              <div id="not-humor" class="toggle-button">No</div>
             </li>
 
           </ul>
+
+          <ul class='answers-cls'>
+              <div id="humor-panel" class="votes-panel">
+                <div id="vote-h-d" class="vote vote-humor humor-d"><span class="legend-vote legend-wider">I don't get it</span></div>
+                <div id="vote-h-1" class="vote vote-humor humor-1"><span class="legend-vote">Not funny</span></div>
+                <div id="vote-h-2" class="vote vote-humor humor-2"><span class="legend-vote">Somewhat funny</span></div>
+                <div id="vote-h-3" class="vote vote-humor humor-3"><span class="legend-vote">Regular</span></div>
+                <div id="vote-h-4" class="vote vote-humor humor-4"><span class="legend-vote">Good</span></div>
+                <div id="vote-h-5" class="vote vote-humor humor-5"><span class="legend-vote">Very good!</span></div>
+              </div>
+          </ul>
+
+          <p id="question">Is this text generally offensive?</p>
+          <ul class='answers-cls'>
+
+            <li>
+              <div id="offensive" class="toggle-button">Yes</div>
+            </li>
+
+            <li>
+              <div id="not-offensive" class="toggle-button">No</div>
+            </li>
+
+          </ul>
+
+          <ul class='answers-cls'>
+              <div id="offensive-panel" class="votes-panel">
+                <div id="vote-o-1" class="vote vote-offensive offensive-1"><span class="legend-vote">Vote 1</span></div>
+                <div id="vote-o-2" class="vote vote-offensive offensive-2"><span class="legend-vote">Vote 2</span></div>
+                <div id="vote-o-3" class="vote vote-offensive offensive-3"><span class="legend-vote">Vote 3</span></div>
+                <div id="vote-o-4" class="vote vote-offensive offensive-4"><span class="legend-vote">Vote 4</span></div>
+                <div id="vote-o-5" class="vote vote-offensive offensive-5"><span class="legend-vote">Vote 5</span></div>
+              </div>
+          </ul>
+
+          <p id="question">Is this text personally offensive?</p>
+
+          <ul class='answers-cls'>
+
+            <li>
+              <div id="personal" class="toggle-button">Yes</div>
+            </li>
+
+            <li>
+              <div id="not-personal" class="toggle-button">No</div>
+            </li>
+
+          </ul>
+
+          <ul class='answers-cls'>
+              <div id="personal-panel" class="votes-panel">
+                <div id="vote-p-1" class="vote vote-offensive offensive-1"><span class="legend-vote">Vote 1</span></div>
+                <div id="vote-p-2" class="vote vote-offensive offensive-2"><span class="legend-vote">Vote 2</span></div>
+                <div id="vote-p-3" class="vote vote-offensive offensive-3"><span class="legend-vote">Vote 3</span></div>
+                <div id="vote-p-4" class="vote vote-offensive offensive-4"><span class="legend-vote">Vote 4</span></div>
+                <div id="vote-p-5" class="vote vote-offensive offensive-5"><span class="legend-vote">Vote 5</span></div>
+              </div>
+          </ul>
+
+          <ul class='answers-cls'>
+            <li>
+              <button id="next" class="btn btn-lg btn-default">Next</button>
+            </li>
+          </ul>
+
         </div>
       </div>
     </div>
 
-    <footer class="container">
+<!--     <footer class="container">
       <div class="row">
         <div id="social-buttons-container" class="col-xs-6">
           <div class="fb-share-button" data-href="https://clasificahumor.com" data-layout="button_count"
@@ -147,7 +193,7 @@
       </div>
     </footer>
   </div>
-
+ -->
   <div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

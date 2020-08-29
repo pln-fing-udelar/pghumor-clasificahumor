@@ -1,33 +1,11 @@
 let $star;
 let $homeContent;
 let $tweet;
-let $humor;
-let $votesAndToolbox;
-let $votes_humor;
-let $votes_offensive;
-let $toolbox;
-let $voteClass;
-let $vote1;
-let $vote2;
-let $vote3;
-let $vote4;
-let $vote5;
-let $voteo1;
-let $voteo2;
-let $voteo3;
-let $voteo4;
-let $voteo5;
-let $question;
 let $legendVote;
-let $notHumor;
-let $skip;
-let $isOffensive;
+let $next;
 let emoji;
 
-let legendsShownForFirstTime = false;
-
-let mode = 'humor';
-let collectVotes = {};
+let votes = {};
 
 const voteCodeToText = {
     1: "Nada gracioso",
@@ -47,21 +25,44 @@ $(document).ready(function () {
     setupEmojiConverter();
     getRandomTweets();
     setUiListeners();
-    moveToolboxIfOutside();
 });
 
-function switchMode() {
-    if (mode == 'humor') {
-        mode = 'offensive';
-        $question.text("Is this text generally offensive?");
-    } else if (mode == 'offensive') {
-        mode = 'personal';
-        $question.text("Is this text personally offensive?");
-    } else if (mode == 'personal') {
-        mode = 'humor';
-        $question.text("Is the intention of this text to be humorous?");
-        collectVotes = {};
-    }
+function setupQuestion(yes_btn,no_btn,vote_pnl,vote_btns,question,votes) {
+    vote_pnl.addClass('votes-panel-hidden');
+    yes_btn.click(function () {
+        if (!yes_btn.hasClass('toggle-button-down')) {
+            delete votes[question];
+            yes_btn.addClass('toggle-button-down');
+            no_btn.removeClass('toggle-button-down');
+            vote_pnl.removeClass('votes-panel-hidden');
+        }
+    });
+    no_btn.click(function () {
+        if (!no_btn.hasClass('toggle-button-down')) {
+            vote_pnl.children('.vote').removeClass('selected');
+            votes[question] = 'n';
+            no_btn.addClass('toggle-button-down');
+            yes_btn.removeClass('toggle-button-down');
+            vote_pnl.addClass('votes-panel-hidden');
+        }
+    });
+    $.each(vote_btns,function (i,btn) {
+        btn.click(function () {
+            pieces = btn[0].id.split('-');
+            option = pieces[pieces.length-1];
+            votes[question] = option;
+            vote_pnl.children('.vote').removeClass('selected');
+            btn.addClass('selected');
+        })
+    });
+}
+
+function resetQuestion(yes_btn,no_btn,vote_pnl,question,votes) {
+    delete votes[question];
+    no_btn.removeClass('toggle-button-down');
+    yes_btn.removeClass('toggle-button-down');
+    vote_pnl.addClass('votes-panel-hidden');
+    vote_pnl.children('.vote').removeClass('selected');
 }
 
 function setupSentry() {
@@ -75,27 +76,7 @@ function setupElements() {
     $star = $('*');
     $homeContent = $('#home-content');
     $tweet = $('#tweet-text');
-    $humor = $('#humor');
-    $votesAndToolbox = $('#votes_humor,#votes_offensive,#toolbox');
-    $votes_humor = $('#votes_humor');
-    $votes_offensive = $('#votes_offensive');
-    $toolbox = $('#toolbox');
-    $voteClass = $('.vote');
-    $vote1 = $('#vote-1');
-    $vote2 = $('#vote-2');
-    $vote3 = $('#vote-3');
-    $vote4 = $('#vote-4');
-    $vote5 = $('#vote-5');
-    $voteo1 = $('#vote-o-1');
-    $voteo2 = $('#vote-o-2');
-    $voteo3 = $('#vote-o-3');
-    $voteo4 = $('#vote-o-4');
-    $voteo5 = $('#vote-o-5');
-    $question = $('#question');
-    $legendVote = $('.legend-vote');
-    $notHumor = $('#not-humor');
-    $skip = $('#skip');
-    $isOffensive = $('#is-offensive');
+    $next = $('#next');
 }
 
 function showTweet() {
@@ -142,152 +123,67 @@ function getRandomTweets() {
     });
 }
 
-function setUiListeners() {
-    $humor.click(function () {
-        if (!legendsShownForFirstTime) {
-            $legendVote.stop().fadeTo('slow', 1, function () {
-                setTimeout(function () {
-                    $legendVote.stop().fadeTo('slow', 0, function () {
-                        $legendVote.css('opacity', '');
-                    });
-                }, 1000);
-            });
-            legendsShownForFirstTime = true;
-        }
-    });
-
-    $humor.hover(function () {
-        // $votesAndToolbox.css('display', '');
-        if (mode == 'humor') {
-            $toolbox.css('display','');
-            $votes_humor.css('display','');
-            $votes_offensive.css('display','none');
+function initToggle(button) {
+    button.click(function () {
+        if (!button.hasClass('toggle-button-down')) {
+            button.addClass('toggle-button-down');
         } else {
-            $toolbox.css('display','');
-            $votes_humor.css('display','none');
-            $votes_offensive.css('display','');
+            button.removeClass('toggle-button-down');
         }
     });
+}
 
-    $notHumor.click(function () {
-        vote('x');
-        $notHumor.addClass('no-hover');
-    });
+function releaseToggle(button) {
+    button.removeClass('toggle-button-down');
+}
 
-    $notHumor.on('mousemove mouswdown', function () {
-        $notHumor.removeClass('no-hover');
-    });
+function setToggle(button) {
+    button.addClass('toggle-button-down');
+}
 
-    $vote1.click(function () {
-        vote('1');
-    });
+function setUiListeners() {
+    setupQuestion($('#humor'),$('#not-humor'),$('#humor-panel'),[$('#vote-h-d'),$('#vote-h-1'),$('#vote-h-2'),$('#vote-h-3'),$('#vote-h-4'),$('#vote-h-5')],'humor',votes);
+    setupQuestion($('#offensive'),$('#not-offensive'),$('#offensive-panel'),[$('#vote-o-1'),$('#vote-o-2'),$('#vote-o-3'),$('#vote-o-4'),$('#vote-o-5')],'offensive',votes);
+    setupQuestion($('#personal'),$('#not-personal'),$('#personal-panel'),[$('#vote-p-1'),$('#vote-p-2'),$('#vote-p-3'),$('#vote-p-4'),$('#vote-p-5')],'personal',votes);
 
-    $vote2.click(function () {
-        vote('2');
-    });
-
-    $vote3.click(function () {
-        vote('3');
-    });
-
-    $vote4.click(function () {
-        vote('4');
-    });
-
-    $vote5.click(function () {
-        vote('5');
-    });
-
-    $voteo1.click(function () {
-        vote('1');
-    });
-
-    $voteo2.click(function () {
-        vote('2');
-    });
-
-    $voteo3.click(function () {
-        vote('3');
-    });
-
-    $voteo4.click(function () {
-        vote('4');
-    });
-
-    $voteo5.click(function () {
-        vote('5');
-    });
-
-    $skip.click(function () {
-        vote('n');
-    });
-
-    $('button').mouseup(function () {
-        $(this).blur();
+    $next.click(function () {
+        vote();
     });
 }
 
-function vote(voteOption) {
-    collectVotes[mode] = voteOption;
-
-    if (mode == 'personal') {
-        const oldIndex = index;
-        index = (index + 1) % tweets.length;
-
-        const otherIndex = (index + 1) % tweets.length;
-
-        $.post('vote', {
-            tweet_id: tweets[oldIndex].id,
-            vote_humor: collectVotes['humor'],
-            vote_offensive: collectVotes['offensive'],
-            vote_personal: collectVotes['personal'],
-            ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
-            is_offensive: $isOffensive.prop('checked'),
-        }, function (tweet) {
-            tweets[oldIndex] = tweet;
-        }, 'json');
-
-        showTweet();
-
-        $.mdtoast(toastText(voteOption), {duration: 3000});
+function vote() {
+    if (!('humor' in votes) || !('offensive' in votes) || !('personal' in votes)) {
+        $.mdtoast("Please answer all questions", {duration: 3000});
+        return;
     }
 
-    $votesAndToolbox.fadeOut();
+    const oldIndex = index;
+    index = (index + 1) % tweets.length;
 
-    $isOffensive.prop('checked', false);
+    const otherIndex = (index + 1) % tweets.length;
 
-    switchMode();
-}
+    $.post('vote', {
+        tweet_id: tweets[oldIndex].id,
+        vote_humor: votes['humor'],
+        vote_offensive: votes['offensive'],
+        vote_personal: votes['personal'],
+        ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
+        // is_offensive: $isOffensive.prop('checked'),
+    }, function (tweet) {
+        tweets[oldIndex] = tweet;
+    }, 'json');
 
-function toastText(voteOption) {
-    if (voteOption === 'x') {
-        return "Clasificado como no humorístico. ¡Gracias!";
-    } else if (voteOption === 'n') {
-        return "Tweet salteado. ¡Gracias!";
-    } else {
-        return "Clasificado como "
-            + removeNonWords(voteCodeToText[Number(voteOption)]).toLowerCase()
-            + ". ¡Gracias!";
-    }
+    resetQuestion($('#humor'),$('#not-humor'),$('#humor-panel'),'humor',votes);
+    resetQuestion($('#offensive'),$('#not-offensive'),$('#offensive-panel'),'offensive',votes);
+    resetQuestion($('#personal'),$('#not-personal'),$('#personal-panel'),'personal',votes);
+    showTweet();
+
+    $.mdtoast("Vote registered. Thanks!", {duration: 3000});
+
+    $('html,body').scrollTop(0);
+    // $votesAndToolbox.fadeOut();
 }
 
 function removeNonWords(text) {
     return text.replace(/[^\w\sáéíóúÁÉÍÓÚüÜñÑ]/g, "");
-}
-
-function moveToolboxIfOutside() {
-    const x = $toolbox[0].getBoundingClientRect().x;
-    if (x < 0) {
-        const translation = -x + 10;
-        addPxToLeft($toolbox, translation);
-        addPxToLeft($vote1, translation);
-        addPxToLeft($vote2, translation);
-        addPxToLeft($vote3, translation);
-        addPxToLeft($vote4, translation);
-        addPxToLeft($vote5, translation);
-    }
-}
-
-function addPxToLeft(element, translation) {
-    element.css('left', (parseInt(element.css('left')) + translation).toString() + "px");
 }
