@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="apple-touch-icon" href="img/favicon.png">
+
+  <title>Clasificá tweets y divertite</title>
+
+  <link href="css/normalize.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+  <link href="css/mdtoast.min.css" rel="stylesheet" />
+  <link href="css/emoji.css" rel="stylesheet" />
+  <link href="css/votes.css" rel="stylesheet" />
+  <link href="css/main.css" rel="stylesheet" />
+</head>
+
+<body>
+
+
+  <!-- <div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> -->
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+
+<h4>INFORMATION AND CONSENT FORM</h4>
+ 
+<p>This study was certified according to the Informatics Research Ethics Process, RT number 2019/68132 Please take time to read the following information carefully. You should save this page for your records.</p>
+
+<p>Who are the researchers?</p>
+
+<p>The researchers are Julie-Anne Meaney, PhD Candidate under the supervision of Dr Walid Magdy.</p>
+ 
+
+<p>What is the purpose of the study?</p>
+
+<p>The purpose of this annotation process is to examine how different people respond to different types of humorous, offensive, and non-humorous texts.</p>
+ 
+
+<p>Why have I been asked to take part?</p>
+
+<p>This research targets people of your age group, gender, and level of education.</p>
+
+
+<p>Do I have to take part?</p>
+
+<p>No – participation in this study is entirely up to you. You can withdraw from the study at any time, without giving a reason. Your rights will not be affected. If you wish to withdraw, contact the PI. We will stop using your data in any publications or presentations submitted after you have withdrawn consent. However, we will keep copies of your original consent, and of your withdrawal request.</p>
+
+ 
+
+<p>Are there any risks associated with taking part?</p>
+
+<p>There are no significant risks associated with participation. However, you may find some of the texts offensive. If you wish to withdraw at any time, please do not hesitate to do so.</p>
+
+ 
+
+<p>Are there any benefits associated with taking part?</p>
+
+ 
+
+<p>There are no significant benefits to taking part, but you may find some of the texts funny.</p>
+
+ 
+
+<p>Who can I contact?</p>
+
+<p>If you have any further questions about the study, please contact the lead researcher, Julie-Anne Meaney julieanne.meaney@ed.ac.uk.</p>
+
+<p>If you wish to make a complaint about the study, please contact inf-ethics@inf.ed.ac.uk. When you contact us, please provide the study title and detail the nature of your complaint.</p>
+
+ 
+
+<p>I confirm that I have read and understood the Information above, that I have had the opportunity to ask questions, and that any questions I had were answered to my satisfaction. </p>
+
+<ul class='answers-cls'>
+
+  <li>
+    <div id="question1-y" class="toggle-button">Yes</div>
+  </li>
+
+  <li>
+    <div id="question1-n" class="toggle-button">No</div>
+  </li>
+
+</ul>
+
+<div class="blank-space"></div>
+
+<p>I understand that my participation is voluntary, and that I can withdraw at any time without giving a reason. Withdrawing will not affect any of my rights.</p>
+
+
+<ul class='answers-cls'>
+
+  <li>
+    <div id="question2-y" class="toggle-button">Yes</div>
+  </li>
+
+  <li>
+    <div id="question2-n" class="toggle-button">No</div>
+  </li>
+
+</ul>
+
+<div class="blank-space"></div>
+
+<p>I consent to my anonymised data being used in academic publications and presentations.</p>
+
+
+<ul class='answers-cls'>
+
+  <li>
+    <div id="question3-y" class="toggle-button">Yes</div>
+  </li>
+
+  <li>
+    <div id="question3-n" class="toggle-button">No</div>
+  </li>
+
+</ul>
+
+<div class="blank-space"></div>
+
+<p>I understand that my anonymised data can be stored for a minimum of two years </p>
+
+<ul class='answers-cls'>
+
+  <li>
+    <div id="question4-y" class="toggle-button">Yes</div>
+  </li>
+
+  <li>
+    <div id="question4-n" class="toggle-button">No</div>
+  </li>
+
+</ul>
+
+<div class="blank-space"></div>
+
+<p>I allow my data to be used in future ethically approved research.</p>
+
+<ul class='answers-cls'>
+
+  <li>
+    <div id="question5-y" class="toggle-button">Yes</div>
+  </li>
+
+  <li>
+    <div id="question5-n" class="toggle-button">No</div>
+  </li>
+
+</ul>
+
+<div class="blank-space"></div>
+
+<p>I agree to take part in this study.</p>
+
+<ul class='answers-cls'>
+
+  <li>
+    <div id="question6-y" class="toggle-button">Yes</div>
+  </li>
+
+  <li>
+    <div id="question6-n" class="toggle-button">No</div>
+  </li>
+
+</ul>
+
+<div class="blank-space"></div>
+
+<p>Prolific ID</p>
+
+<ul class='answers-cls'>
+
+  <li>
+    <input type="text" id="prolific-id-txt" class="form-control"></input>
+  </li>
+
+</ul>
+
+<div class="blank-space"></div>
+
+<ul class='answers-cls'>
+
+  <li>
+    <button id="continue-btn" class="btn btn-lg btn-default">Continue</button>
+  </li>
+
+</ul>
+
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+          integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.ravenjs.com/3.23.1/raven.min.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="js/mdtoast.js"></script>
+<!--   <script type="text/javascript" src="js/placeload.min.js"></script>
+  <script type="text/javascript" src="js/emoji.min.js"></script>
+  <script type="text/javascript" src="js/main.js"></script> -->
+  <script type="text/javascript" src="js/consent_form.js"></script>
+
+  <!--suppress CommaExpressionJS, JSUnresolvedVariable -->
+<!--   <script type="text/javascript">if(typeof wabtn4fg==="undefined")	{wabtn4fg=1;h=document.head||document.getElementsByTagName("head")[0],s=document.createElement("script");s.type="text/javascript";s.src="//cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js";h.appendChild(s)}</script>
+ -->
+  <!--suppress CommaExpressionJS, JSUnresolvedFunction, JSValidateTypes -->
+<!--   <script>
+  if (document.location.hostname !== 'localhost') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34392230-5', 'auto');
+    ga('send', 'pageview');
+  }
+  </script> -->
+</body>
+
+</html>

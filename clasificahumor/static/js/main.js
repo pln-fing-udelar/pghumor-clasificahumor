@@ -149,6 +149,8 @@ function setUiListeners() {
     $next.click(function () {
         vote();
     });
+
+    $('#help').click();
 }
 
 function vote() {

@@ -190,3 +190,7 @@ footer {
 .wa_btn {
   vertical-align: bottom;
 }
+
+.blank-space {
+  height: 25px;
+}

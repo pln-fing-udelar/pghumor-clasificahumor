@@ -85,6 +85,9 @@ STATEMENT_HISTOGRAM = sqlalchemy.sql.text('SELECT c, COUNT(*) as freq'
                                           ' ORDER BY c')
 STATEMENT_VOTE_COUNT_PER_CATEGORY = sqlalchemy.sql.text('SELECT vote, COUNT(*) FROM votes GROUP BY vote ORDER BY vote')
 
+STATEMENT_ADD_ANNOTATOR = sqlalchemy.sql.text('INSERT INTO annotators (session_id, prolific_id, question1, question2, question3, question4, question5, question6)'
+                                         ' VALUES (:session_id, :prolific_id, :question1, :question2, :question3, :question4, :question5, :question6)')
+
 
 def create_engine():
     return sqlalchemy.create_engine(f'mysql://{os.environ["DB_USER"]}:{os.environ["DB_PASS"]}@{os.environ["DB_HOST"]}'
@@ -166,6 +169,30 @@ def add_vote_2020(session_id: str, tweet_id: str, vote_humor: str, vote_offensiv
         with engine.connect() as connection:
             connection.execute(STATEMENT_ADD_VOTE_2020, {'tweet_id': tweet_id, 'session_id': session_id,
                                                     'vote_humor': vote_humor, 'vote_offensive': vote_offensive, 'vote_personal': vote_personal})
+
+def add_annotator(session_id, prolific_id, question1, question2, question3, question4, question5, question6) -> None:
+    """
+    Registers an annotator and their consent form
+
+    :param session_id: Session ID
+    :param prolific_id: Prolific ID
+    :param question1: Answer to question1 in the form 'y' or 'n'
+    :param question2: Answer to question2 in the form 'y' or 'n'
+    :param question3: Answer to question3 in the form 'y' or 'n'
+    :param question4: Answer to question4 in the form 'y' or 'n'
+    :param question5: Answer to question5 in the form 'y' or 'n'
+    :param question6: Answer to question6 in the form 'y' or 'n'
+    """
+    with engine.connect() as connection:
+        connection.execute(STATEMENT_ADD_ANNOTATOR, {
+          'session_id': session_id,
+          'prolific_id': prolific_id,
+          'question1': question1,
+          'question2': question1,
+          'question3': question1,
+          'question4': question1,
+          'question5': question1,
+          'question6': question1})
 
 
 def vote_count_without_skips() -> int:

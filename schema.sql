@@ -44,3 +44,15 @@ CREATE TABLE votes2020 (
   INDEX (session_id),
   FOREIGN KEY (tweet_id) REFERENCES tweets (tweet_id)
 ) ENGINE InnoDB;
+
+CREATE TABLE annotators (
+  session_id CHAR(100) NOT NULL,
+  prolific_id CHAR(100) NOT NULL,
+  form_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  question1 CHAR(1),
+  question2 CHAR(1),
+  question3 CHAR(1),
+  question4 CHAR(1),
+  question5 CHAR(1),
+  question6 CHAR(1)
+) ENGINE InnoDB;

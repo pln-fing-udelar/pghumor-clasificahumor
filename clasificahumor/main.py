@@ -92,6 +92,16 @@ def vote_and_get_new_tweet_route() -> Response:
 
     return jsonify(tweets[0] if tweets else {})
 
+@app.route('/annotator', methods=['POST'])
+def register_annotator() -> Response:
+    session_id = get_session_id()
+
+    if 'prolific_id' in request.form and 'question1' in request.form and 'question2' in request.form and 'question3' in request.form and 'question4' in request.form and 'question5' in request.form and 'question6' in request.form:
+        database.add_annotator(session_id, request.form['prolific_id'], request.form['question1'], request.form['question2'], request.form['question3'], request.form['question4'], request.form['question5'], request.form['question6'])
+        return jsonify("OK")
+    else:
+        return jsonify("Error: Please answer all questions")
+
 
 @app.route('/vote-count')
 def vote_count_route() -> Response:
