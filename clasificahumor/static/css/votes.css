@@ -109,29 +109,33 @@
   width: 50px;
 }
 
+.legend-visible {
+  opacity: 1;
+}
+
 .humor-d {
+  transform: scale(0.7);
   background-position: 0 -480px;
-  /*left: 50px;*/
+}
+
+.humor-d.selected {
+  background-position: 0 -528px;
 }
 
 .humor-2 {
   background-position: 0 -48px;
-  /*left: 50px;*/
 }
 
 .humor-3 {
   background-position: 0 -96px;
-  /*left: 100px;*/
 }
 
 .humor-4 {
   background-position: 0 -144px;
-  /*left: 150px;*/
 }
 
 .humor-5 {
   background-position: 0 -192px;
-  /*left: 200px;*/
 }
 
 .offensive-1 {
@@ -140,22 +144,18 @@
 
 .offensive-2 {
   background-position: 0 -288px;
-  /*left: 55px;*/
 }
 
 .offensive-3 {
   background-position: 0 -336px;
-  /*left: 110px;*/
 }
 
 .offensive-4 {
   background-position: 0 -384px;
-  /*left: 165px;*/
 }
 
 .offensive-5 {
   background-position: 0 -432px;
-  /*left: 220px;*/
 }
 
 .toggle-button {

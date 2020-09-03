@@ -99,12 +99,12 @@
 
           <ul class='answers-cls'>
               <div id="humor-panel" class="votes-panel">
-                <div id="vote-h-d" class="vote vote-humor humor-d"><span class="legend-vote legend-wider">I don't get it</span></div>
-                <div id="vote-h-1" class="vote vote-humor humor-1"><span class="legend-vote">Not funny</span></div>
-                <div id="vote-h-2" class="vote vote-humor humor-2"><span class="legend-vote">Somewhat funny</span></div>
-                <div id="vote-h-3" class="vote vote-humor humor-3"><span class="legend-vote">Regular</span></div>
-                <div id="vote-h-4" class="vote vote-humor humor-4"><span class="legend-vote">Good</span></div>
-                <div id="vote-h-5" class="vote vote-humor humor-5"><span class="legend-vote">Very good!</span></div>
+                <div id="vote-h-d" class="vote vote-humor humor-d"><span class="legend-vote legend-wider legend-visible">I don't get it</span></div>
+                <div id="vote-h-1" class="vote vote-humor offensive-1"><span class="legend-vote">Not funny</span></div>
+                <div id="vote-h-2" class="vote vote-humor offensive-2"><span class="legend-vote">Somewhat funny</span></div>
+                <div id="vote-h-3" class="vote vote-humor offensive-3"><span class="legend-vote">Regular</span></div>
+                <div id="vote-h-4" class="vote vote-humor offensive-4"><span class="legend-vote">Good</span></div>
+                <div id="vote-h-5" class="vote vote-humor offensive-5"><span class="legend-vote">Very good!</span></div>
               </div>
           </ul>
 
@@ -165,9 +165,9 @@
       </div>
     </div>
 
-<!--     <footer class="container">
+    <footer class="container">
       <div class="row">
-        <div id="social-buttons-container" class="col-xs-6">
+<!--         <div id="social-buttons-container" class="col-xs-6">
           <div class="fb-share-button" data-href="https://clasificahumor.com" data-layout="button_count"
                data-size="small" data-mobile-iframe="true">
             <a class="fb-xfbml-parse-ignore" target="_blank"
@@ -185,15 +185,15 @@
             Compartir
           </a>
         </div>
-        <div class="col-xs-6">
+ -->        <div class="col-xs-6">
           <button id="help" class="btn btn-link" type="button" data-toggle="modal" data-target="#about">
-            Ayuda
+            Help
           </button>
         </div>
       </div>
     </footer>
   </div>
- -->
+
   <div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -201,77 +201,35 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title" id="myModalLabel">Ayuda</h4>
+          <h4 class="modal-title" id="myModalLabel">Instructions</h4>
         </div>
         <div class="modal-body">
-          <h4>Instrucciones</h4>
+<h4>TASK INSTRUCTIONS</h4>
 
-          <p>
-            Dado el tweet que se muestra en pantalla, ¿lo considerás humorístico? En caso positivo, apretá el
-            botón "Sí", y elegí qué tan gracioso le parece del 1 al 5 (representado por los 5 emojis).
-            En caso que no, apretá en "No". Si no estás seguro, poné "Saltear". Luego de esto, se mostrará otro tweet y
-            se repite el procedimiento de anotación.
-          </p>
 
-          <p>
-            En un segundo nivel de importancia, también nos interesa saber si los tweets son ofensivos. Entonces, antes
-            de indicar si son humoristicos, tildá la casilla de verificación que dice "Ofensivo" si te parece que el tweet
-            que aparece en pantalla es ofensivo.
-          </p>
+<p>In this task, you will imagine that you are a social media moderator. This means that you get to decide what content is published on the social media platform. You make the rules, and they fit in perfectly with your tastes and opinions!</p>
 
-          <hr>
+ 
+<p>You will see a selection of short texts and you will be asked some questions about the text. </p>
 
-          <h4>Sobre el proyecto</h4>
+ 
+<p>1. Read the text in the box</p>
+ 
+<p>2. You’ll be asked if the intention of the tweet is to be humorous. By this we mean, is it supposed to have a funny or comic effect, as opposed to a serious effect? This helps us to identify if the genre is humor. You may not personally find the text funny, but you should decide if you think that the intention of the author was to be funny.</p>
 
-          <p>
-            El fin de esta página es armar una base de datos de opiniones sobre humor durante febrero de 2019,
-            y así hacer investigación sobre
-            <a href="https://es.wikipedia.org/wiki/Humor_computacional" target="_blank">Humor Computacional</a>.
-          </p>
-          <p>
-            Por ejemplo, va a usarse como conjunto de datos para
-            <a href="https://www.fing.edu.uy/inco/grupos/pln/haha/" target="_blank">la competencia HAHA 2019 (2ª
-              edición)</a>,
-            organizada por el
-            <a href="https://www.fing.edu.uy/inco/grupos/pln" target="_blank">Grupo de Procesamiento de Lenguaje Natural
-              (PLN)</a> de la
-            <a href="https://www.fing.edu.uy" target="_blank">Facultad de Ingeniería</a> de la
-            <a href="http://www.universidad.edu.uy/" target="_blank">Universidad de la República</a>, Uruguay.
-            La competencia consiste básicamente en predecir si un tweet es humorístico o no, y también decir qué tan
-            gracioso le puede resultar a la gente 😲 Si te interesa, podés participar.
-          </p>
-          <p>El código de este proyecto
-            <a href="https://github.com/pln-fing-udelar/pghumor-clasificahumor" target="_blank">se encuentra disponible
-              en GitHub</a>.
-          </p>
-          <p>
-            Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad. ¡¡¡MUCHAS GRACIAS!!!
-          </p>
+ 
+<p>3. For the humorous texts, you’ll give your subjective impression of the text - how funny do you find it, on a scale from 1-5? If you identified that the genre is humorous, but you don’t personally find it funny, just choose the lowest rating. </p>
 
-          <h4>Historia del proyecto</h4>
+ 
+<p>4. After this, you’ll be asked if this text is generally offensive. By this we mean, do you think a reasonable number of people would be offended by this? Do you think it insults another person or group simply for belonging to that group, or do you think it’s inappropriate? If you select yes, we’ll ask you to decide how generally offensive it is, on a scale from 1-5. It does not have to be personally offensive to you, but if you think it is inappropriate, you should select this label. Again, if you select yes, you’ll be asked to select how generally offensive it is, from 1-5.</p>
 
-          <p>
-            La página fue creada en 2014 por dos estudiantes de Ingeniería en Computación,
-            (<a href="https://github.com/bryant1410" target="_blank">Santiago Castro</a> y
-            <a href="https://www.fing.edu.uy/~mcubero/" target="_blank">Matías Cubero</a>)
-            originalmente para el proyecto de grado
-            <a href="https://github.com/pln-fing-udelar/pghumor" target="_blank">pgHumor</a>
-            – Universidad de la República, Uruguay, apoyados por la
-            <a href="http://www.anii.org.uy" target="_blank">ANII</a>. En 2018 se volvió a lanzar para tener más
-            anotaciones y de mejor calidad 😊, para la 1ª edición de la competencia HAHA.
-          </p>
 
-          <h4>Cookies</h4>
-
-          <p>
-            Este sitio usa cookies para hacer un seguimiento de qué tweets ya clasificó cada persona, y evitar mostrar
-            repetidos. También usa <a href="https://analytics.google.com/analytics/web/" target="_blank">Google
-            Analytics</a> para conocer información general sobre los anotadores (país, idioma, género, rango etario,
-            etc).
-          </p>
+<p>5. Finally, you’ll be asked if this text is personally offensive. By this we mean, does this target you or a group you belong to, do you feel hurt by this joke, or do you feel hurt on another person’s behalf? If you select yes, you will also be asked to rate this 1-5.</p>
+ 
+<p>IF YOU FORGET THE DEFINITIONS OF HUMOROUS, GENERALLY OFFENSIVE OR PERSONALLY OFFENSIVE, JUST ROLL YOUR MOUSE OVER THE QUESTION TO GET A REMINDER</p>
         </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
       </div>
     </div>
