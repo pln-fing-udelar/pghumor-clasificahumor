@@ -5,24 +5,8 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional.">
-  <meta name="author" content="Santiago Castro, Matías Cubero y el Grupo PLN, UdelaR">
-  <link rel="apple-touch-icon" href="img/favicon.png">
 
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Clasificá tweets y divertite" />
-  <meta property="og:image" content="https://clasificahumor.com/img/og.png" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:title" content="Clasificá tweets y divertite" />
-  <meta property="og:description" content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional." />
-  <meta property="og:url" content="https://clasificahumor.com/" />
-  <meta property="fb:app_id" content="1223095247821615" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@PLN_UdelaR" />
-  <meta name="twitter:creator" content="@PLN_UdelaR" />
-
-  <title>Clasificá tweets y divertite</title>
+  <title>Annotate tweets for Hahackaton</title>
 
   <link href="css/normalize.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -84,7 +68,7 @@
         </div>
 
         <div id="form-container">
-          <p id="question">Is the intention of this text to be humorous?</p>
+          <p id="question" title="Is it supposed to have a funny or comic effect, as opposed to a serious effect?">Is the intention of this text to be humorous?</p>
           <ul class='answers-cls'>
 
             <li>
@@ -108,7 +92,7 @@
               </div>
           </ul>
 
-          <p id="question">Is this text generally offensive?</p>
+          <p id="question" title="Does this text insult another person or group simply for belonging to that group?">Is this text generally offensive?</p>
           <ul class='answers-cls'>
 
             <li>
@@ -131,7 +115,7 @@
               </div>
           </ul>
 
-          <p id="question">Is this text personally offensive?</p>
+          <p id="question" title="Do you feel hurt by this joke, or do you feel hurt on another person's behalf?">Is this text personally offensive?</p>
 
           <ul class='answers-cls'>
 

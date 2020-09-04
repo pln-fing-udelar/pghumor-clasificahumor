@@ -47,8 +47,14 @@ function continue_click() {
         return;
     }
 
+    prolific_id_val = $("#prolific-id-txt").val().trim();
+    if (prolific_id_val == "") {
+        $.mdtoast("Please specify your Prolific ID", {duration: 3000});
+        return;
+    }
+
     $.post('annotator', {
-        prolific_id: "12345abc",
+        prolific_id: prolific_id_val,
         question1: answers['question1'],
         question2: answers['question2'],
         question3: answers['question3'],
@@ -58,6 +64,8 @@ function continue_click() {
     }, function (msg) {
         if (msg == "OK") {
             window.location.replace("votes.html");
+        } else if (msg == "NO-CONSENT") {
+            window.location.replace("noconsent.html");
         } else {
             $.mdtoast(msg, {duration: 3000})
         }
