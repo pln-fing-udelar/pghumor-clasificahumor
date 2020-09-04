@@ -57,7 +57,7 @@ function continue_click() {
         question6: answers['question6']
     }, function (msg) {
         if (msg == "OK") {
-            window.location.replace("index.html");
+            window.location.replace("votes.html");
         } else {
             $.mdtoast(msg, {duration: 3000})
         }

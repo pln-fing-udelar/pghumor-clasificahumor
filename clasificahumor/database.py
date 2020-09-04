@@ -90,9 +90,7 @@ STATEMENT_ADD_ANNOTATOR = sqlalchemy.sql.text('INSERT INTO annotators (session_i
 
 
 def create_engine():
-    return sqlalchemy.create_engine(f'mysql://{os.environ["DB_USER"]}:{os.environ["DB_PASS"]}@{os.environ["DB_HOST"]}'
-                                    f'/{os.environ["DB_NAME"]}?charset=utf8mb4', pool_size=10,
-                                    pool_recycle=3600)
+    return sqlalchemy.create_engine('mysql://'+os.environ["DB_USER"]+':'+os.environ["DB_PASS"]+'@'+os.environ["DB_HOST"]+'/'+os.environ["DB_NAME"]+'?charset=utf8mb4', pool_size=10, pool_recycle=3600)
 
 
 engine = create_engine()
