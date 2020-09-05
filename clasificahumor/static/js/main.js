@@ -7,6 +7,8 @@ let emoji;
 
 let votes = {};
 
+let count_votes = 0;
+
 const voteCodeToText = {
     1: "Nada gracioso",
     2: "Poco gracioso",
@@ -170,9 +172,12 @@ function vote() {
         vote_offensive: votes['offensive'],
         vote_personal: votes['personal'],
         ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
-        // is_offensive: $isOffensive.prop('checked'),
     }, function (tweet) {
         tweets[oldIndex] = tweet;
+        count_votes++;
+        if (count_votes == 25) {
+            window.location.replace("thankyou.html");
+        }
     }, 'json');
 
     resetQuestion($('#humor'),$('#not-humor'),$('#humor-panel'),'humor',votes);
@@ -183,7 +188,6 @@ function vote() {
     $.mdtoast("Vote registered. Thanks!", {duration: 3000});
 
     $('html,body').scrollTop(0);
-    // $votesAndToolbox.fadeOut();
 }
 
 function removeNonWords(text) {

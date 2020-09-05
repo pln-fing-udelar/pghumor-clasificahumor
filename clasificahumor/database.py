@@ -8,45 +8,45 @@ import sqlalchemy.sql
 STATEMENT_RANDOM_LEAST_VOTED_UNSEEN_TWEETS = \
     sqlalchemy.sql.text('SELECT t.tweet_id, text'
                         ' FROM tweets t'
-                        '   LEFT JOIN (SELECT tweet_id FROM votes WHERE session_id = :session_id) a'
-                        '     ON t.tweet_id = a.tweet_id'
-                        '   LEFT JOIN (SELECT tweet_id FROM votes WHERE vote != \'n\') b'
-                        '     ON t.tweet_id = b.tweet_id'
-                        ' WHERE a.tweet_id IS NULL AND FIND_IN_SET(t.tweet_id, :ignore_tweet_ids) = 0'
-                        ' GROUP BY t.tweet_id'
-                        ' ORDER BY weight DESC, COUNT(b.tweet_id), RAND()'
+                        ' WHERE NOT EXISTS (SELECT * FROM votes v WHERE session_id = :session_id and v.tweet_id = t.tweet_id)'
+                        # '   LEFT JOIN (SELECT tweet_id FROM votes WHERE session_id = :session_id) a'
+                        # '     ON t.tweet_id = a.tweet_id'
+                        # # '   LEFT JOIN (SELECT tweet_id FROM votes WHERE vote != \'n\') b'
+                        # # '     ON t.tweet_id = b.tweet_id'
+                        # # ' WHERE a.tweet_id IS NULL AND FIND_IN_SET(t.tweet_id, :ignore_tweet_ids) = 0'
+                        # ' GROUP BY t.tweet_id'
+                        # # ' ORDER BY weight DESC, COUNT(b.tweet_id), RAND()'
+                        ' ORDER BY RAND()'
                         ' LIMIT :limit')
 STATEMENT_RANDOM_TWEETS = sqlalchemy.sql.text('SELECT t.tweet_id, text'
                                               ' FROM tweets t'
                                               ' ORDER BY RAND()'
                                               ' LIMIT :limit')
-STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote, is_offensive)'
-                                         ' VALUES (:tweet_id, :session_id, :vote, :is_offensive)'
-                                         ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
-STATEMENT_ADD_VOTE_2020 = sqlalchemy.sql.text('INSERT INTO votes2020 (tweet_id, session_id, vote_humor, vote_offensive, vote_personal)'
+STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote_humor, vote_offensive, vote_personal)'
                                          ' VALUES (:tweet_id, :session_id, :vote_humor, :vote_offensive, :vote_personal)'
                                          ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
 STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*)'
                                            ' FROM votes v'
-                                           '   LEFT JOIN (SELECT session_id'
-                                           '               FROM votes'
-                                           '               WHERE tweet_id = 1092855393188020224 AND vote = \'x\') s1'
-                                           '     ON v.session_id = s1.session_id'
-                                           '   LEFT JOIN (SELECT session_id'
-                                           '               FROM votes'
-                                           '               WHERE tweet_id = 1088158691633713152 AND vote = \'x\') s2'
-                                           '     ON v.session_id = s2.session_id'
-                                           '   LEFT JOIN (SELECT session_id'
-                                           '               FROM votes'
-                                           '               WHERE tweet_id = 1086371400431095813'
-                                           '                 AND vote != \'x\''
-                                           '                 AND vote != \'n\') s3'
-                                           '     ON v.session_id = s3.session_id'
-                                           ' WHERE (NOT :without_skips OR vote != \'n\')'
-                                           '   AND (NOT :pass_test'
-                                           '     OR (s1.session_id IS NOT NULL'
-                                           '       AND s2.session_id IS NOT NULL'
-                                           '       AND s3.session_id IS NOT NULL))')
+                                           # '   LEFT JOIN (SELECT session_id'
+                                           # '               FROM votes'
+                                           # '               WHERE tweet_id = 1092855393188020224 AND vote = \'x\') s1'
+                                           # '     ON v.session_id = s1.session_id'
+                                           # '   LEFT JOIN (SELECT session_id'
+                                           # '               FROM votes'
+                                           # '               WHERE tweet_id = 1088158691633713152 AND vote = \'x\') s2'
+                                           # '     ON v.session_id = s2.session_id'
+                                           # '   LEFT JOIN (SELECT session_id'
+                                           # '               FROM votes'
+                                           # '               WHERE tweet_id = 1086371400431095813'
+                                           # '                 AND vote != \'x\''
+                                           # '                 AND vote != \'n\') s3'
+                                           # '     ON v.session_id = s3.session_id'
+                                           # ' WHERE NOT :without_skips OR vote != \'n\')'
+                                           # '   AND (NOT :pass_test'
+                                           # '     OR (s1.session_id IS NOT NULL'
+                                           # '       AND s2.session_id IS NOT NULL'
+                                           # '       AND s3.session_id IS NOT NULL))')
+                                           ' WHERE NOT :without_skips')
 STATEMENT_SESSION_COUNT = sqlalchemy.sql.text('SELECT COUNT(DISTINCT v.session_id)'
                                               ' FROM votes v'
                                               '   LEFT JOIN (SELECT session_id'
@@ -135,25 +135,7 @@ def random_tweets(batch_size: int) -> List[Dict[str, Any]]:
         result = connection.execute(STATEMENT_RANDOM_TWEETS, {'limit': batch_size})
         return [{'id': id_, 'text': text} for id_, text in result.fetchall()]
 
-
-def add_vote(session_id: str, tweet_id: str, vote: str, is_offensive: bool) -> None:
-    """
-    Adds a vote for a tweet by a determined session.
-
-    If the vote is not one of ['1', '2', '3', '4', '5', 'x', 'n'], it will do nothing. If the session had already voted,
-    the new vote will be ignored.
-
-    :param session_id: Session ID
-    :param tweet_id: Tweet ID
-    :param vote: Vote of the tweet: '1' to '5' for the stars, 'x' for non-humorous and 'n' for skipped
-    :param is_offensive: If the tweet is considered offensive
-    """
-    if vote in ['1', '2', '3', '4', '5', 'x', 'n']:
-        with engine.connect() as connection:
-            connection.execute(STATEMENT_ADD_VOTE, {'tweet_id': tweet_id, 'session_id': session_id, 'vote': vote,
-                                                    'is_offensive': is_offensive})
-
-def add_vote_2020(session_id: str, tweet_id: str, vote_humor: str, vote_offensive: str, vote_personal: str) -> None:
+def add_vote(session_id: str, tweet_id: str, vote_humor: str, vote_offensive: str, vote_personal: str) -> None:
     """
     Adds a vote for a tweet by a determined session.
 
@@ -165,7 +147,7 @@ def add_vote_2020(session_id: str, tweet_id: str, vote_humor: str, vote_offensiv
     """
     if vote_humor in ['1', '2', '3', '4', '5', 'd', 'n'] and vote_offensive in ['1', '2', '3', '4', '5', 'n'] and vote_personal in ['1', '2', '3', '4', '5', 'n']:
         with engine.connect() as connection:
-            connection.execute(STATEMENT_ADD_VOTE_2020, {'tweet_id': tweet_id, 'session_id': session_id,
+            connection.execute(STATEMENT_ADD_VOTE, {'tweet_id': tweet_id, 'session_id': session_id,
                                                     'vote_humor': vote_humor, 'vote_offensive': vote_offensive, 'vote_personal': vote_personal})
 
 def add_annotator(session_id, prolific_id, question1, question2, question3, question4, question5, question6) -> None:
