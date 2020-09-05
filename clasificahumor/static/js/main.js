@@ -164,14 +164,17 @@ function vote() {
     const oldIndex = index;
     index = (index + 1) % tweets.length;
 
-    const otherIndex = (index + 1) % tweets.length;
+    tweet_ids = []
+    for (i = 0; i < tweets.length; i++) {
+        tweet_ids.push(tweets[i].id);
+    }
 
     $.post('vote', {
         tweet_id: tweets[oldIndex].id,
         vote_humor: votes['humor'],
         vote_offensive: votes['offensive'],
         vote_personal: votes['personal'],
-        ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
+        ignore_tweet_ids: tweet_ids
     }, function (tweet) {
         tweets[oldIndex] = tweet;
         count_votes++;
