@@ -91,22 +91,22 @@
   box-sizing: border-box;
   color: #fff;
   display: inline-block;
-  font-size: 11px;
+  font-size: 16px;
   text-overflow: ellipsis;
   font-weight: bold;
   line-height: 20px;
   opacity: 0;
   overflow: hidden;
-  padding: 0 6px;
+  padding: 6px;
   left: 50%;
   position: absolute;
   text-align: center;
-  top: -28px;
+  top: 40px;
   transform: translateX(-50%);
 }
 
 .legend-wider {
-  width: 50px;
+  width: 60px;
 }
 
 .legend-visible {

@@ -194,3 +194,7 @@ footer {
 .blank-space {
   height: 25px;
 }
+
+.progress-span {
+  text-align: center;
+}

@@ -2,12 +2,14 @@ let $star;
 let $homeContent;
 let $tweet;
 let $legendVote;
+let $progressLbl;
 let $next;
 let emoji;
 
 let votes = {};
 
 let count_votes = 0;
+let total_votes = 25;
 
 const voteCodeToText = {
     1: "Nada gracioso",
@@ -78,6 +80,7 @@ function setupElements() {
     $star = $('*');
     $homeContent = $('#home-content');
     $tweet = $('#tweet-text');
+    $progressLbl = $('#progress_lbl');
     $next = $('#next');
 }
 
@@ -86,6 +89,7 @@ function showTweet() {
         console.error("No hay tweets para mostrar.");
     } else {
         $tweet.fadeOut(200, function () {
+            $progressLbl.text("Tweet " + (count_votes + 1) + ' / ' + total_votes);
             $tweet.html(emoji.replace_unified(tweets[index].text.replace(/\n/mg, '<br/>'))).text();
             $tweet.fadeIn(200);
         });
@@ -178,7 +182,7 @@ function vote() {
     }, function (tweet) {
         tweets[oldIndex] = tweet;
         count_votes++;
-        if (count_votes == 25) {
+        if (count_votes >= total_votes) {
             window.location.replace("thankyou.html");
         }
     }, 'json');
