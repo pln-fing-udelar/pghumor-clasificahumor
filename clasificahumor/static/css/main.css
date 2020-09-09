@@ -27,7 +27,7 @@ h2 {
   border-radius: 5px;
   border: 1px solid #e1e8ed;
   display: flex;
-  margin: 30px auto;
+  margin: 20px auto;
   max-width: 500px;
   min-height: 150px;
   padding: 20px;
@@ -53,7 +53,7 @@ h2 {
   word-wrap: break-word;
 }
 
-#form-container {
+.form-container {
   display: inline-grid;
   text-align: left;
 }
@@ -197,4 +197,16 @@ footer {
 
 .progress-span {
   text-align: center;
+  margin-top: 20px;
+}
+
+.score-select{
+  width: 80px;
+}
+
+.score-select-ul{
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  padding: 0;  
 }

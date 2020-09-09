@@ -44,3 +44,18 @@ CREATE TABLE annotators (
   question5 CHAR(1),
   question6 CHAR(1)
 ) ENGINE InnoDB;
+
+CREATE TABLE personality (
+  prolific_id CHAR(100) NOT NULL,
+  form_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  question1 CHAR(1),
+  question2 CHAR(1),
+  question3 CHAR(1),
+  question4 CHAR(1),
+  question5 CHAR(1),
+  question6 CHAR(1),
+  question7 CHAR(1),
+  question8 CHAR(1),
+  question9 CHAR(1),
+  question10 CHAR(1)
+) ENGINE InnoDB;

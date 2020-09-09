@@ -123,14 +123,32 @@ def register_annotator() -> Response:
         prolific_id = request.form['prolific_id'].strip()
         if prolific_id == "":
             return jsonify("Error: Please specify your Prolific ID")
-        database.add_annotator(session_id, request.form['prolific_id'], request.form['question1'], request.form['question2'], request.form['question3'], request.form['question4'], request.form['question5'], request.form['question6'])
+        database.add_annotator(session_id, prolific_id, request.form['question1'], request.form['question2'], request.form['question3'], request.form['question4'], request.form['question5'], request.form['question6'])
         if request.form['question1'] != 'y' or request.form['question2'] != 'y' or request.form['question3'] != 'y' or request.form['question4'] != 'y' or request.form['question5'] != 'y' or request.form['question6'] != 'y':
             return jsonify("NO-CONSENT")
+
+        result = database.is_personality_registered(prolific_id)
+        if 'count' not in result or result['count'] == 0:
+            return jsonify("OK-NO-SURVEY")
         else:
-            return jsonify("OK")
+            return jsonify("OK-SURVEY")
     else:
         return jsonify("Error: Please answer all questions")
 
+@app.route('/personality_survey', methods=['POST'])
+def add_personality_survey() -> Response:
+    session_id = get_session_id()
+
+    result = database.get_prolific_id(session_id)
+    if 'prolific_id' not in result:
+        return jsonify("Error: Annotator not registered")
+    prolific_id = result['prolific_id']
+
+    if 'question1' in request.form and 'question2' in request.form and 'question3' in request.form and 'question4' in request.form and 'question5' in request.form and 'question6' in request.form and 'question7' in request.form and 'question8' in request.form and 'question9' in request.form and 'question10' in request.form:
+        database.add_personality(prolific_id, request.form['question1'], request.form['question2'], request.form['question3'], request.form['question4'], request.form['question5'], request.form['question6'], request.form['question7'], request.form['question8'], request.form['question9'], request.form['question10'])
+        return jsonify("OK")
+    else:
+        return jsonify("Error: Please answer all questions")
 
 @app.route('/vote-count')
 def vote_count_route() -> Response:

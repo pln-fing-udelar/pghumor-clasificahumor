@@ -86,6 +86,12 @@ STATEMENT_VOTE_COUNT_PER_CATEGORY = sqlalchemy.sql.text('SELECT vote, COUNT(*) F
 STATEMENT_ADD_ANNOTATOR = sqlalchemy.sql.text('INSERT INTO annotators (session_id, prolific_id, question1, question2, question3, question4, question5, question6)'
                                          ' VALUES (:session_id, :prolific_id, :question1, :question2, :question3, :question4, :question5, :question6)')
 
+STATEMENT_ADD_PERSONALITY = sqlalchemy.sql.text('INSERT INTO personality (prolific_id, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10)'
+                                         ' VALUES (:prolific_id, :question1, :question2, :question3, :question4, :question5, :question6, :question7, :question8, :question9, :question10)')
+
+STATEMENT_COUNT_PERSONALITY = sqlalchemy.sql.text('SELECT COUNT(*) FROM personality WHERE prolific_id = :prolific_id')
+
+STATEMENT_GET_PROLIFIC_ID = sqlalchemy.sql.text('SELECT prolific_id FROM annotators WHERE session_id = :session_id ORDER BY form_sent DESC LIMIT 1')
 
 def create_engine():
     return sqlalchemy.create_engine('mysql://'+os.environ["DB_USER"]+':'+os.environ["DB_PASS"]+'@'+os.environ["DB_HOST"]+'/'+os.environ["DB_NAME"]+'?charset=utf8mb4', pool_size=10, pool_recycle=3600)
@@ -166,12 +172,52 @@ def add_annotator(session_id, prolific_id, question1, question2, question3, ques
           'session_id': session_id,
           'prolific_id': prolific_id,
           'question1': question1,
-          'question2': question1,
-          'question3': question1,
-          'question4': question1,
-          'question5': question1,
-          'question6': question1})
+          'question2': question2,
+          'question3': question3,
+          'question4': question4,
+          'question5': question5,
+          'question6': question6})
 
+def add_personality(prolific_id, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10) -> None:
+    """
+    Registers the personality questionaire for an
+
+    :param prolific_id: Prolific ID
+    :param question[1-10]: Answer to question[1-10] from '1' or '7'
+    """
+    with engine.connect() as connection:
+        connection.execute(STATEMENT_ADD_PERSONALITY, {
+          'prolific_id': prolific_id,
+          'question1': question1,
+          'question2': question2,
+          'question3': question3,
+          'question4': question4,
+          'question5': question5,
+          'question6': question6,
+          'question7': question7,
+          'question8': question8,
+          'question9': question9,
+          'question10': question10})
+
+def is_personality_registered(prolific_id):
+    """
+    Returns the number of personality surveys registered for a Prolific ID
+
+    :param prolific_id: Prolific ID
+    """
+    with engine.connect() as connection:
+        result = connection.execute(STATEMENT_COUNT_PERSONALITY, {'prolific_id': prolific_id})
+        return {'count': result.fetchone()[0]}
+
+def get_prolific_id(session_id):
+    """
+    Returns the Prolific ID associated to a session
+
+    :param session_id: Session ID
+    """
+    with engine.connect() as connection:
+        result = connection.execute(STATEMENT_GET_PROLIFIC_ID, {'session_id': session_id})
+        return {'prolific_id': result.fetchone()[0]}
 
 def vote_count_without_skips() -> int:
     """Returns the vote count, not including skips."""

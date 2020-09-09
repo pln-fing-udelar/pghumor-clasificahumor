@@ -62,8 +62,10 @@ function continue_click() {
         question5: answers['question5'],
         question6: answers['question6']
     }, function (msg) {
-        if (msg == "OK") {
+        if (msg == "OK-SURVEY") {
             window.location.replace("votes.html");
+        } else if (msg == "OK-NO-SURVEY") {
+            window.location.replace("survey.html");
         } else if (msg == "NO-CONSENT") {
             window.location.replace("noconsent.html");
         } else {

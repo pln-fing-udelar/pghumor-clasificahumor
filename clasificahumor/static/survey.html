@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="apple-touch-icon" href="img/favicon.png">
+
+  <title>Annotate tweets for Hahackaton</title>
+
+  <link href="css/normalize.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+  <link href="css/mdtoast.min.css" rel="stylesheet" />
+  <link href="css/emoji.css" rel="stylesheet" />
+  <link href="css/votes.css" rel="stylesheet" />
+  <link href="css/main.css" rel="stylesheet" />
+</head>
+
+<body>
+
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+
+<h4>TEN-ITEM PERSONALITY INVENTORY</h4>
+ 
+<p>Here are a number of personality traits that may or may not apply to you. Please write a number next to each statement to indicate the extent to which you agree or disagree with that statement. You should rate the extent to which the pair of traits applies to you, even if one characteristic applies more strongly than the other.</p>
+
+<ul>
+  <li>1 = Disagree strongly</li>
+  <li>2 = Disagree moderately</li>
+  <li>3 = Disagree a little</li>
+  <li>4 = Neither agree nor disagree</li>
+  <li>5 = Agree a little</li>
+  <li>6 = Agree moderately</li>
+  <li>7 = Agree strongly</li>
+</ul>
+
+<p>I see myself as:</p>
+
+<ul>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>1.</li>
+      <li>
+        <select id="question1" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Extraverted, enthusiastic.</li>
+    </ul></div>
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>2.</li>
+      <li>
+        <select id="question2" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Critical, quarrelsome.</li> 
+    </ul></div> 
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>3.</li>
+      <li>
+        <select id="question3" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Dependable, self-disciplined.</li>
+    </ul></div> 
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>4.</li>
+      <li>
+        <select id="question4" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Anxious, easily upset.</li>
+    </ul></div>
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>5.</li>
+      <li>
+        <select id="question5" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Open to new experiences, complex.</li>
+    </ul></div>
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>6.</li>
+      <li>
+        <select id="question6" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Reserved, quiet.</li>
+    </ul></div>
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>7.</li>
+      <li>
+        <select id="question7" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Sympathetic, warm.</li>
+    </ul></div>
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>8.</li>
+      <li>
+        <select id="question8" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Disorganized, careless.</li>
+    </ul></div>
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>9.</li>
+      <li>
+        <select id="question9" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Calm, emotionally stable.</li>
+    </ul></div>
+  </li>
+  <li>
+    <div><ul class="score-select-ul">
+      <li>10.</li>
+      <li>
+        <select id="question10" class="form-control score-select">
+          <option value="-">-</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </li>
+      <li>Conventional, uncreative.</li>
+    </ul></div>
+  </li>
+
+</ul>
+
+<div class="blank-space"></div>
+
+<ul class='answers-cls'>
+
+  <li>
+    <button id="continue-btn" class="btn btn-lg btn-default">Continue</button>
+  </li>
+
+</ul>
+
+        </div>
+      </div>
+    </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+          integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.ravenjs.com/3.23.1/raven.min.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="js/mdtoast.js"></script>
+  <script type="text/javascript" src="js/survey.js"></script>
+
+</body>
+
+</html>
