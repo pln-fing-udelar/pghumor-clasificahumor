@@ -36,6 +36,8 @@ CREATE TABLE votes (
 CREATE TABLE annotators (
   session_id CHAR(100) NOT NULL,
   prolific_id CHAR(100) NOT NULL,
+  prolific_session_id CHAR(100),
+  study_id CHAR(100),
   form_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   question1 CHAR(1),
   question2 CHAR(1),

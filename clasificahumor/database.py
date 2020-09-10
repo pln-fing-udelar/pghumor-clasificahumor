@@ -83,8 +83,8 @@ STATEMENT_HISTOGRAM = sqlalchemy.sql.text('SELECT c, COUNT(*) as freq'
                                           ' ORDER BY c')
 STATEMENT_VOTE_COUNT_PER_CATEGORY = sqlalchemy.sql.text('SELECT vote, COUNT(*) FROM votes GROUP BY vote ORDER BY vote')
 
-STATEMENT_ADD_ANNOTATOR = sqlalchemy.sql.text('INSERT INTO annotators (session_id, prolific_id, question1, question2, question3, question4, question5, question6)'
-                                         ' VALUES (:session_id, :prolific_id, :question1, :question2, :question3, :question4, :question5, :question6)')
+STATEMENT_ADD_ANNOTATOR = sqlalchemy.sql.text('INSERT INTO annotators (session_id, prolific_id, prolific_session_id, study_id, question1, question2, question3, question4, question5, question6)'
+                                         ' VALUES (:session_id, :prolific_id, :prolific_session_id, :study_id, :question1, :question2, :question3, :question4, :question5, :question6)')
 
 STATEMENT_ADD_PERSONALITY = sqlalchemy.sql.text('INSERT INTO personality (prolific_id, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10)'
                                          ' VALUES (:prolific_id, :question1, :question2, :question3, :question4, :question5, :question6, :question7, :question8, :question9, :question10)')
@@ -154,12 +154,14 @@ def add_vote(session_id: str, tweet_id: str, vote_humor: str, vote_offensive: st
             connection.execute(STATEMENT_ADD_VOTE, {'tweet_id': tweet_id, 'session_id': session_id,
                                                     'vote_humor': vote_humor, 'vote_offensive': vote_offensive, 'vote_personal': vote_personal})
 
-def add_annotator(session_id, prolific_id, question1, question2, question3, question4, question5, question6) -> None:
+def add_annotator(session_id, prolific_id, prolific_session_id, study_id, question1, question2, question3, question4, question5, question6) -> None:
     """
     Registers an annotator and their consent form
 
     :param session_id: Session ID
     :param prolific_id: Prolific ID
+    :param prolific_session_id: Session ID from Prolific
+    :param study_id: Study ID from Prolific
     :param question1: Answer to question1 in the form 'y' or 'n'
     :param question2: Answer to question2 in the form 'y' or 'n'
     :param question3: Answer to question3 in the form 'y' or 'n'
@@ -171,6 +173,8 @@ def add_annotator(session_id, prolific_id, question1, question2, question3, ques
         connection.execute(STATEMENT_ADD_ANNOTATOR, {
           'session_id': session_id,
           'prolific_id': prolific_id,
+          'prolific_session_id': prolific_session_id,
+          'study_id': study_id,
           'question1': question1,
           'question2': question2,
           'question3': question3,

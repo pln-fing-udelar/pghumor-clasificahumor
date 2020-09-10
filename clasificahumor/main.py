@@ -12,6 +12,9 @@ from clasificahumor import database
 
 from itertools import accumulate as _accumulate, repeat as _repeat
 from bisect import bisect as _bisect
+
+PROLIFIC_REDIRECT_URL = "https://app.prolific.co/submissions/complete?cc=2A8B0A57"
+
 def random_choices(population, weights=None, *, cum_weights=None, k=1):
     """Return a k sized list of population elements chosen with replacement.
     If the relative weights or cumulative weights are not specified,
@@ -48,6 +51,7 @@ def create_app() -> Flask:
 app = create_app()
 
 BATCH_SIZE = 5
+VOTES_SIZE = 25
 
 
 def stringify_tweet_ids(tweets: List[Dict[str, Any]]) -> None:
@@ -115,6 +119,13 @@ def vote_and_get_new_tweet_route() -> Response:
 
     return jsonify(tweets[0] if tweets else {})
 
+@app.route('/vote_ready', methods=['POST'])
+def vote_ready() -> Response:
+    if 'votes' in request.form and int(request.form['votes']) >= VOTES_SIZE:
+        return jsonify({ "msg": "OK", "url": PROLIFIC_REDIRECT_URL })
+    else:
+        return jsonify({ "msg": 'ERROR: %s votes expected, %s found' % (VOTES_SIZE,request.form['votes'])})
+
 @app.route('/annotator', methods=['POST'])
 def register_annotator() -> Response:
     session_id = get_session_id()
@@ -123,7 +134,13 @@ def register_annotator() -> Response:
         prolific_id = request.form['prolific_id'].strip()
         if prolific_id == "":
             return jsonify("Error: Please specify your Prolific ID")
-        database.add_annotator(session_id, prolific_id, request.form['question1'], request.form['question2'], request.form['question3'], request.form['question4'], request.form['question5'], request.form['question6'])
+        prolific_session_id = ""
+        if "prolific_session_id" in request.form:
+            prolific_session_id = request.form["prolific_session_id"]
+        study_id = ""
+        if "study_id" in request.form:
+            study_id = request.form["study_id"]
+        database.add_annotator(session_id, prolific_id, prolific_session_id, study_id, request.form['question1'], request.form['question2'], request.form['question3'], request.form['question4'], request.form['question5'], request.form['question6'])
         if request.form['question1'] != 'y' or request.form['question2'] != 'y' or request.form['question3'] != 'y' or request.form['question4'] != 'y' or request.form['question5'] != 'y' or request.form['question6'] != 'y':
             return jsonify("NO-CONSENT")
 

@@ -183,7 +183,7 @@ function vote() {
         tweets[oldIndex] = tweet;
         count_votes++;
         if (count_votes >= total_votes) {
-            window.location.replace("thankyou.html");
+            task_completed();
         }
     }, 'json');
 
@@ -195,6 +195,18 @@ function vote() {
     $.mdtoast("Vote registered. Thanks!", {duration: 3000});
 
     $('html,body').scrollTop(0);
+}
+
+function task_completed() {
+    $.post('vote_ready', {
+        votes: count_votes
+    }, function (result) {
+        if (result["msg"] == "OK") {
+            window.location.replace(result["url"]);
+        } else {
+            $.mdtoast(result["msg"], {duration: 3000});
+        }
+    }, 'json');
 }
 
 function removeNonWords(text) {

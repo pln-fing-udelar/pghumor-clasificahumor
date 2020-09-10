@@ -1,11 +1,29 @@
 let $continue;
+let $prolific_id_txt;
 
 let answers = {};
+
+let prolific_id = "";
+let prolific_session_id = "";
+let study_id = "";
 
 $(document).ready(function () {
     setupElements();
     setUiListeners();
 });
+
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
 
 function setupYesNoQuestion(yes_btn,no_btn,question,answers) {
     yes_btn.click(function () {
@@ -32,6 +50,18 @@ function setupElements() {
     setupYesNoQuestion($('#question4-y'),$('#question4-n'),'question4',answers);
     setupYesNoQuestion($('#question5-y'),$('#question5-n'),'question5',answers);
     setupYesNoQuestion($('#question6-y'),$('#question6-n'),'question6',answers);
+    urlVars = getUrlVars();
+    if ("PROLIFIC_PID" in urlVars) {
+        prolific_id = urlVars["PROLIFIC_PID"];
+    }
+    if ("SESSION_ID" in urlVars) {
+        prolific_session_id = urlVars["SESSION_ID"];
+    }
+    if ("STUDY_ID" in urlVars) {
+        study_id = urlVars["STUDY_ID"];
+    }
+    $prolific_id_txt = $("#prolific-id-txt");
+    $prolific_id_txt.val(prolific_id);
 }
 
 function setUiListeners() {
@@ -55,6 +85,8 @@ function continue_click() {
 
     $.post('annotator', {
         prolific_id: prolific_id_val,
+        prolific_session_id: prolific_session_id,
+        study_id: study_id,
         question1: answers['question1'],
         question2: answers['question2'],
         question3: answers['question3'],
