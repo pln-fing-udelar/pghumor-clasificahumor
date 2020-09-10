@@ -204,6 +204,10 @@ footer {
   width: 80px;
 }
 
+.score-select-11{
+  width: 300px;
+}
+
 .score-select-ul{
   display: flex;
   flex-wrap: wrap;

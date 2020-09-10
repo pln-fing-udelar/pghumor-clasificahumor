@@ -9,6 +9,7 @@ let $question7;
 let $question8;
 let $question9;
 let $question10;
+let $question11;
 
 $(document).ready(function () {
     setupElements();
@@ -27,6 +28,7 @@ function setupElements() {
     $question8 = $('#question8');
     $question9 = $('#question9');
     $question10 = $('#question10');
+    $question11 = $('#question11');
 }
 
 function setUiListeners() {
@@ -37,7 +39,7 @@ function setUiListeners() {
 
 function continue_click() {
     if ($question1.val() == '-' || $question2.val() == '-' || $question3.val() == '-' || $question4.val() == '-' || $question5.val() == '-' || 
-        $question6.val() == '-' || $question7.val() == '-' || $question8.val() == '-' || $question9.val() == '-' || $question10.val() == '-') {
+        $question6.val() == '-' || $question7.val() == '-' || $question8.val() == '-' || $question9.val() == '-' || $question10.val() == '-' || $question11.val() == '-') {
         $.mdtoast("Please answer all questions", {duration: 3000});
         return;
     }
@@ -52,7 +54,8 @@ function continue_click() {
         question7: $question7.val(),
         question8: $question8.val(),
         question9: $question9.val(),
-        question10: $question10.val()
+        question10: $question10.val(),
+        question11: $question11.val()
     }, function (msg) {
         if (msg == "OK") {
             window.location.replace("votes.html");

@@ -59,5 +59,6 @@ CREATE TABLE personality (
   question7 CHAR(1),
   question8 CHAR(1),
   question9 CHAR(1),
-  question10 CHAR(1)
+  question10 CHAR(1),
+  question11 CHAR(1)
 ) ENGINE InnoDB;

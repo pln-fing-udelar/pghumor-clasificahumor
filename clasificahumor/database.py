@@ -86,8 +86,8 @@ STATEMENT_VOTE_COUNT_PER_CATEGORY = sqlalchemy.sql.text('SELECT vote, COUNT(*) F
 STATEMENT_ADD_ANNOTATOR = sqlalchemy.sql.text('INSERT INTO annotators (session_id, prolific_id, prolific_session_id, study_id, question1, question2, question3, question4, question5, question6)'
                                          ' VALUES (:session_id, :prolific_id, :prolific_session_id, :study_id, :question1, :question2, :question3, :question4, :question5, :question6)')
 
-STATEMENT_ADD_PERSONALITY = sqlalchemy.sql.text('INSERT INTO personality (prolific_id, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10)'
-                                         ' VALUES (:prolific_id, :question1, :question2, :question3, :question4, :question5, :question6, :question7, :question8, :question9, :question10)')
+STATEMENT_ADD_PERSONALITY = sqlalchemy.sql.text('INSERT INTO personality (prolific_id, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11)'
+                                         ' VALUES (:prolific_id, :question1, :question2, :question3, :question4, :question5, :question6, :question7, :question8, :question9, :question10, :question11)')
 
 STATEMENT_COUNT_PERSONALITY = sqlalchemy.sql.text('SELECT COUNT(*) FROM personality WHERE prolific_id = :prolific_id')
 
@@ -182,12 +182,13 @@ def add_annotator(session_id, prolific_id, prolific_session_id, study_id, questi
           'question5': question5,
           'question6': question6})
 
-def add_personality(prolific_id, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10) -> None:
+def add_personality(prolific_id, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11) -> None:
     """
     Registers the personality questionaire for an
 
     :param prolific_id: Prolific ID
     :param question[1-10]: Answer to question[1-10] from '1' or '7'
+    :param question11: Answer to question11 with values in ['U','A','F','I']
     """
     with engine.connect() as connection:
         connection.execute(STATEMENT_ADD_PERSONALITY, {
@@ -201,7 +202,8 @@ def add_personality(prolific_id, question1, question2, question3, question4, que
           'question7': question7,
           'question8': question8,
           'question9': question9,
-          'question10': question10})
+          'question10': question10,
+          'question11': question11})
 
 def is_personality_registered(prolific_id):
     """
