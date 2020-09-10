@@ -210,3 +210,7 @@ footer {
   list-style-type: none;
   padding: 0;  
 }
+
+.instructions {
+  margin-bottom: 30px;
+}
