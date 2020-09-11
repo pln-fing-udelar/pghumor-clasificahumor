@@ -122,7 +122,7 @@ def vote_and_get_new_tweet_route() -> Response:
 @app.route('/vote_ready', methods=['POST'])
 def vote_ready() -> Response:
     if 'votes' in request.form and int(request.form['votes']) >= VOTES_SIZE:
-        return jsonify({ "msg": "OK", "url": PROLIFIC_REDIRECT_URL })
+        return jsonify({ "msg": "OK" })
     else:
         return jsonify({ "msg": 'ERROR: %s votes expected, %s found' % (VOTES_SIZE,request.form['votes'])})
 
@@ -171,6 +171,10 @@ def add_personality_survey() -> Response:
 def vote_count_route() -> Response:
     return jsonify(database.vote_count_without_skips())
 
+
+@app.route('/get-prolific-url', methods=['POST'])
+def get_prolific_url() -> Response:
+    return jsonify({ "url" : PROLIFIC_REDIRECT_URL })
 
 @app.route('/stats')
 def stats_route() -> Response:

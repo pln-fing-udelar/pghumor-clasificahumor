@@ -202,7 +202,7 @@ function task_completed() {
         votes: count_votes
     }, function (result) {
         if (result["msg"] == "OK") {
-            window.location.replace(result["url"]);
+            window.location.replace("thankyou.html");
         } else {
             $.mdtoast(result["msg"], {duration: 3000});
         }
