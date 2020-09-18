@@ -1,4 +1,5 @@
 let $prolific;
+let $commentsTxt;
 
 $(document).ready(function () {
     setupElements();
@@ -7,6 +8,7 @@ $(document).ready(function () {
 
 function setupElements() {
     $prolific = $('#prolific-btn');
+    $commentsTxt = $('#comments-txt');
 }
 
 function setUiListeners() {
@@ -17,6 +19,7 @@ function setUiListeners() {
 
 function prolific_click() {
     $.post('get-prolific-url', {
+        comments: $commentsTxt.val()
     }, function (msg) {
         window.location.replace(msg["url"]);
     }, 'json');

@@ -6,10 +6,12 @@ let $progressLbl;
 let $next;
 let emoji;
 
+let instructions_first_time = true;
+
 let votes = {};
 
 let count_votes = 0;
-let total_votes = 25;
+let total_votes = 100;
 
 const voteCodeToText = {
     1: "Nada gracioso",
@@ -147,6 +149,13 @@ function setToggle(button) {
     button.addClass('toggle-button-down');
 }
 
+function closeInstructions() {
+    if (instructions_first_time) {
+        instructions_first_time = false;
+        $.post('close-instructions',{});
+    }
+}
+
 function setUiListeners() {
     setupQuestion($('#humor'),$('#not-humor'),$('#humor-panel'),[$('#vote-h-d'),$('#vote-h-1'),$('#vote-h-2'),$('#vote-h-3'),$('#vote-h-4'),$('#vote-h-5')],'humor',votes);
     setupQuestion($('#offensive'),$('#not-offensive'),$('#offensive-panel'),[$('#vote-o-1'),$('#vote-o-2'),$('#vote-o-3'),$('#vote-o-4'),$('#vote-o-5')],'offensive',votes);
@@ -157,6 +166,9 @@ function setUiListeners() {
     });
 
     $('#help').click();
+
+    $('#instructions-x-btn').click(closeInstructions);
+    $('#instructions-close-btn').click(closeInstructions);
 }
 
 function vote() {

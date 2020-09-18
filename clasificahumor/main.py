@@ -51,7 +51,7 @@ def create_app() -> Flask:
 app = create_app()
 
 BATCH_SIZE = 5
-VOTES_SIZE = 25
+VOTES_SIZE = 100
 
 
 def stringify_tweet_ids(tweets: List[Dict[str, Any]]) -> None:
@@ -121,10 +121,14 @@ def vote_and_get_new_tweet_route() -> Response:
 
 @app.route('/vote_ready', methods=['POST'])
 def vote_ready() -> Response:
+    session_id = get_session_id()
     if 'votes' in request.form and int(request.form['votes']) >= VOTES_SIZE:
+        database.add_event(session_id, "VOTE_READY", str(request.form['votes']))
         return jsonify({ "msg": "OK" })
     else:
-        return jsonify({ "msg": 'ERROR: %s votes expected, %s found' % (VOTES_SIZE,request.form['votes'])})
+        msg = 'ERROR: %s votes expected, %s found' % (VOTES_SIZE,request.form['votes'])
+        database.add_event(session_id, "VOTE_NOT_READY", msg)
+        return jsonify({ "msg": msg})
 
 @app.route('/annotator', methods=['POST'])
 def register_annotator() -> Response:
@@ -141,6 +145,7 @@ def register_annotator() -> Response:
         if "study_id" in request.form:
             study_id = request.form["study_id"]
         database.add_annotator(session_id, prolific_id, prolific_session_id, study_id, request.form['question1'], request.form['question2'], request.form['question3'], request.form['question4'], request.form['question5'], request.form['question6'])
+        database.add_event(session_id, "REGISTER", "prolific_id: " + str(prolific_id))
         if request.form['question1'] != 'y' or request.form['question2'] != 'y' or request.form['question3'] != 'y' or request.form['question4'] != 'y' or request.form['question5'] != 'y' or request.form['question6'] != 'y':
             return jsonify("NO-CONSENT")
 
@@ -163,6 +168,7 @@ def add_personality_survey() -> Response:
 
     if 'question1' in request.form and 'question2' in request.form and 'question3' in request.form and 'question4' in request.form and 'question5' in request.form and 'question6' in request.form and 'question7' in request.form and 'question8' in request.form and 'question9' in request.form and 'question10' in request.form and 'question11' in request.form:
         database.add_personality(prolific_id, request.form['question1'], request.form['question2'], request.form['question3'], request.form['question4'], request.form['question5'], request.form['question6'], request.form['question7'], request.form['question8'], request.form['question9'], request.form['question10'], request.form['question11'])
+        database.add_event(session_id, "SURVEY_ADDED", "prolific_id: " + str(prolific_id))
         return jsonify("OK")
     else:
         return jsonify("Error: Please answer all questions")
@@ -171,9 +177,16 @@ def add_personality_survey() -> Response:
 def vote_count_route() -> Response:
     return jsonify(database.vote_count_without_skips())
 
+@app.route('/close-instructions', methods=['POST'])
+def close_instructions() -> Response:
+    session_id = get_session_id()
+    database.add_event(session_id, "CLOSE_INSTRUCTIONS", "")
+    return jsonify("OK")
 
 @app.route('/get-prolific-url', methods=['POST'])
 def get_prolific_url() -> Response:
+    session_id = get_session_id()
+    database.add_event(session_id, "GO_BACK_TO_PROLIFIC", request.form['comments'])
     return jsonify({ "url" : PROLIFIC_REDIRECT_URL })
 
 @app.route('/stats')

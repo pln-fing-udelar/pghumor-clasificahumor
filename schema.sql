@@ -62,3 +62,10 @@ CREATE TABLE personality (
   question10 CHAR(1),
   question11 CHAR(1)
 ) ENGINE InnoDB;
+
+CREATE TABLE events (
+  session_id CHAR(100) NOT NULL,
+  event CHAR(100) NOT NULL,
+  content TEXT,
+  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE InnoDB;

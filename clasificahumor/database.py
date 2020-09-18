@@ -89,6 +89,8 @@ STATEMENT_ADD_ANNOTATOR = sqlalchemy.sql.text('INSERT INTO annotators (session_i
 STATEMENT_ADD_PERSONALITY = sqlalchemy.sql.text('INSERT INTO personality (prolific_id, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11)'
                                          ' VALUES (:prolific_id, :question1, :question2, :question3, :question4, :question5, :question6, :question7, :question8, :question9, :question10, :question11)')
 
+STATEMENT_ADD_EVENT = sqlalchemy.sql.text('INSERT INTO events (session_id, event, content) VALUES (:session_id, :event, :content)')
+
 STATEMENT_COUNT_PERSONALITY = sqlalchemy.sql.text('SELECT COUNT(*) FROM personality WHERE prolific_id = :prolific_id')
 
 STATEMENT_GET_PROLIFIC_ID = sqlalchemy.sql.text('SELECT prolific_id FROM annotators WHERE session_id = :session_id ORDER BY form_sent DESC LIMIT 1')
@@ -204,6 +206,20 @@ def add_personality(prolific_id, question1, question2, question3, question4, que
           'question9': question9,
           'question10': question10,
           'question11': question11})
+
+def add_event(session_id, event, content) -> None:
+    """
+    Registers an envent
+
+    :param session_id: Session ID
+    :param event: Short event name
+    :param content: Content associated to the event
+    """
+    with engine.connect() as connection:
+        connection.execute(STATEMENT_ADD_EVENT, {
+          'session_id': session_id,
+          'event': event,
+          'content': content})
 
 def is_personality_registered(prolific_id):
     """
