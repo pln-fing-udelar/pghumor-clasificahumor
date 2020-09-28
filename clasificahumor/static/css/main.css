@@ -222,3 +222,11 @@ footer {
 .prolific-id-textbox {
   width: 300px;
 }
+
+.instructions-hidden {
+  display: none;
+}
+
+.btn-hidden {
+  display: none;
+}

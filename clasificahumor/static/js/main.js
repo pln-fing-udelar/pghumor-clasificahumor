@@ -4,6 +4,12 @@ let $tweet;
 let $legendVote;
 let $progressLbl;
 let $next;
+let $instructionsClose;
+let $instructionsNext;
+let $instructionsPage1;
+let $instructionsPage2;
+let $instructionsPage3;
+let $instructionsPage4;
 let emoji;
 
 let instructions_first_time = true;
@@ -84,6 +90,12 @@ function setupElements() {
     $tweet = $('#tweet-text');
     $progressLbl = $('#progress_lbl');
     $next = $('#next');
+    $instructionsClose = $('#instructions-close-btn');
+    $instructionsNext = $('#instructions-next-btn');
+    $instructionsPage1 = $('#instructions-page1');
+    $instructionsPage2 = $('#instructions-page2');
+    $instructionsPage3 = $('#instructions-page3');
+    $instructionsPage4 = $('#instructions-page4');
 }
 
 function showTweet() {
@@ -150,6 +162,18 @@ function setToggle(button) {
 }
 
 function closeInstructions() {
+    // Reset instructions to first page
+    $instructionsPage1.addClass('instructions-visible');
+    $instructionsPage1.removeClass('instructions-hidden');
+    $instructionsPage2.removeClass('instructions-visible');
+    $instructionsPage2.addClass('instructions-hidden');
+    $instructionsPage3.removeClass('instructions-visible');
+    $instructionsPage3.addClass('instructions-hidden');
+    $instructionsPage4.removeClass('instructions-visible');
+    $instructionsPage4.addClass('instructions-hidden');
+    $instructionsNext.removeClass('btn-hidden');
+    $instructionsClose.addClass('btn-hidden');
+
     if (instructions_first_time) {
         instructions_first_time = false;
         $.post('close-instructions',{});
@@ -168,7 +192,27 @@ function setUiListeners() {
     $('#help').click();
 
     $('#instructions-x-btn').click(closeInstructions);
-    $('#instructions-close-btn').click(closeInstructions);
+    $instructionsClose.click(closeInstructions);
+    $instructionsNext.click(function() {
+        if ($instructionsPage1.hasClass('instructions-visible')) {
+            $instructionsPage1.removeClass('instructions-visible');
+            $instructionsPage1.addClass('instructions-hidden');
+            $instructionsPage2.removeClass('instructions-hidden');
+            $instructionsPage2.addClass('instructions-visible');
+        } else if ($instructionsPage2.hasClass('instructions-visible')) {
+            $instructionsPage2.removeClass('instructions-visible');
+            $instructionsPage2.addClass('instructions-hidden');
+            $instructionsPage3.removeClass('instructions-hidden');
+            $instructionsPage3.addClass('instructions-visible');
+        } else if ($instructionsPage3.hasClass('instructions-visible')) {
+            $instructionsPage3.removeClass('instructions-visible');
+            $instructionsPage3.addClass('instructions-hidden');
+            $instructionsPage4.removeClass('instructions-hidden');
+            $instructionsPage4.addClass('instructions-visible');
+            $instructionsNext.addClass('btn-hidden');
+            $instructionsClose.removeClass('btn-hidden');
+        }
+    });
 }
 
 function vote() {
