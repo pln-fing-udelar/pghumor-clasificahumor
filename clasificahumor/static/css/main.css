@@ -230,3 +230,21 @@ footer {
 .btn-hidden {
   display: none;
 }
+
+.btn-link-help {
+  font-size: 18px;
+}
+
+.help-img {
+  width: 16px;
+  height: 16px;
+}
+
+.help-footer {
+  position: fixed;
+  bottom: 0px;
+}
+
+.page-progress {
+  text-align: right;
+}

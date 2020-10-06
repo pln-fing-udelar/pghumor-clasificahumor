@@ -153,7 +153,7 @@
       </div>
     </div>
 
-    <footer class="container">
+    <footer class="container help-footer">
       <div class="row">
 <!--         <div id="social-buttons-container" class="col-xs-6">
           <div class="fb-share-button" data-href="https://clasificahumor.com" data-layout="button_count"
@@ -175,7 +175,8 @@
         </div>
  -->
          <div class="col-xs-6">
-          <button id="help" class="btn btn-link" type="button" data-toggle="modal" data-target="#about">
+          <button id="help" class="btn btn-link btn-link-help" type="button" data-toggle="modal" data-target="#about">
+            <img class="help-img" src='img/help.png'></img>
             Help
           </button>
         </div>
@@ -195,6 +196,8 @@
         <div class="modal-body">
 
 <div id="instructions-page1" class="instructions-visible">
+  <p class="instructions page-progress">1 / 7</p>
+
   <p class="instructions">Thank you for signing up to help with our research on humor!</p>
 
   <p class="instructions">Your opinions will help us to learn about how different people react to humor in different ways. We’re interested in hearing your opinions today, so feel free to express your opinions without censoring yourself.</p>
@@ -207,6 +210,8 @@
   <!-- <p class="instructions">You will see a selection of short texts and you will be asked some questions about the text. </p> -->
 </div>
 <div id="instructions-page2" class="instructions-hidden">
+  <p class="instructions page-progress">2 / 7</p>
+
   <p class="instructions"><b>Genre:</b> First, we want to know if the text is supposed to be a joke or not. So the first question is:</p>
 
   <p class="instructions"><b>Is the intention of this text to be humorous?</b></p>
@@ -216,6 +221,11 @@
   <p class="instructions"><b>How humorous do you find the text?</b></p>
 
   <p class="instructions">Here you can give your personal response to the text. This is subjective and is completely up to you.</p>
+
+  <p class="instructions">Click next to see an example.</p>
+</div>
+<div id="instructions-page3" class="instructions-hidden">
+  <p class="instructions page-progress">3 / 7</p>
 
   <p class="instructions"><b>Let’s look at an example:</b></p>
 
@@ -228,7 +238,9 @@
 
   <p class="instructions">If that's clear, please move on to the next page of instructions.</p>
 </div>
-<div id="instructions-page3" class="instructions-hidden">
+<div id="instructions-page4" class="instructions-hidden">
+  <p class="instructions page-progress">4 / 7</p>
+
   <p class="instructions"><b>Generally Offensive:</b> After this question, you’ll be asked:</p>
 
   <p class="instructions"><b>Is this text generally offensive?</b></p>
@@ -237,13 +249,22 @@
 
   <p class="instructions"><b>How generally offensive do you find the text?</b></p>
 
+  <p class="instructions">To what extent do you think people would be generally offended by the content of the tweet? Please select a rating from 1-5.</p>
+
+  <p class="instructions">Click next to see an example.</p>
+</div>
+<div id="instructions-page5" class="instructions-hidden">
+  <p class="instructions page-progress">5 / 7</p>
+
   <p class="instructions">For example: </p>
 
   <p>John sees a joke that he thinks a lot of people would be hurt by, so he selects ‘yes’ but he thinks that also most people would take it as a joke, and this little bit of humor wouldn’t hurt, so he selects ‘1’ for the second question.</p>
   <p>Anna also thinks the joke makes fun of a group of people and thinks it’s kind of mean-spirited, so she selects ‘4’. For some jokes, you might think ‘I find this hilarious, but some people might be offended by it.’ Don’t worry! Some jokes which are offensive might also make you laugh. Again, there are no right or wrong answers here, we’re just interested in your opinion. If you think it’s just a joke, and not really offensive, select no. Maybe it talks about a group of people, but not in a negative way. Maybe it’s just innocent humor.</p>
   <p class="instructions">What if you’re not sure if it’s offensive? Best to just say no.</p>
 </div>
-<div id="instructions-page4" class="instructions-hidden">
+<div id="instructions-page6" class="instructions-hidden">
+  <p class="instructions page-progress">6 / 7</p>
+
   <p class="instructions"><b>Personally Offensive</b> The last question will be:</p>
 
   <p class="instructions"><b>Do you find this text personally offensive?</b></p>
@@ -258,6 +279,10 @@
   <p><b>How personally offensive do you find this text?</b></p>
   <p class="instructions">To what extent are you affected or personally offended by the content of the tweet? Please select a rating from 1-5.</p>
    
+</div>
+<div id="instructions-page7" class="instructions-hidden">
+  <p class="instructions page-progress">7 / 7</p>
+
   <p class="instructions"><b><i>If you forget the definitions of humorous, generally offensive or personally offensive, just roll your mouse over the question to get a reminder.</i></b></p>
 
   <p><b><i>If you would like to see these instructions again, click help at the bottom of the screen.</i></b></p>
