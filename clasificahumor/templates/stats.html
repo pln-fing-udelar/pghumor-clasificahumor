@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="css/stats.css" rel="stylesheet" />
   <style>
     .chart {
       height: 500px;
@@ -24,11 +25,37 @@
 
 <body>
   <div class="container" style="padding: 0 16px">
-    <h1>Estadísticas</h1>
+    <h1>Stats</h1>
 
-    <p>Cantidad total de votos: {{ stats['votes'] }}</p>
-    <p>Cantidad de sesiones: {{ stats['sessions'] }}</p>
-    <p>Votos a los 3 tweets de prueba: {{ stats['test-tweets-vote-count'] }}</p>
+    <p>Total number of votes: {{ stats['votes'] }}</p>
+
+    <p>Total number of sessions: {{ stats['sessions'] }}</p>
+
+    <p>Votes per prolific id:</p>
+
+    <table class="stats-table">
+        <th>Prolific ID</th><th>Votes</th>
+    {% for prolific_id in stats['votes_by_prolific_id'] %}
+        <tr>
+          <td>{{ prolific_id }}</td>
+          <td>{{ stats['votes_by_prolific_id'][prolific_id] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    <p>Tweets per vote:</p>
+
+    <table class="stats-table">
+        <th>Votes</th><th>Number of tweets</th>
+    {% for vote_count in stats['tweets_by_vote_count'] %}
+        <tr>
+          <td>{{ vote_count }}</td>
+          <td>{{ stats['tweets_by_vote_count'][vote_count] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+<!--     <p>Votos a los 3 tweets de prueba: {{ stats['test-tweets-vote-count'] }}</p>
     <p>Votos que no fueron a los de prueba: {{ stats['votes-not-consider-test'] }}</p>
 
     <p>Distribución de votos por tweet (sin los de prueba):</p>
@@ -48,7 +75,7 @@
 
     <p>Cantidad de votos: {{ stats['votes-pass-test'] }}</p>
     <p>Cantidad de sesiones: {{ stats['sessions-pass-test'] }}</p>
-  </div>
+ -->  </div>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <!--suppress ES6ConvertVarToLetConst, JSUnresolvedFunction, JSUnresolvedVariable -->

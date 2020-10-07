@@ -98,6 +98,16 @@ STATEMENT_COUNT_PERSONALITY = sqlalchemy.sql.text('SELECT COUNT(*) FROM personal
 
 STATEMENT_GET_PROLIFIC_ID = sqlalchemy.sql.text('SELECT prolific_id FROM annotators WHERE session_id = :session_id ORDER BY form_sent DESC LIMIT 1')
 
+STATEMENT_VOTES_BY_SESSION = sqlalchemy.sql.text('SELECT session_id,count(*) as vote_count FROM votes GROUP BY session_id')
+
+STATEMENT_VOTES_BY_TWEET = sqlalchemy.sql.text('SELECT tweet_id,count(*) as vote_count FROM votes GROUP BY tweet_id')
+
+STATEMENT_VOTE_COUNT_ALL = sqlalchemy.sql.text('SELECT COUNT(*) FROM votes v')
+
+STATEMENT_SESSION_COUNT_ALL = sqlalchemy.sql.text('SELECT COUNT(DISTINCT v.session_id) FROM votes v')
+
+STATEMENT_ANNOTATORS = sqlalchemy.sql.text('SELECT session_id, prolific_id FROM annotators')
+
 def create_engine():
     return sqlalchemy.create_engine('mysql://'+os.environ["DB_USER"]+':'+os.environ["DB_PASS"]+'@'+os.environ["DB_HOST"]+'/'+os.environ["DB_NAME"]+'?charset=utf8mb4', pool_size=10, pool_recycle=3600)
 
@@ -255,26 +265,11 @@ def stats() -> Dict[str, Any]:
     """Returns the vote count, vote count without skips, vote count histogram and votes per category."""
     with engine.connect() as connection:
         result = {
-            'votes': connection.execute(STATEMENT_VOTE_COUNT, {'without_skips': False,
-                                                               'pass_test': False}).fetchone()[0],
-            'sessions': connection.execute(STATEMENT_SESSION_COUNT, {'without_skips': False,
-                                                                     'pass_test': False}).fetchone()[0],
-            'test-tweets-vote-count': [t[0] for t in connection.execute(STATEMENT_TEST_TWEETS_VOTE_COUNT).fetchall()],
-            'histogram': dict(connection.execute(STATEMENT_HISTOGRAM).fetchall()),
-            'votes-per-category': dict(connection.execute(STATEMENT_VOTE_COUNT_PER_CATEGORY).fetchall()),
-
-            'votes-without-skips': connection.execute(STATEMENT_VOTE_COUNT, {'without_skips': True,
-                                                                             'pass_test': False}).fetchone()[0],
-            'sessions-without-skips': connection.execute(STATEMENT_SESSION_COUNT, {'without_skips': True,
-                                                                                   'pass_test': False}).fetchone()[0],
-
-            'votes-pass-test': connection.execute(STATEMENT_VOTE_COUNT, {'without_skips': True,
-                                                                         'pass_test': True}).fetchone()[0],
-            'sessions-pass-test': connection.execute(STATEMENT_SESSION_COUNT, {'without_skips': True,
-                                                                               'pass_test': True}).fetchone()[0],
+            'votes': connection.execute(STATEMENT_VOTE_COUNT_ALL, {}).fetchone()[0],
+            'sessions': connection.execute(STATEMENT_SESSION_COUNT_ALL, {}).fetchone()[0],
+            'votes_by_session_id': dict(connection.execute(STATEMENT_VOTES_BY_SESSION, {}).fetchall()),
+            'votes_by_tweet_id': dict(connection.execute(STATEMENT_VOTES_BY_TWEET, {}).fetchall()),
+            'annotators': connection.execute(STATEMENT_ANNOTATORS, {}).fetchall()
         }
-
-    for category in ['1', '2', '3', '4', '5', 'x', 'n']:
-        result['votes-per-category'].setdefault(category, 0)
 
     return result

@@ -193,22 +193,20 @@ def get_prolific_url() -> Response:
 def stats_route() -> Response:
     stats = database.stats()
 
-    stats['votes-not-consider-test'] = stats['votes'] - sum(stats['test-tweets-vote-count'])
+    annotators = {}
+    for session_id,prolific_id in stats['annotators']:
+        annotators[session_id] = prolific_id
 
-    stats['test-tweets-vote-count'] = ', '.join(str(c) for c in stats['test-tweets-vote-count'])
+    stats['votes_by_prolific_id'] = {annotators[session_id] : stats['votes_by_session_id'][session_id] for session_id in stats['votes_by_session_id']}
 
-    stats['histogram'] = [["Cantidad de votos", "Cantidad de tweets"]] + \
-                         [[str(a), b] for a, b in stats['histogram'].items()]
+    tweets_by_vote_count = {}
+    for tweet_id in stats['votes_by_tweet_id']:
+        vote_count = stats['votes_by_tweet_id'][tweet_id]
+        tweets_by_vote_count[vote_count] = tweets_by_vote_count.get(vote_count,0) + 1
 
-    stats['votes-per-category']['No humor'] = stats['votes-per-category']['x']
-    del stats['votes-per-category']['x']
-    stats['votes-per-category']['Saltear'] = stats['votes-per-category']['n']
-    del stats['votes-per-category']['n']
-    stats['votes-per-category'] = [["Voto", "Cantidad de tweets"]] + \
-                                  [[str(a), b] for a, b in stats['votes-per-category'].items()]
+    stats['tweets_by_vote_count'] = tweets_by_vote_count
 
     return render_template('stats.html', stats=stats)
-
 
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')

@@ -1,0 +1,4 @@
+.stats-table td, .stats-table th {
+    border: 1px solid black;
+    padding: 2px 5px 2px 5px;
+}
