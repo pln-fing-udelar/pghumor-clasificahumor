@@ -108,6 +108,14 @@ STATEMENT_SESSION_COUNT_ALL = sqlalchemy.sql.text('SELECT COUNT(DISTINCT v.sessi
 
 STATEMENT_ANNOTATORS = sqlalchemy.sql.text('SELECT session_id, prolific_id FROM annotators')
 
+STATEMENT_GET_VOTES = sqlalchemy.sql.text('SELECT tweet_id, session_id, vote_humor, vote_offensive, vote_personal, date FROM votes')
+
+STATEMENT_GET_ANNOTATORS = sqlalchemy.sql.text('SELECT session_id, prolific_id, prolific_session_id, study_id, form_sent, question1, question2, question3, question4, question5, question6 FROM annotators')
+
+STATEMENT_GET_PERSONALITIES = sqlalchemy.sql.text('SELECT prolific_id, form_sent, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11 FROM personality')
+
+STATEMENT_GET_EVENTS = sqlalchemy.sql.text('SELECT session_id, event, content, date FROM events')
+
 def create_engine():
     return sqlalchemy.create_engine('mysql://'+os.environ["DB_USER"]+':'+os.environ["DB_PASS"]+'@'+os.environ["DB_HOST"]+'/'+os.environ["DB_NAME"]+'?charset=utf8mb4', pool_size=10, pool_recycle=3600)
 
@@ -273,3 +281,19 @@ def stats() -> Dict[str, Any]:
         }
 
     return result
+
+def all_votes():
+  with engine.connect() as connection:
+    return connection.execute(STATEMENT_GET_VOTES, {}).fetchall()
+
+def all_annotators():
+  with engine.connect() as connection:
+    return connection.execute(STATEMENT_GET_ANNOTATORS, {}).fetchall()
+
+def all_personalities():
+  with engine.connect() as connection:
+    return connection.execute(STATEMENT_GET_PERSONALITIES, {}).fetchall()
+
+def all_events():
+  with engine.connect() as connection:
+    return connection.execute(STATEMENT_GET_EVENTS, {}).fetchall()

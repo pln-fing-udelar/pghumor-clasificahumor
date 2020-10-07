@@ -208,6 +208,62 @@ def stats_route() -> Response:
 
     return render_template('stats.html', stats=stats)
 
+@app.route("/download-votes")
+def download_votes():
+    rows = []
+    rows.append("tweet_id,session_id,vote_humor,vote_offensive,vote_personal,date")
+    votes = database.all_votes()
+    for votes_data in votes:
+        rows.append(",".join([str(d) for d in votes_data]))
+
+    return Response(
+        "\n".join(rows),
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=votes.csv"})
+
+@app.route("/download-annotators")
+def download_annotators():
+    rows = []
+    rows.append("session_id,prolific_id,prolific_session_id,study_id,form_sent,question1,question2,question3,question4,question5,question6")
+    votes = database.all_annotators()
+    for votes_data in votes:
+        rows.append(",".join(['"' + str(d) + '"' for d in votes_data]))
+
+    return Response(
+        "\n".join(rows),
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=annotators.csv"})
+
+@app.route("/download-personalities")
+def download_personalities():
+    rows = []
+    rows.append("prolific_id,form_sent,question1,question2,question3,question4,question5,question6,question7,question8,question9,question10,question11")
+    votes = database.all_personalities()
+    for votes_data in votes:
+        rows.append(",".join(['"' + str(d) + '"' for d in votes_data]))
+
+    return Response(
+        "\n".join(rows),
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=personalities.csv"})
+
+@app.route("/download-events")
+def download_events():
+    rows = []
+    rows.append("session_id,event,content,date")
+    votes = database.all_events()
+    for votes_data in votes:
+        rows.append(",".join(['"' + str(d) + '"' for d in votes_data]))
+
+    return Response(
+        "\n".join(rows),
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=events.csv"})
+
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def static_files_route(path) -> Response:
