@@ -116,6 +116,16 @@ STATEMENT_GET_PERSONALITIES = sqlalchemy.sql.text('SELECT prolific_id, form_sent
 
 STATEMENT_GET_EVENTS = sqlalchemy.sql.text('SELECT session_id, event, content, date FROM events')
 
+STATEMENT_UPDATE_RESET_TWEETS = sqlalchemy.sql.text('UPDATE tweets SET weight=1 WHERE weight=0')
+
+STATEMENT_DELETE_VOTES = sqlalchemy.sql.text('DELETE FROM votes')
+
+STATEMENT_DELETE_PERSONALITY = sqlalchemy.sql.text('DELETE FROM personality')
+
+STATEMENT_DELETE_ANNOTATORS = sqlalchemy.sql.text('DELETE FROM annotators')
+
+STATEMENT_DELETE_EVENTS = sqlalchemy.sql.text('DELETE FROM events')
+
 def create_engine():
     return sqlalchemy.create_engine('mysql://'+os.environ["DB_USER"]+':'+os.environ["DB_PASS"]+'@'+os.environ["DB_HOST"]+'/'+os.environ["DB_NAME"]+'?charset=utf8mb4', pool_size=10, pool_recycle=3600)
 
@@ -297,3 +307,15 @@ def all_personalities():
 def all_events():
   with engine.connect() as connection:
     return connection.execute(STATEMENT_GET_EVENTS, {}).fetchall()
+
+def reset_state():
+  with engine.connect() as connection:
+    result = {
+        'updated_tweets': connection.execute(STATEMENT_UPDATE_RESET_TWEETS, {}).rowcount,
+        'deleted_votes': connection.execute(STATEMENT_DELETE_VOTES, {}).rowcount,
+        'deleted_personalities': connection.execute(STATEMENT_DELETE_PERSONALITY, {}).rowcount,
+        'deleted_annotators': connection.execute(STATEMENT_DELETE_ANNOTATORS, {}).rowcount,
+        'deleted_events': connection.execute(STATEMENT_DELETE_EVENTS, {}).rowcount
+    }
+
+  return result
