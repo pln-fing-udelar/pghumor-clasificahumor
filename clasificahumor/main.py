@@ -229,7 +229,7 @@ def download_annotators():
     rows.append("session_id,prolific_id,prolific_session_id,study_id,form_sent,question1,question2,question3,question4,question5,question6")
     annotators = database.all_annotators()
     for annotators_data in annotators:
-        rows.append(",".join(['"' + str(d) + '"' for d in annotators_data]))
+        rows.append(",".join([wrap_escape(str(d)) for d in annotators_data]))
 
     return Response(
         "\n".join(rows),
@@ -243,7 +243,7 @@ def download_personalities():
     rows.append("prolific_id,form_sent,question1,question2,question3,question4,question5,question6,question7,question8,question9,question10,question11")
     personalities = database.all_personalities()
     for personalities_data in personalities:
-        rows.append(",".join(['"' + str(d) + '"' for d in personalities_data]))
+        rows.append(",".join([wrap_escape(str(d)) for d in personalities_data]))
 
     return Response(
         "\n".join(rows),
@@ -257,13 +257,16 @@ def download_events():
     rows.append("session_id,event,content,date")
     events = database.all_events()
     for events_data in events:
-        rows.append(",".join(['"' + str(d) + '"' for d in events_data]))
+        rows.append(",".join([wrap_escape(str(d)) for d in events_data]))
 
     return Response(
         "\n".join(rows),
         mimetype="text/csv",
         headers={"Content-disposition":
                  "attachment; filename=events.csv"})
+
+def wrap_escape(s):
+    return '"' + s.replace('"','""') + '"'
 
 @app.route("/backup-and-reset")
 def backup_and_reset():
@@ -281,21 +284,21 @@ def backup_and_reset():
         f.write("session_id,prolific_id,prolific_session_id,study_id,form_sent,question1,question2,question3,question4,question5,question6\n")
         annotators = database.all_annotators()
         for annotators_data in annotators:
-            f.write(",".join(['"' + str(d) + '"' for d in annotators_data]) + "\n")
+            f.write(",".join([wrap_escape(str(d)) for d in annotators_data]) + "\n")
         results['backup_annotators'] = (len(annotators), os.path.realpath(f.name))
 
     with open('backup_' + current_date + '_personalities.csv','w') as f:
         f.write("prolific_id,form_sent,question1,question2,question3,question4,question5,question6,question7,question8,question9,question10,question11\n")
         personalities = database.all_personalities()
         for personalities_data in personalities:
-            f.write(",".join(['"' + str(d) + '"' for d in personalities_data]) + "\n")
+            f.write(",".join([wrap_escape(str(d)) for d in personalities_data]) + "\n")
         results['backup_personalities'] = (len(personalities), os.path.realpath(f.name))
 
     with open('backup_' + current_date + '_events.csv','w') as f:
         f.write("session_id,event,content,date")
         events = database.all_events()
         for events_data in events:
-            f.write(",".join(['"' + str(d) + '"' for d in events_data]) + "\n")
+            f.write(",".join([wrap_escape(str(d)) for d in events_data]) + "\n")
         results['backup_events'] = (len(events), os.path.realpath(f.name))
 
     res = database.reset_state()
