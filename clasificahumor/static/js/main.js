@@ -6,6 +6,7 @@ let $progressLbl;
 let $next;
 let $instructionsClose;
 let $instructionsNext;
+let $instructionsBack;
 let $instructionsPage1;
 let $instructionsPage2;
 let $instructionsPage3;
@@ -95,6 +96,7 @@ function setupElements() {
     $next = $('#next');
     $instructionsClose = $('#instructions-close-btn');
     $instructionsNext = $('#instructions-next-btn');
+    $instructionsBack = $('#instructions-back-btn');
     $instructionsPage1 = $('#instructions-page1');
     $instructionsPage2 = $('#instructions-page2');
     $instructionsPage3 = $('#instructions-page3');
@@ -183,6 +185,7 @@ function closeInstructions() {
     $instructionsPage6.addClass('instructions-hidden');
     $instructionsPage7.removeClass('instructions-visible');
     $instructionsPage7.addClass('instructions-hidden');
+    $instructionsBack.addClass('btn-hidden');
     $instructionsNext.removeClass('btn-hidden');
     $instructionsClose.addClass('btn-hidden');
 
@@ -212,6 +215,7 @@ function setUiListeners() {
             $instructionsPage1.addClass('instructions-hidden');
             $instructionsPage2.removeClass('instructions-hidden');
             $instructionsPage2.addClass('instructions-visible');
+            $instructionsBack.removeClass('btn-hidden');
         } else if ($instructionsPage2.hasClass('instructions-visible')) {
             $instructionsPage2.removeClass('instructions-visible');
             $instructionsPage2.addClass('instructions-hidden');
@@ -239,6 +243,42 @@ function setUiListeners() {
             $instructionsPage7.addClass('instructions-visible');
             $instructionsNext.addClass('btn-hidden');
             $instructionsClose.removeClass('btn-hidden');
+        }
+    });
+    $instructionsBack.click(function() {
+        if ($instructionsPage2.hasClass('instructions-visible')) {
+            $instructionsPage2.removeClass('instructions-visible');
+            $instructionsPage2.addClass('instructions-hidden');
+            $instructionsPage1.removeClass('instructions-hidden');
+            $instructionsPage1.addClass('instructions-visible');
+            $instructionsBack.addClass('btn-hidden');
+        } else if ($instructionsPage3.hasClass('instructions-visible')) {
+            $instructionsPage3.removeClass('instructions-visible');
+            $instructionsPage3.addClass('instructions-hidden');
+            $instructionsPage2.removeClass('instructions-hidden');
+            $instructionsPage2.addClass('instructions-visible');
+        } else if ($instructionsPage4.hasClass('instructions-visible')) {
+            $instructionsPage4.removeClass('instructions-visible');
+            $instructionsPage4.addClass('instructions-hidden');
+            $instructionsPage3.removeClass('instructions-hidden');
+            $instructionsPage3.addClass('instructions-visible');
+        } else if ($instructionsPage5.hasClass('instructions-visible')) {
+            $instructionsPage5.removeClass('instructions-visible');
+            $instructionsPage5.addClass('instructions-hidden');
+            $instructionsPage4.removeClass('instructions-hidden');
+            $instructionsPage4.addClass('instructions-visible');
+        } else if ($instructionsPage6.hasClass('instructions-visible')) {
+            $instructionsPage6.removeClass('instructions-visible');
+            $instructionsPage6.addClass('instructions-hidden');
+            $instructionsPage5.removeClass('instructions-hidden');
+            $instructionsPage5.addClass('instructions-visible');
+        } else if ($instructionsPage7.hasClass('instructions-visible')) {
+            $instructionsPage7.removeClass('instructions-visible');
+            $instructionsPage7.addClass('instructions-hidden');
+            $instructionsPage6.removeClass('instructions-hidden');
+            $instructionsPage6.addClass('instructions-visible');
+            $instructionsNext.removeClass('btn-hidden');
+            $instructionsClose.addClass('btn-hidden');
         }
     });
 }
