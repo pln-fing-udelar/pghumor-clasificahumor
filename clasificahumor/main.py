@@ -268,6 +268,11 @@ def download_events():
 def wrap_escape(s):
     return '"' + s.replace('"','""') + '"'
 
+@app.route("/update-finished")
+def update_finished():
+    updated = database.update_finished_tweets()
+    return jsonify({'updated': updated})
+
 @app.route("/backup-and-reset")
 def backup_and_reset():
     results = {}

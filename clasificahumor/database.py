@@ -186,7 +186,10 @@ def add_vote(session_id: str, tweet_id: str, vote_humor: str, vote_offensive: st
         with engine.connect() as connection:
             connection.execute(STATEMENT_ADD_VOTE, {'tweet_id': tweet_id, 'session_id': session_id,
                                                     'vote_humor': vote_humor, 'vote_offensive': vote_offensive, 'vote_personal': vote_personal})
-            # connection.execute(STATEMENT_UPDATE_FINISHED_TWEETS)
+
+def update_finished_tweets():
+    with engine.connect() as connection:
+        return connection.execute(STATEMENT_UPDATE_FINISHED_TWEETS).rowcount
 
 def add_annotator(session_id, prolific_id, prolific_session_id, study_id, question1, question2, question3, question4, question5, question6) -> None:
     """
