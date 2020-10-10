@@ -5,11 +5,9 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional.">
-  <meta name="author" content="Santiago Castro, Matías Cubero y el Grupo PLN, UdelaR">
   <link rel="apple-touch-icon" href="img/favicon.png">
 
-  <title>Estadísticas</title>
+  <title>Statistics</title>
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -31,18 +29,6 @@
 
     <p>Total number of sessions: {{ stats['sessions'] }}</p>
 
-    <p>Votes per prolific id:</p>
-
-    <table class="stats-table">
-        <th>Prolific ID</th><th>Votes</th>
-    {% for prolific_id in stats['votes_by_prolific_id'] %}
-        <tr>
-          <td>{{ prolific_id }}</td>
-          <td>{{ stats['votes_by_prolific_id'][prolific_id] }}</td>
-        </tr>
-    {% endfor %}
-    </table>
-
     <p>Tweets per vote:</p>
 
     <table class="stats-table">
@@ -51,6 +37,18 @@
         <tr>
           <td>{{ vote_count }}</td>
           <td>{{ stats['tweets_by_vote_count'][vote_count] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    <p>Votes per prolific id:</p>
+
+    <table class="stats-table">
+        <th>Prolific ID</th><th>Votes</th>
+    {% for prolific_id in stats['votes_by_prolific_id'] %}
+        <tr>
+          <td>{{ prolific_id }}</td>
+          <td>{{ stats['votes_by_prolific_id'][prolific_id] }}</td>
         </tr>
     {% endfor %}
     </table>

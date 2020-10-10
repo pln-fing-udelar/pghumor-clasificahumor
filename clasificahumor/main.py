@@ -273,6 +273,12 @@ def update_finished():
     updated = database.update_finished_tweets()
     return jsonify({'updated': updated})
 
+@app.route("/delete-votes-session")
+def delete_votes_session():
+    session_id = request.args.get('session_id')
+    deleted = database.delete_votes_session(session_id)
+    return jsonify({'deleted': deleted})
+
 @app.route("/backup-and-reset")
 def backup_and_reset():
     results = {}

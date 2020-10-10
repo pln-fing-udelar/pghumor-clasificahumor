@@ -126,6 +126,8 @@ STATEMENT_DELETE_ANNOTATORS = sqlalchemy.sql.text('DELETE FROM annotators')
 
 STATEMENT_DELETE_EVENTS = sqlalchemy.sql.text('DELETE FROM events')
 
+STATEMENT_DELETE_VOTES_FOR_SESSION = sqlalchemy.sql.text('DELETE FROM votes WHERE session_id = :session_id')
+
 def create_engine():
     return sqlalchemy.create_engine('mysql://'+os.environ["DB_USER"]+':'+os.environ["DB_PASS"]+'@'+os.environ["DB_HOST"]+'/'+os.environ["DB_NAME"]+'?charset=utf8mb4', pool_size=10, pool_recycle=3600)
 
@@ -322,3 +324,7 @@ def reset_state():
     }
 
   return result
+
+def delete_votes_session(session_id):
+    with engine.connect() as connection:
+        return connection.execute(STATEMENT_DELETE_VOTES_FOR_SESSION, {'session_id': session_id}).rowcount
