@@ -23,9 +23,8 @@ STATEMENT_RANDOM_TWEETS = sqlalchemy.sql.text('SELECT t.tweet_id, text'
 STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote_humor, vote_offensive, vote_personal)'
                                          ' VALUES (:tweet_id, :session_id, :vote_humor, :vote_offensive, :vote_personal)'
                                          ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
-STATEMENT_UPDATE_FINISHED_TWEETS = sqlalchemy.sql.text('UPDATE tweets SET weight=0 WHERE tweet_id IN '
-                                                       ' (SELECT tweet_id FROM votes '
-                                                       ' GROUP BY tweet_id HAVING count(*) >= 5)')
+STATEMENT_GET_FINISHED_TWEETS = sqlalchemy.sql.text('SELECT tweet_id FROM votes GROUP BY tweet_id HAVING count(*) >= 5')
+STATEMENT_UPDATE_FINISHED_TWEETS = sqlalchemy.sql.text('UPDATE tweets SET weight=0 WHERE tweet_id IN :tweet_ids')
 STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*)'
                                            ' FROM votes v'
                                            # '   LEFT JOIN (SELECT session_id'
@@ -191,7 +190,11 @@ def add_vote(session_id: str, tweet_id: str, vote_humor: str, vote_offensive: st
 
 def update_finished_tweets():
     with engine.connect() as connection:
-        return connection.execute(STATEMENT_UPDATE_FINISHED_TWEETS).rowcount
+        finished_tweets = [str(t[0]) for t in connection.execute(STATEMENT_GET_FINISHED_TWEETS).fetchall()]
+        if len(finished_tweets) == 0:
+          return -1
+        else:
+          return connection.execute(STATEMENT_UPDATE_FINISHED_TWEETS, {'tweet_ids': tuple(finished_tweets)}).rowcount
 
 def add_annotator(session_id, prolific_id, prolific_session_id, study_id, question1, question2, question3, question4, question5, question6) -> None:
     """
