@@ -51,7 +51,7 @@ def create_app() -> Flask:
 
 app = create_app()
 
-BATCH_SIZE = 5
+BATCH_SIZE = 3
 VOTES_SIZE = 100
 
 

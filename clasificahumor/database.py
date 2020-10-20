@@ -23,7 +23,7 @@ STATEMENT_RANDOM_TWEETS = sqlalchemy.sql.text('SELECT t.tweet_id, text'
 STATEMENT_ADD_VOTE = sqlalchemy.sql.text('INSERT INTO votes (tweet_id, session_id, vote_humor, vote_offensive, vote_personal)'
                                          ' VALUES (:tweet_id, :session_id, :vote_humor, :vote_offensive, :vote_personal)'
                                          ' ON DUPLICATE KEY UPDATE tweet_id = tweet_id')
-STATEMENT_GET_FINISHED_TWEETS = sqlalchemy.sql.text('SELECT tweet_id FROM votes GROUP BY tweet_id HAVING count(*) >= 5')
+STATEMENT_GET_FINISHED_TWEETS = sqlalchemy.sql.text('SELECT tweet_id FROM votes GROUP BY tweet_id HAVING count(*) >= 1')
 STATEMENT_UPDATE_FINISHED_TWEETS = sqlalchemy.sql.text('UPDATE tweets SET weight=0 WHERE tweet_id IN :tweet_ids')
 STATEMENT_VOTE_COUNT = sqlalchemy.sql.text('SELECT COUNT(*)'
                                            ' FROM votes v'
