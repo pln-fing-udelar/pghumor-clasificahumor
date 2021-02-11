@@ -74,6 +74,33 @@ mysql -u $USER -p database < dump.sql
 You can prefix `docker-compose exec database` to the command to run it
 in the database Docker container.
 
+### Useful SQL commands
+
+List the databases:
+
+```sql
+show databases;
+```
+
+List `pghumor` database tables:
+
+```sql
+use pghumor;
+show tables;
+```
+
+Describe a particular table:
+
+```sql
+describe tweets;
+```
+
+Show some data from a table:
+
+```sql
+select * from tweets limit 10;
+```
+
 ## Testing
 
 To run it using a WSGI server, just like in production, do:
@@ -101,3 +128,11 @@ To run a SQL script in production (e.g., to restore some data):
 ```bash
 docker exec -i clasificahumor_database_1 mysql -u root -p pghumor < dump.sql
 ```
+
+To open a mysql interactive session in productrion:
+
+```bash
+docker exec -i clasificahumor_database_1 mysql -u root -p pghumor
+```
+
+For these commands, using directly Docker Compose (`docker-compose exec database`) is also supported instead of the Docker CLI directly (`docker exec clasificahumor_database_1`). However, the extra flags needed for each of them change as Docker Compose `exec` subcommand uses a pseudo TTY and it's interactive by default while the Docker CLI `exec` subcommand doesn't.
