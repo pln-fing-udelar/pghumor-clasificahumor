@@ -159,7 +159,19 @@ Docker CLI directly (`docker exec clasificahumor_database_1`). However, the extr
 as Docker Compose `exec` subcommand uses a pseudo TTY and it's interactive by default while the Docker CLI `exec`
 subcommand doesn't.
 
-## TODO: push production
+## Deploy to production
+
+Add a git remote to push to production:
+
+```bash
+git remote add production $YOUR_USERNAME@clasificahumor.com:/opt/clasificahumor
+```
+
+Then just push to production:
+
+```bash
+git push production
+```
 
 ## Tweet extraction
 

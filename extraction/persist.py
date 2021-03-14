@@ -42,11 +42,13 @@ def main() -> None:
             tweet.setdefault("origin", args.default_origin)
 
         # Consider that the key names may vary between "tweet_id" or "id", and `account_id or "user_id",
-        #   depending on the input file.
-        if id_ := tweet.get("tweet_id"):
+        # depending on the input file.
+        id_ = tweet.get("tweet_id")
+        if id_:
             tweet["id"] = id_
 
-        if user_id := tweet.get("account_id"):
+        user_id = tweet.get("account_id")
+        if user_id:
             tweet["user_id"] = user_id
 
     with util.create_connection() as connection:
