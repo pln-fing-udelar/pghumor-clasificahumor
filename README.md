@@ -167,7 +167,7 @@ Follow the steps here to download new tweets and get them into the database.
 
 ### Download new tweets
 
-You need to create a `.env` file with the content (Twitter API credentials):
+You need to create a `.env` file with the content (use the Twitter API credentials):
 
 ```shell
 CONSUMER_TOKEN=...
@@ -176,6 +176,35 @@ ACCESS_TOKEN=...
 ACCESS_TOKEN_SECRET=...
 ```
 
-```shell
-./download_tweets.py
+Note that normally we wouldn't need the access token and access token secret as we're not authenticating other users 
+to this "Twitter app". However, the app access token can be used to act in name of the Twitter app user owner 
+(user-based authentication), and thus gain greater Twitter API rate limits than in an app-based authentication context. 
+
+#### Download tweets from the hose
+
+```bash
+./extraction/download_hose.py > tweets1.jsonl
+```
+
+#### Download tweets from humorous accounts
+
+```bash
+./extraction/download_from_accounts.py > tweets2.jsonl
+```
+
+### Persist the downloaded tweets into the database
+
+```bash
+./extraction/persist.py < tweets.jsonl
+```
+
+See the options available in the command with `./extraction/persist.py --help`.
+
+## Analysis
+
+To compute the agreement (for example with
+[this annotations_by_tweet.csv file](https://github.com/pln-fing-udelar/humor/blob/main/annotations_by_tweet.csv)):
+
+```bash
+./analysis/agreement.py FILE
 ```

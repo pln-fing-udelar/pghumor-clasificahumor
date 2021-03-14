@@ -1,22 +1,23 @@
 import fileinput
+import json
 import os
 import re
-from typing import Any, Iterable, Mapping, Sequence, TypeVar
+from typing import Any, Iterable, MutableMapping, Optional, Sequence, TypeVar
 
-import MySQLdb
+import MySQLdb.connections
 import tweepy
 
-TYPE_TWEET = Mapping[str, Any]
+TYPE_TWEET = MutableMapping[str, Any]
 
 RE_LINK = re.compile(r"https?://")
 
 
-def read_tweets_from_input() -> Iterable[TYPE_TWEET]:
-    return read_tweets(fileinput.input())
+def read_tweets_from_input(path: Optional[str] = None, json_format: bool = True) -> Iterable[TYPE_TWEET]:
+    return read_tweets(fileinput.input(path), json_format)
 
 
-def read_tweets(file: Iterable[str]) -> Iterable[TYPE_TWEET]:
-    return [eval(line) for line in file]
+def read_tweets(file: Iterable[str], json_format: bool = True) -> Iterable[TYPE_TWEET]:
+    return [deserialize_tweet(line) if json_format else eval(line) for line in file]
 
 
 def status_is_retweet(status: tweepy.Status) -> bool:
@@ -50,19 +51,30 @@ def status_to_dict(status: tweepy.Status) -> TYPE_TWEET:
     }
 
 
-def create_tweepy_api(app_only_auth: bool = False) -> tweepy.API:
+def serialize_tweet(tweet: TYPE_TWEET) -> str:
+    return json.dumps(tweet)
+
+
+def deserialize_tweet(text: str) -> TYPE_TWEET:
+    return json.loads(text)
+
+
+def create_tweepy_auth(app_only_auth: bool = False) -> tweepy.auth.AuthHandler:
     consumer_token = os.environ["CONSUMER_TOKEN"]
     consumer_secret = os.environ["CONSUMER_SECRET"]
 
     if app_only_auth:
-        auth = tweepy.AppAuthHandler(consumer_token, consumer_secret)
+        return tweepy.AppAuthHandler(consumer_token, consumer_secret)
     else:
         access_token = os.environ["ACCESS_TOKEN"]
         access_token_secret = os.environ["ACCESS_TOKEN_SECRET"]
         auth = tweepy.OAuthHandler(consumer_token, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
+        return auth
 
-    return tweepy.API(auth)
+
+def create_tweepy_api(app_only_auth: bool = False) -> tweepy.API:
+    return tweepy.API(auth_handler=create_tweepy_auth(app_only_auth))
 
 
 T = TypeVar("T")
@@ -74,6 +86,6 @@ def chunks(seq: Sequence[T], n: int) -> Sequence[Sequence[T]]:
         yield seq[i:i + n]
 
 
-def create_connection() -> MySQLdb.Connection:
+def create_connection() -> MySQLdb.connections.Connection:
     return MySQLdb.connect(host=os.environ["DB_HOST"], user=os.environ["DB_USER"], password=os.environ["DB_PASS"],
                            database=os.environ["DB_NAME"], charset="utf8mb4")

@@ -1,10 +1,12 @@
 #!/usr/bin/env python
+import argparse
 import time
 from typing import Mapping
 
-from tqdm import *
+from tqdm.auto import tqdm
 
 import util
+from argparse_with_defaults import ArgumentParserWithDefaults
 
 APP_AUTH_USER_TIMELINE_RATE_LIMIT_PER_WINDOW = 1500
 SECS_IN_A_MINUTE = 60
@@ -85,7 +87,15 @@ def max_obtainable_status_count_per_user() -> Mapping[str, int]:
     return result
 
 
+def parse_args() -> argparse.Namespace:
+    parser = ArgumentParserWithDefaults()
+    parser.add_argument("--no-json-format", dest="json_format", action="store_false")
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
+
     status_count_per_user = max_obtainable_status_count_per_user()
 
     assert all(screen_name in status_count_per_user for screen_name in SCREEN_NAMES), \
@@ -107,7 +117,8 @@ def main() -> None:
                                                  count=MAX_STATUSES_COUNT_PER_APP_AUTH_USER_TIMELINE_REQUEST)
                 for status in statuses:
                     if util.status_is_valid(status):
-                        print(util.status_to_dict(status))
+                        tweet = util.status_to_dict(status)
+                        print(util.serialize_tweet(tweet) if args.json_format else tweet)
 
                 max_id = statuses.max_id
 
