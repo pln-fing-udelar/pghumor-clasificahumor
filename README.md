@@ -21,10 +21,10 @@ docker-compose up --build
 
 ### Pipenv
 
-1. (for the tweet extraction part) Install the MySQL library headers. In Ubuntu, it'd be:
+1. Install the Python and MySQL library headers. In Ubuntu, it'd be:
 
     ```bash
-    sudo apt install libmysqlclient-dev
+    sudo apt install libmysqlclient-dev python3-dev
     ```
 
 2. Install the dependencies using [Pipenv](https://docs.pipenv.org/):
