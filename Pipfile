@@ -5,18 +5,23 @@ verify_ssl = true
 name = "pypi"
 
 
-[dev-packages]
-
-mycli = "*"
-
-
 [packages]
 
 Flask = "*"
-raven = {extras = ["flask"]}
-SQLAlchemy = {extras = ["mysql"]}
+raven = { extras = ["flask"] }
+SQLAlchemy = { extras = ["mysql"] }
+
+
+[dev-packages]
+
+krippendorff = "*"
+mycli = "*"
+mysqlclient = "*"
+numpy = "*"
+tweepy = "*"
+tqdm = "*"
 
 
 [requires]
 
-python_version = "3.6"
+python_version = "3.9"

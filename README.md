@@ -1,14 +1,15 @@
 # pgHumor-clasificahumor
 
-Web page for [pgHumor](https://github.com/pln-fing-udelar/pghumor) and
-[HUMOR](https://github.com/pln-fing-udelar/humor) corpora crowd-annotation. This is the input data for the
-[HAHA](http://www.fing.edu.uy/inco/grupos/pln/haha) competition as well.
+Website to crowd-annotate tweets for Humor Research. Originally created for
+[pgHumor](https://github.com/pln-fing-udelar/pghumor), and also used in the
+[HAHA competitions](http://www.fing.edu.uy/inco/grupos/pln/haha). If you want to learn general information about the 
+data and its format, see [HUMOR](https://github.com/pln-fing-udelar/humor) website.
 
 ## Setup
 
 There are two ways to run this code after cloning the repo: with Docker or via Pipenv. The first one is the recommended
-way to get started (or to just use for the database), and the second one is for advanced use (such as debugging with an
-IDE).
+way to get started (or to just use for the database), and the second one is for the extraction and analysis part, and
+for advanced usage (such as debugging with an IDE).
 
 ### Docker
 
@@ -157,3 +158,24 @@ For these commands, using directly Docker Compose (`docker-compose exec database
 Docker CLI directly (`docker exec clasificahumor_database_1`). However, the extra flags needed for each of them change
 as Docker Compose `exec` subcommand uses a pseudo TTY and it's interactive by default while the Docker CLI `exec`
 subcommand doesn't.
+
+## TODO: push production
+
+## Tweet extraction
+
+Follow the steps here to download new tweets and get them into the database.
+
+### Download new tweets
+
+You need to create a `.env` file with the content (Twitter API credentials):
+
+```shell
+CONSUMER_TOKEN=...
+CONSUMER_SECRET=...
+ACCESS_TOKEN=...
+ACCESS_TOKEN_SECRET=...
+```
+
+```shell
+./download_tweets.py
+```

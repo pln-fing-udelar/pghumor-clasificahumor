@@ -1,0 +1,1 @@
+select id, replace(text, '"', '""'), account_id, n, '1', '2', '3', '4', '5' from a_publicar_pln into outfile '/var/lib/mysql-files/annotations_by_tweet.csv' fields terminated by ',' optionally enclosed by '"' escaped by '' lines terminated by '\n';

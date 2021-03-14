@@ -1,0 +1,1 @@
+select id_tweet, eschiste_tweet, id_account, categoria_tweet from tweets into outfile '/var/lib/mysql-files/tweets.csv' fields terminated by ',' optionally enclosed by '"' escaped by '' lines terminated by '\n';
