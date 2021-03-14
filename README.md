@@ -213,9 +213,9 @@ ACCESS_TOKEN=...
 ACCESS_TOKEN_SECRET=...
 ```
 
-Note that normally we wouldn't need the access token and access token secret as we're not authenticating other users 
-to this "Twitter app". However, the app access token can be used to act in name of the Twitter app user owner 
-(user-based authentication), and thus gain greater Twitter API rate limits than in an app-based authentication context. 
+> Note that normally we wouldn't need the access token and access token secret as we're not authenticating other users 
+> to this "Twitter app". However, the app access token can be used to act in name of the Twitter app user owner 
+> (user-based authentication), and thus gain greater Twitter API rate limits than in an app-based authentication context. 
 
 #### Download tweets from the hose
 
