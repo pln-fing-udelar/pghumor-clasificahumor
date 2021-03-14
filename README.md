@@ -21,13 +21,19 @@ docker-compose up --build
 
 ### Pipenv
 
-1. Install the dependencies using [Pipenv](https://docs.pipenv.org/):
+1. (for the tweet extraction part) Install the MySQL library headers. In Ubuntu, it'd be:
+
+    ```bash
+    sudo apt install libmysqlclient-dev
+    ```
+
+2. Install the dependencies using [Pipenv](https://docs.pipenv.org/):
 
     ```bash
     pipenv install -d
     ```
 
-2. Create a `.env` file with the following content (setting some env vars values):
+3. Create a `.env` file with the following content (setting some env vars values):
 
     ```shell
     FLASK_APP=clasificahumor/main.py
@@ -39,14 +45,14 @@ docker-compose up --build
     DB_NAME=SET_VALUE
     ```
 
-3. Run:
+4. Run:
 
     ```bash
     pipenv shell  # It will load the environment, along with the .env file.
     flask run
     ```
 
-4. Set up a MySQL 5.7 instance. It could be the instance generated with the Docker setup.
+5. Set up a MySQL 5.7 instance. It could be the instance generated with the Docker setup.
 
 ## Tweet data
 
@@ -159,6 +165,25 @@ Docker CLI directly (`docker exec clasificahumor_database_1`). However, the extr
 as Docker Compose `exec` subcommand uses a pseudo TTY and it's interactive by default while the Docker CLI `exec`
 subcommand doesn't.
 
+## Production setup
+
+The repo was first cloned in production in `/opt/clasificahumor`. The following command was run:
+
+```bash
+git config receive.denyCurrentBranch updateInstead
+```
+
+The file `/opt/clasificahumor/.git/hooks/post-update` in production has been set with the following content to 
+deploy on `git push`:
+
+```bash
+#!/usr/bin/env bash
+
+pushd .. > /dev/null  # So it loads the .env file in the working directory.
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+popd > /dev/null
+```
+
 ## Deploy to production
 
 Add a git remote to push to production:
@@ -179,7 +204,7 @@ Follow the steps here to download new tweets and get them into the database.
 
 ### Download new tweets
 
-You need to create a `.env` file with the content (use the Twitter API credentials):
+Add the following to the `.env` file with the content (replace with the Twitter API credentials values):
 
 ```shell
 CONSUMER_TOKEN=...
@@ -220,3 +245,8 @@ To compute the agreement (for example with
 ```bash
 ./analysis/agreement.py FILE
 ```
+
+## Troubleshooting
+
+If you have an SSL connection error when trying to access the database, see
+[MySQL ERROR 2026 - SSL connection error - Ubuntu 20.04](https://stackoverflow.com/a/61934186/1165181).
