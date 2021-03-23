@@ -26,9 +26,9 @@
 
   <title>Clasificá tweets y divertite</title>
 
-  <link href="css/normalize.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <!--  <link href="css/normalize.css" rel="stylesheet"/>-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
   <link href="css/mdtoast.min.css" rel="stylesheet"/>
   <link href="css/emoji.css" rel="stylesheet"/>
   <link href="css/votes.css" rel="stylesheet"/>
@@ -63,18 +63,20 @@
 </script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js"></script>
 
-<script>window.twttr = ((d, s, id) => {
-  let js, fjs = d.getElementsByTagName(s)[0],
-      t = window.twttr || {};
-  if (d.getElementById(id)) return t;
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://platform.twitter.com/widgets.js";
-  fjs.parentNode.insertBefore(js, fjs);
-  t._e = [];
-  t.ready = t._e.push;
-  return t;
-})(document, "script", "twitter-wjs");</script>
+<script>
+  window.twttr = ((d, s, id) => {
+    let js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+    t._e = [];
+    t.ready = t._e.push;
+    return t;
+  })(document, "script", "twitter-wjs");
+</script>
 
 <div class="main-content">
   <div class="container">
@@ -92,7 +94,7 @@
         <ul id="answers">
           <li id="humor-answer" class="answer">
             <div id="humor-container">
-              <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
+              <button id="humor" type="button" class="btn btn-lg btn-light btn-answer">Sí</button>
               <div id="toolbox"></div>
               <div id="votes">
                 <button id="vote-1" class="vote"><span class="legend-vote">Nada gracioso</span></button>
@@ -105,18 +107,16 @@
           </li>
 
           <li id="not-humor-answer" class="answer">
-            <button id="not-humor" type="button" class="btn btn-lg btn-default btn-answer">No</button>
+            <button id="not-humor" type="button" class="btn btn-lg btn-light btn-answer">No</button>
           </li>
 
           <li class="answer">
             <button id="skip" type="button" class="btn btn-lg btn-link btn-answer">Saltear</button>
           </li>
 
-          <li class="answer">
-            <label id="is-offensive-label" for="is-offensive">
-              <input id="is-offensive" type="checkbox"/>
-              Ofensivo
-            </label>
+          <li id="is-offensive-container" class="form-check answer">
+            <input class="form-check-input" id="is-offensive" type="checkbox"/>
+            <label class="form-check-label" id="is-offensive-label" for="is-offensive">Ofensivo</label>
           </li>
         </ul>
       </div>
@@ -125,7 +125,7 @@
 
   <footer class="container">
     <div class="row">
-      <div id="social-buttons-container" class="col-xs-6">
+      <div id="social-buttons-container" class="col-6">
         <div class="fb-share-button" data-href="https://clasificahumor.com" data-layout="button_count"
              data-size="small">
           <a class="fb-xfbml-parse-ignore" target="_blank"
@@ -143,7 +143,7 @@
           Compartir
         </a>
       </div>
-      <div class="col-xs-6">
+      <div class="col-6">
         <button id="help" class="btn btn-link" type="button" data-toggle="modal" data-target="#about">
           Ayuda
         </button>
@@ -152,17 +152,17 @@
   </footer>
 </div>
 
-<div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
+<div id="about" class="modal fade" tabindex="-1" aria-labelledby="modal-label">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
+        <h4 class="modal-title" id="modal-label">Ayuda</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title" id="myModalLabel">Ayuda</h4>
       </div>
       <div class="modal-body">
-        <h4>Instrucciones</h4>
+        <h5>Instrucciones</h5>
 
         <p>
           Dado el tweet que se muestra en pantalla, ¿lo considerás humorístico? En caso positivo, apretá el
@@ -179,7 +179,7 @@
 
         <hr>
 
-        <h4>Sobre el proyecto</h4>
+        <h5>Sobre el proyecto</h5>
 
         <p>
           El fin de esta página es armar una base de datos de opiniones sobre humor durante febrero de 2019,
@@ -206,7 +206,7 @@
           Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad. ¡¡¡MUCHAS GRACIAS!!!
         </p>
 
-        <h4>Historia del proyecto</h4>
+        <h5>Historia del proyecto</h5>
 
         <p>
           La página fue creada en 2014 por dos estudiantes de Ingeniería en Computación,
@@ -219,7 +219,7 @@
           anotaciones y de mejor calidad 😊, para la 1ª edición de la competencia HAHA.
         </p>
 
-        <h4>Cookies</h4>
+        <h5>Cookies</h5>
 
         <p>
           Este sitio usa cookies para hacer un seguimiento de qué tweets ya clasificó cada persona, y evitar mostrar
@@ -229,19 +229,20 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Can't use jQuery slim cause it doesn't have ajax. -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"
         integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw=="
         crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
 <script src="https://cdn.ravenjs.com/3.4.0/raven.min.js" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/mdtoast.js"></script>

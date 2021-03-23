@@ -16,6 +16,7 @@ body {
 
 h1 {
   font-size: 30px;
+  margin-top: 20px;
 }
 
 h2 {
@@ -94,18 +95,16 @@ h2 {
 .open > .dropdown-toggle#humor.focus,
 .open > .dropdown-toggle#humor:focus,
 .open > .dropdown-toggle#humor:hover {
-  background-color: #fafafa;
-  border-color: #ddd;
+  background-color: #f2f2f2;
+  border-color: #fafafa;
   box-shadow: none;
-  color: #333;
   cursor: default;
-  outline: none;
 }
 
 #not-humor.no-hover:hover {
-  background-color: #fff;
-  border-color: #ccc;
-  color: #333;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+  box-shadow: none;
   transition-delay: 75ms;
 }
 
@@ -132,15 +131,17 @@ h2 {
   text-decoration: none;
 }
 
-#is-offensive-label {
-  font-weight: normal;
-  /*margin: 0 20px 50px 20px;*/
+#is-offensive-container {
   margin-top: 16px;
-  text-align: center;
 }
 
 #is-offensive {
   vertical-align: top;
+}
+
+#is-offensive-label {
+  font-weight: normal;
+  text-align: center;
 }
 
 #about-us-content {
@@ -155,9 +156,8 @@ footer {
   text-align: center;
 }
 
-.row {
+footer .row {
   align-items: flex-end;
-  display: flex;
 }
 
 #social-buttons-container {
