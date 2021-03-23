@@ -5,262 +5,272 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional.">
+  <meta name="description"
+        content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional.">
   <meta name="author" content="Santiago Castro, Matías Cubero y el Grupo PLN, UdelaR">
   <link rel="apple-touch-icon" href="img/favicon.png">
 
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Clasificá tweets y divertite" />
-  <meta property="og:image" content="https://clasificahumor.com/img/og.png" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:title" content="Clasificá tweets y divertite" />
-  <meta property="og:description" content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional." />
-  <meta property="og:url" content="https://clasificahumor.com/" />
-  <meta property="fb:app_id" content="1223095247821615" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@PLN_UdelaR" />
-  <meta name="twitter:creator" content="@PLN_UdelaR" />
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Clasificá tweets y divertite"/>
+  <meta property="og:image" content="https://clasificahumor.com/img/og.png"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:title" content="Clasificá tweets y divertite"/>
+  <meta property="og:description"
+        content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional."/>
+  <meta property="og:url" content="https://clasificahumor.com/"/>
+  <meta property="fb:app_id" content="1223095247821615"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@PLN_UdelaR"/>
+  <meta name="twitter:creator" content="@PLN_UdelaR"/>
 
   <title>Clasificá tweets y divertite</title>
 
   <link href="css/normalize.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
-  <link href="css/mdtoast.min.css" rel="stylesheet" />
-  <link href="css/emoji.css" rel="stylesheet" />
-  <link href="css/votes.css" rel="stylesheet" />
-  <link href="css/main.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link href="css/mdtoast.min.css" rel="stylesheet"/>
+  <link href="css/emoji.css" rel="stylesheet"/>
+  <link href="css/votes.css" rel="stylesheet"/>
+  <link href="css/main.css" rel="stylesheet"/>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-34392230-5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-34392230-5');
+  </script>
 </head>
 
 <body>
-  <!--suppress ES6ConvertVarToLetConst, ES6ModulesDependencies, JSUnresolvedFunction, JSUnresolvedVariable -->
-  <script>
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '1223095247821615',
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v2.10'
-      });
+<!--suppress ES6ConvertVarToLetConst, ES6ModulesDependencies, JSUnresolvedFunction, JSUnresolvedVariable -->
+<script>
+  window.fbAsyncInit = function () {
+    FB.init({
+      appId: '1223095247821615',
+      cookie: true,
+      xfbml: true,
+      version: 'v2.10'
+    });
 
-      FB.AppEvents.logPageView();
-    };
+    FB.AppEvents.logPageView();
+  };
 
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/es_LA/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
-  </script>
-
-  <!--suppress JSUnresolvedVariable -->
-  <script>window.twttr = (function(d, s, id) {
-    //noinspection ES6ConvertVarToLetConst
-    var js, fjs = d.getElementsByTagName(s)[0],
-            t = window.twttr || {};
-    if (d.getElementById(id)) return t;
+  (function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {
+      return;
+    }
     js = d.createElement(s);
     js.id = id;
-    js.src = "https://platform.twitter.com/widgets.js";
+    js.src = "https://connect.facebook.net/es_LA/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
-    t._e = [];
-    t.ready = function(f) {
-        t._e.push(f);
-    };
-    return t;
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<!--suppress JSUnresolvedVariable -->
+<script>window.twttr = (function (d, s, id) {
+  //noinspection ES6ConvertVarToLetConst
+  var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+  t._e = [];
+  t.ready = function (f) {
+    t._e.push(f);
+  };
+  return t;
 }(document, "script", "twitter-wjs"));</script>
 
-  <div class="main-content">
-    <div class="container">
-      <div id="home-content" class="content">
-        <h1>Clasificá tweets y divertite</h1>
+<div class="main-content">
+  <div class="container">
+    <div id="home-content" class="content">
+      <h1>Clasificá tweets y divertite</h1>
 
-        <div id="tweet">
-          <p id="tweet-text"></p>
-          <img id="tweet-logo" src="img/twitter.ico" alt="Twitter"/>
-        </div>
+      <div id="tweet">
+        <p id="tweet-text"></p>
+        <img id="tweet-logo" src="img/twitter.ico" alt="Twitter"/>
+      </div>
 
-        <div id="form-container">
-          <p id="question">¿El tweet pretende ser humorístico?</p>
+      <div id="form-container">
+        <p id="question">¿El tweet pretende ser humorístico?</p>
 
-          <ul id="answers">
-            <li id="humor-answer" class="answer">
-              <div id="humor-container">
-                <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
-                <div id="toolbox"></div>
-                <div id="votes">
-                  <button id="vote-1" class="vote"><span class="legend-vote">Nada gracioso</span></button>
-                  <button id="vote-2" class="vote"><span class="legend-vote">Poco gracioso</span></button>
-                  <button id="vote-3" class="vote"><span class="legend-vote">Regular</span></button>
-                  <button id="vote-4" class="vote"><span class="legend-vote">Bueno</span></button>
-                  <button id="vote-5" class="vote"><span class="legend-vote">¡Buenísimo!</span></button>
-                </div>
+        <ul id="answers">
+          <li id="humor-answer" class="answer">
+            <div id="humor-container">
+              <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
+              <div id="toolbox"></div>
+              <div id="votes">
+                <button id="vote-1" class="vote"><span class="legend-vote">Nada gracioso</span></button>
+                <button id="vote-2" class="vote"><span class="legend-vote">Poco gracioso</span></button>
+                <button id="vote-3" class="vote"><span class="legend-vote">Regular</span></button>
+                <button id="vote-4" class="vote"><span class="legend-vote">Bueno</span></button>
+                <button id="vote-5" class="vote"><span class="legend-vote">¡Buenísimo!</span></button>
               </div>
-            </li>
+            </div>
+          </li>
 
-            <li id="not-humor-answer" class="answer">
-              <button id="not-humor" type="button" class="btn btn-lg btn-default btn-answer">No</button>
-            </li>
+          <li id="not-humor-answer" class="answer">
+            <button id="not-humor" type="button" class="btn btn-lg btn-default btn-answer">No</button>
+          </li>
 
-            <li class="answer">
-              <button id="skip" type="button" class="btn btn-lg btn-link btn-answer">Saltear</button>
-            </li>
+          <li class="answer">
+            <button id="skip" type="button" class="btn btn-lg btn-link btn-answer">Saltear</button>
+          </li>
 
-            <li class="answer">
-              <label id="is-offensive-label" for="is-offensive">
-                <input id="is-offensive" type="checkbox" />
-                Ofensivo
-              </label>
-            </li>
-          </ul>
-        </div>
+          <li class="answer">
+            <label id="is-offensive-label" for="is-offensive">
+              <input id="is-offensive" type="checkbox"/>
+              Ofensivo
+            </label>
+          </li>
+        </ul>
       </div>
     </div>
+  </div>
 
-    <footer class="container">
-      <div class="row">
-        <div id="social-buttons-container" class="col-xs-6">
-          <div class="fb-share-button" data-href="https://clasificahumor.com" data-layout="button_count"
-               data-size="small" data-mobile-iframe="true">
-            <a class="fb-xfbml-parse-ignore" target="_blank"
-               href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fclasificahumor.com&amp;src=sdkpreparse">
-              Compartir
-            </a>
-          </div>
-          <a class="twitter-share-button"
-             href="https://twitter.com/intent/tweet?text=Clasificá%20tweets%20y%20divertite&via=PLN_UdelaR"
-             data-size="small">
-            Twittear
-          </a>
-          <a href="whatsapp://send" data-text="Clasificá tweets y divertite" data-href="" class="wa_btn wa_btn_s"
-             style="display:none">
+  <footer class="container">
+    <div class="row">
+      <div id="social-buttons-container" class="col-xs-6">
+        <div class="fb-share-button" data-href="https://clasificahumor.com" data-layout="button_count"
+             data-size="small" data-mobile-iframe="true">
+          <a class="fb-xfbml-parse-ignore" target="_blank"
+             href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fclasificahumor.com&amp;src=sdkpreparse">
             Compartir
           </a>
         </div>
-        <div class="col-xs-6">
-          <button id="help" class="btn btn-link" type="button" data-toggle="modal" data-target="#about">
-            Ayuda
-          </button>
-        </div>
+        <a class="twitter-share-button"
+           href="https://twitter.com/intent/tweet?text=Clasificá%20tweets%20y%20divertite&via=PLN_UdelaR"
+           data-size="small">
+          Twittear
+        </a>
+        <a href="whatsapp://send" data-text="Clasificá tweets y divertite" data-href="" class="wa_btn wa_btn_s"
+           style="display:none">
+          Compartir
+        </a>
       </div>
-    </footer>
-  </div>
+      <div class="col-xs-6">
+        <button id="help" class="btn btn-link" type="button" data-toggle="modal" data-target="#about">
+          Ayuda
+        </button>
+      </div>
+    </div>
+  </footer>
+</div>
 
-  <div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h4 class="modal-title" id="myModalLabel">Ayuda</h4>
-        </div>
-        <div class="modal-body">
-          <h4>Instrucciones</h4>
+<div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Ayuda</h4>
+      </div>
+      <div class="modal-body">
+        <h4>Instrucciones</h4>
 
-          <p>
-            Dado el tweet que se muestra en pantalla, ¿lo considerás humorístico? En caso positivo, apretá el
-            botón "Sí", y elegí qué tan gracioso le parece del 1 al 5 (representado por los 5 emojis).
-            En caso que no, apretá en "No". Si no estás seguro, poné "Saltear". Luego de esto, se mostrará otro tweet y
-            se repite el procedimiento de anotación.
-          </p>
+        <p>
+          Dado el tweet que se muestra en pantalla, ¿lo considerás humorístico? En caso positivo, apretá el
+          botón "Sí", y elegí qué tan gracioso le parece del 1 al 5 (representado por los 5 emojis).
+          En caso que no, apretá en "No". Si no estás seguro, poné "Saltear". Luego de esto, se mostrará otro tweet y
+          se repite el procedimiento de anotación.
+        </p>
 
-          <p>
-            En un segundo nivel de importancia, también nos interesa saber si los tweets son ofensivos. Entonces, antes
-            de indicar si son humoristicos, tildá la casilla de verificación que dice "Ofensivo" si te parece que el tweet
-            que aparece en pantalla es ofensivo.
-          </p>
+        <p>
+          En un segundo nivel de importancia, también nos interesa saber si los tweets son ofensivos. Entonces, antes
+          de indicar si son humoristicos, tildá la casilla de verificación que dice "Ofensivo" si te parece que el tweet
+          que aparece en pantalla es ofensivo.
+        </p>
 
-          <hr>
+        <hr>
 
-          <h4>Sobre el proyecto</h4>
+        <h4>Sobre el proyecto</h4>
 
-          <p>
-            El fin de esta página es armar una base de datos de opiniones sobre humor durante febrero de 2019,
-            y así hacer investigación sobre
-            <a href="https://es.wikipedia.org/wiki/Humor_computacional" target="_blank">Humor Computacional</a>.
-          </p>
-          <p>
-            Por ejemplo, va a usarse como conjunto de datos para
-            <a href="https://www.fing.edu.uy/inco/grupos/pln/haha/" target="_blank">la competencia HAHA 2019 (2ª
-              edición)</a>,
-            organizada por el
-            <a href="https://www.fing.edu.uy/inco/grupos/pln" target="_blank">Grupo de Procesamiento de Lenguaje Natural
-              (PLN)</a> de la
-            <a href="https://www.fing.edu.uy" target="_blank">Facultad de Ingeniería</a> de la
-            <a href="http://www.universidad.edu.uy/" target="_blank">Universidad de la República</a>, Uruguay.
-            La competencia consiste básicamente en predecir si un tweet es humorístico o no, y también decir qué tan
-            gracioso le puede resultar a la gente 😲 Si te interesa, podés participar.
-          </p>
-          <p>El código de este proyecto
-            <a href="https://github.com/pln-fing-udelar/pghumor-clasificahumor" target="_blank">se encuentra disponible
-              en GitHub</a>.
-          </p>
-          <p>
-            Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad. ¡¡¡MUCHAS GRACIAS!!!
-          </p>
+        <p>
+          El fin de esta página es armar una base de datos de opiniones sobre humor durante febrero de 2019,
+          y así hacer investigación sobre
+          <a href="https://es.wikipedia.org/wiki/Humor_computacional" target="_blank">Humor Computacional</a>.
+        </p>
+        <p>
+          Por ejemplo, va a usarse como conjunto de datos para
+          <a href="https://www.fing.edu.uy/inco/grupos/pln/haha/" target="_blank">la competencia HAHA 2019 (2ª
+            edición)</a>,
+          organizada por el
+          <a href="https://www.fing.edu.uy/inco/grupos/pln" target="_blank">Grupo de Procesamiento de Lenguaje Natural
+            (PLN)</a> de la
+          <a href="https://www.fing.edu.uy" target="_blank">Facultad de Ingeniería</a> de la
+          <a href="http://www.universidad.edu.uy/" target="_blank">Universidad de la República</a>, Uruguay.
+          La competencia consiste básicamente en predecir si un tweet es humorístico o no, y también decir qué tan
+          gracioso le puede resultar a la gente 😲 Si te interesa, podés participar.
+        </p>
+        <p>El código de este proyecto
+          <a href="https://github.com/pln-fing-udelar/pghumor-clasificahumor" target="_blank">se encuentra disponible
+            en GitHub</a>.
+        </p>
+        <p>
+          Gracias a tu ayuda, vamos a poder obtener una base de datos de buena calidad. ¡¡¡MUCHAS GRACIAS!!!
+        </p>
 
-          <h4>Historia del proyecto</h4>
+        <h4>Historia del proyecto</h4>
 
-          <p>
-            La página fue creada en 2014 por dos estudiantes de Ingeniería en Computación,
-            (<a href="https://github.com/bryant1410" target="_blank">Santiago Castro</a> y
-            <a href="https://www.fing.edu.uy/~mcubero/" target="_blank">Matías Cubero</a>)
-            originalmente para el proyecto de grado
-            <a href="https://github.com/pln-fing-udelar/pghumor" target="_blank">pgHumor</a>
-            – Universidad de la República, Uruguay, apoyados por la
-            <a href="http://www.anii.org.uy" target="_blank">ANII</a>. En 2018 se volvió a lanzar para tener más
-            anotaciones y de mejor calidad 😊, para la 1ª edición de la competencia HAHA.
-          </p>
+        <p>
+          La página fue creada en 2014 por dos estudiantes de Ingeniería en Computación,
+          (<a href="https://github.com/bryant1410" target="_blank">Santiago Castro</a> y
+          <a href="https://www.fing.edu.uy/~mcubero/" target="_blank">Matías Cubero</a>)
+          originalmente para el proyecto de grado
+          <a href="https://github.com/pln-fing-udelar/pghumor" target="_blank">pgHumor</a>
+          – Universidad de la República, Uruguay, apoyados por la
+          <a href="http://www.anii.org.uy" target="_blank">ANII</a>. En 2018 se volvió a lanzar para tener más
+          anotaciones y de mejor calidad 😊, para la 1ª edición de la competencia HAHA.
+        </p>
 
-          <h4>Cookies</h4>
+        <h4>Cookies</h4>
 
-          <p>
-            Este sitio usa cookies para hacer un seguimiento de qué tweets ya clasificó cada persona, y evitar mostrar
-            repetidos. También usa <a href="https://analytics.google.com/analytics/web/" target="_blank">Google
-            Analytics</a> para conocer información general sobre los anotadores (país, idioma, género, rango etario,
-            etc).
-          </p>
-        </div>
+        <p>
+          Este sitio usa cookies para hacer un seguimiento de qué tweets ya clasificó cada persona, y evitar mostrar
+          repetidos. También usa <a href="https://analytics.google.com/analytics/web/" target="_blank">Google
+          Analytics</a> para conocer información general sobre los anotadores (país, idioma, género, rango etario,
+          etc).
+        </p>
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
-      </div>
     </div>
   </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-  </script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-          integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
-  </script>
-  <script src="https://cdn.ravenjs.com/3.23.1/raven.min.js" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="js/mdtoast.js"></script>
-  <script type="text/javascript" src="js/placeload.min.js"></script>
-  <script type="text/javascript" src="js/emoji.min.js"></script>
-  <script type="text/javascript" src="js/main.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.ravenjs.com/3.23.1/raven.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/mdtoast.js"></script>
+<script type="text/javascript" src="js/placeload.min.js"></script>
+<script type="text/javascript" src="js/emoji.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
 
-  <!--suppress CommaExpressionJS, JSUnresolvedVariable -->
-  <script type="text/javascript">if(typeof wabtn4fg==="undefined")	{wabtn4fg=1;h=document.head||document.getElementsByTagName("head")[0],s=document.createElement("script");s.type="text/javascript";s.src="//cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js";h.appendChild(s)}</script>
-
-  <!--suppress CommaExpressionJS, JSUnresolvedFunction, JSValidateTypes -->
-  <script>
-  if (document.location.hostname !== 'localhost') {
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-34392230-5', 'auto');
-    ga('send', 'pageview');
-  }
-  </script>
+<!--suppress CommaExpressionJS, JSUnresolvedVariable -->
+<script type="text/javascript">if (typeof wabtn4fg === "undefined") {
+  wabtn4fg = 1;
+  h = document.head || document.getElementsByTagName("head")[0], s = document.createElement("script");
+  s.type = "text/javascript";
+  s.src = "//cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js";
+  h.appendChild(s)
+}</script>
 </body>
 
 </html>
