@@ -43,28 +43,28 @@ function main() {
 
 function setupSentry() {
   // The following key is public.
-  Raven.config('https://3afb3f9917f44b2a87e6fbb070a8977b@sentry.io/298102', {
-    ignoreUrls: ['localhost', '127.0.0.1']
+  Raven.config("https://3afb3f9917f44b2a87e6fbb070a8977b@sentry.io/298102", {
+    ignoreUrls: ["localhost", "127.0.0.1"]
   }).install();
 }
 
 function setupElements() {
-  $star = $('*');
-  $homeContent = $('#home-content');
-  $tweet = $('#tweet-text');
-  $humor = $('#humor');
-  $votesAndToolbox = $('#votes,#toolbox');
-  $toolbox = $('#toolbox');
-  $voteClass = $('.vote');
-  $vote1 = $('#vote-1');
-  $vote2 = $('#vote-2');
-  $vote3 = $('#vote-3');
-  $vote4 = $('#vote-4');
-  $vote5 = $('#vote-5');
-  $legendVote = $('.legend-vote');
-  $notHumor = $('#not-humor');
-  $skip = $('#skip');
-  $isOffensive = $('#is-offensive');
+  $star = $("*");
+  $homeContent = $("#home-content");
+  $tweet = $("#tweet-text");
+  $humor = $("#humor");
+  $votesAndToolbox = $("#votes,#toolbox");
+  $toolbox = $("#toolbox");
+  $voteClass = $(".vote");
+  $vote1 = $("#vote-1");
+  $vote2 = $("#vote-2");
+  $vote3 = $("#vote-3");
+  $vote4 = $("#vote-4");
+  $vote5 = $("#vote-5");
+  $legendVote = $(".legend-vote");
+  $notHumor = $("#not-humor");
+  $skip = $("#skip");
+  $isOffensive = $("#is-offensive");
 }
 
 function showTweet() {
@@ -72,7 +72,7 @@ function showTweet() {
     console.error("No hay tweets para mostrar.");
   } else {
     $tweet.fadeOut(200, () => {
-      $tweet.html(emoji.replace_unified(tweets[index].text.replace(/\n/mg, '<br/>'))).text();
+      $tweet.html(emoji.replace_unified(tweets[index].text.replace(/\n/mg, "<br/>"))).text();
       $tweet.fadeIn(200);
     });
   }
@@ -80,12 +80,12 @@ function showTweet() {
 
 function setupPlaceload() {
   Placeload
-      .$('#tweet-text')
-      .config({speed: '1s'})
+      .$("#tweet-text")
+      .config({speed: "1s"})
       .line(element => element.width(100).height(15))
-      .config({spaceBetween: '7px'})
+      .config({spaceBetween: "7px"})
       .line(element => element.width(100).height(15))
-      .config({spaceBetween: '7px'})
+      .config({spaceBetween: "7px"})
       .line(element => element.width(40).height(15)).fold(() => {
   }, () => {
   });
@@ -94,12 +94,12 @@ function setupPlaceload() {
 function setupEmojiConverter() {
   // noinspection JSUnresolvedFunction
   emoji = new EmojiConvertor();
-  emoji.img_set = 'twitter';
-  emoji.img_sets.twitter.path = 'https://raw.githubusercontent.com/iamcal/emoji-data/a97b2d2efa64535d6300660eb2cd15ecb584e79e/img-twitter-64/';
+  emoji.img_set = "twitter";
+  emoji.img_sets.twitter.path = "https://raw.githubusercontent.com/iamcal/emoji-data/a97b2d2efa64535d6300660eb2cd15ecb584e79e/img-twitter-64/";
 }
 
 function getRandomTweets() {
-  $.getJSON('tweets', data => {
+  $.getJSON("tweets", data => {
     tweets = data;
     showTweet();
   });
@@ -108,34 +108,34 @@ function getRandomTweets() {
 function setUiListeners() {
   $humor.click(() => {
     if (!legendsShownForFirstTime) {
-      $legendVote.stop().fadeTo('slow', 1, () =>
+      $legendVote.stop().fadeTo("slow", 1, () =>
           setTimeout(() =>
-              $legendVote.stop().fadeTo('slow', 0, () =>
-                  $legendVote.css('opacity', '')
+              $legendVote.stop().fadeTo("slow", 0, () =>
+                  $legendVote.css("opacity", "")
               ), 1000)
       );
       legendsShownForFirstTime = true;
     }
   });
 
-  $humor.hover(() => $votesAndToolbox.css('display', ''));
+  $humor.hover(() => $votesAndToolbox.css("display", ""));
 
   $notHumor.click(() => {
-    vote('x');
-    $notHumor.addClass('no-hover');
+    vote("x");
+    $notHumor.addClass("no-hover");
   });
 
-  $notHumor.on('mousemove mouswdown', () => $notHumor.removeClass('no-hover'));
+  $notHumor.on("mousemove mouswdown", () => $notHumor.removeClass("no-hover"));
 
-  $vote1.click(() => vote('1'));
-  $vote2.click(() => vote('2'));
-  $vote3.click(() => vote('3'));
-  $vote4.click(() => vote('4'));
-  $vote5.click(() => vote('5'));
-  $skip.click(() => vote('n'));
+  $vote1.click(() => vote("1"));
+  $vote2.click(() => vote("2"));
+  $vote3.click(() => vote("3"));
+  $vote4.click(() => vote("4"));
+  $vote5.click(() => vote("5"));
+  $skip.click(() => vote("n"));
 
-  $('button').mouseup(function() {
-    // Can't use an arrow here because we need `this` to be the button.
+  $("button").mouseup(function() {
+    // Can"t use an arrow here because we need `this` to be the button.
     $(this).blur();
   });
 }
@@ -146,14 +146,14 @@ function vote(voteOption) {
 
   const otherIndex = (index + 1) % tweets.length;
 
-  $.post('vote', {
+  $.post("vote", {
     tweet_id: tweets[oldIndex].id,
     vote: voteOption,
     ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
-    is_offensive: $isOffensive.prop('checked'),
+    is_offensive: $isOffensive.prop("checked"),
   }, tweet => {
     tweets[oldIndex] = tweet;
-  }, 'json');
+  }, "json");
 
   showTweet();
 
@@ -161,13 +161,13 @@ function vote(voteOption) {
 
   $votesAndToolbox.fadeOut();
 
-  $isOffensive.prop('checked', false);
+  $isOffensive.prop("checked", false);
 }
 
 function toastText(voteOption) {
-  if (voteOption === 'x') {
+  if (voteOption === "x") {
     return "Clasificado como no humorístico. ¡Gracias!";
-  } else if (voteOption === 'n') {
+  } else if (voteOption === "n") {
     return "Tweet salteado. ¡Gracias!";
   } else {
     return `Clasificado como ${removeNonWords(voteCodeToText[Number(voteOption)]).toLowerCase()}. ¡Gracias!`;
@@ -192,5 +192,5 @@ function moveToolboxIfOutside() {
 }
 
 function addPxToLeft(element, translation) {
-  element.css('left', (parseInt(element.css('left')) + translation).toString() + "px");
+  element.css("left", `${(parseInt(element.css("left")) + translation)}px`);
 }
