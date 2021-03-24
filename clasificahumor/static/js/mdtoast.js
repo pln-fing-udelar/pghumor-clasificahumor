@@ -14,8 +14,8 @@
 if (typeof jQuery === 'undefined') {
     throw new Error('MDToast: This plugin requires jQuery');
 }
-+function ($) {
-    var MDToast = function (message, options) {
++($ => {
+    const MDToast = function (message, options) {
         this.animateTime = 250;
         this.options = options;
         this.toastOpenClass = "md-toast-open";
@@ -30,9 +30,9 @@ if (typeof jQuery === 'undefined') {
         this.toast.addClass(options.type).append('<div class="mdt-message">' + message + '</div>');
 
         if (options.interaction) {
-            var that = this;
+            const that = this;
             this.action.text(options.actionText)
-                .on('click', function () {
+                .on('click', () => {
                     if (options.action) options.action(that);
                 });
             this.toast.append(this.action);
@@ -43,7 +43,7 @@ if (typeof jQuery === 'undefined') {
 
     MDToast.prototype = {
         show: function () {
-            var that = this,
+            const that = this,
                 callbacks = that.options.callbacks,
                 existingToast = $('.md-toast'),
                 doc = $('body');
@@ -52,12 +52,12 @@ if (typeof jQuery === 'undefined') {
 
             that.toast.data(that.TOAST_DATA, that).appendTo(doc);
 
-            setTimeout(function () {
+            setTimeout(() => {
                 that.toast.removeClass('mdt-load');
 
                 if (existingToast.length > 0) {
                     existingToast.each(function () {
-                        var ex_toast = $(this).data(that.TOAST_DATA);
+                        const ex_toast = $(this).data(that.TOAST_DATA);
 
                         if (ex_toast !== undefined) {
                             ex_toast.hide();
@@ -65,7 +65,7 @@ if (typeof jQuery === 'undefined') {
                     });
                 }
 
-                setTimeout(function () {
+                setTimeout(() => {
                         // noinspection JSUnresolvedVariable
                         if (callbacks && callbacks.shown) {
                             // noinspection JSUnresolvedFunction
@@ -76,11 +76,11 @@ if (typeof jQuery === 'undefined') {
 
                 if (that.options.interaction) {
                     if (that.options.interactionTimeout)
-                        that.toastTimeout = setTimeout(function () {
+                        that.toastTimeout = setTimeout(() => {
                             that.hide();
                         }, that.options.interactionTimeout);
                 } else if (that.options.duration) {
-                    that.toastTimeout = setTimeout(function () {
+                    that.toastTimeout = setTimeout(() => {
                         that.hide();
                     }, that.options.duration);
                 }
@@ -92,34 +92,32 @@ if (typeof jQuery === 'undefined') {
             }, 10);
         },
         hide: function () {
-            var that = this,
+            const that = this,
                 callbacks = that.options.callbacks;
-            var doc = $('body');
+            const doc = $('body');
 
             clearTimeout(that.toastTimeout);
 
             that.toast.addClass('mdt-load');
             doc.removeClass(that.toastOpenClass).removeClass(that.toastModalClass);
-            setTimeout(function () {
+            setTimeout(() => {
                 that.toast.remove();
                 if (callbacks && callbacks.hidden) callbacks.hidden();
             }, that.animateTime);
         }
     };
 
-    $.mdtoast = function (message, options) {
-        return new MDToast(message, $.extend({}, $.mdtoast.defaults, null, typeof options === 'object' && options));
-    };
+    $.mdtoast = (message, options) => new MDToast(message, $.extend({}, $.mdtoast.defaults, null, typeof options === 'object' && options));
 
     $.mdtoast.defaults = {
-        init: false,				// true if initalize only, false to automatically show toast after initialization.
+        init: false,				// true if initialize only, false to automatically show toast after initialization.
         duration: 5000,				// duration ot toast message.
         type: 'default',			// type of toast to display (can also be info, error, warning, success)
         modal: false,				// true if you want to disable pointer events when toast is shown
         interaction: false,			// determines if toast requires user interaction to dismiss
         interactionTimeout: null,	// if requires interaction, set the value for automatic dismissal of toast (e.g. 2000 -> 2 seconds)
         actionText: 'OK',			// if requires interaction, set the value like 'UNDO'
-        action: function (data) {	// callback action for the user interaction, hides toast by default
+        action: data => {	// callback action for the user interaction, hides toast by default
             data.hide();
         },
         callbacks: {}				// callback object for toast; contains hidden() and shown()
@@ -133,4 +131,4 @@ if (typeof jQuery === 'undefined') {
     };
 
     $.mdtoast.Constructor = MDToast;
-}(jQuery);
+})(jQuery);

@@ -48,35 +48,23 @@
 </head>
 
 <body>
-<!--suppress ES6ConvertVarToLetConst, ES6ModulesDependencies, JSUnresolvedFunction, JSUnresolvedVariable -->
+<!--suppress JSUnresolvedVariable, JSUnresolvedFunction -->
 <script>
-  window.fbAsyncInit = function () {
+  window.fbAsyncInit = () => {
     FB.init({
       appId: '1223095247821615',
       cookie: true,
       xfbml: true,
-      version: 'v2.10'
+      version: 'v10.0'
     });
 
     FB.AppEvents.logPageView();
   };
-
-  (function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {
-      return;
-    }
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/es_LA/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
 </script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js"></script>
 
-<!--suppress JSUnresolvedVariable -->
-<script>window.twttr = (function (d, s, id) {
-  //noinspection ES6ConvertVarToLetConst
-  var js, fjs = d.getElementsByTagName(s)[0],
+<script>window.twttr = ((d, s, id) => {
+  let js, fjs = d.getElementsByTagName(s)[0],
       t = window.twttr || {};
   if (d.getElementById(id)) return t;
   js = d.createElement(s);
@@ -84,11 +72,9 @@
   js.src = "https://platform.twitter.com/widgets.js";
   fjs.parentNode.insertBefore(js, fjs);
   t._e = [];
-  t.ready = function (f) {
-    t._e.push(f);
-  };
+  t.ready = t._e.push;
   return t;
-}(document, "script", "twitter-wjs"));</script>
+})(document, "script", "twitter-wjs");</script>
 
 <div class="main-content">
   <div class="container">
@@ -141,7 +127,7 @@
     <div class="row">
       <div id="social-buttons-container" class="col-xs-6">
         <div class="fb-share-button" data-href="https://clasificahumor.com" data-layout="button_count"
-             data-size="small" data-mobile-iframe="true">
+             data-size="small">
           <a class="fb-xfbml-parse-ignore" target="_blank"
              href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fclasificahumor.com&amp;src=sdkpreparse">
             Compartir
@@ -251,26 +237,18 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"
+        integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw=="
+        crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
         integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
         crossorigin="anonymous"></script>
-<script src="https://cdn.ravenjs.com/3.23.1/raven.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.ravenjs.com/3.4.0/raven.min.js" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/mdtoast.js"></script>
 <script type="text/javascript" src="js/placeload.min.js"></script>
 <script type="text/javascript" src="js/emoji.min.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
-
-<!--suppress CommaExpressionJS, JSUnresolvedVariable -->
-<script type="text/javascript">if (typeof wabtn4fg === "undefined") {
-  wabtn4fg = 1;
-  h = document.head || document.getElementsByTagName("head")[0], s = document.createElement("script");
-  s.type = "text/javascript";
-  s.src = "//cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js";
-  h.appendChild(s)
-}</script>
+<script async src="https://cdn.jsdelivr.net/whatsapp-sharing/1.3.4/whatsapp-button.js"></script>
 </body>
 
 </html>
