@@ -13,7 +13,7 @@ from clasificahumor import database
 from clasificahumor.database import TYPE_TWEET
 
 
-def create_app() -> Flask:
+def _create_app() -> Flask:
     app_ = Flask(__name__)
 
     app_.secret_key = os.environ["FLASK_SECRET_KEY"]
@@ -24,22 +24,24 @@ def create_app() -> Flask:
     return app_
 
 
-app = create_app()
+app = _create_app()
 
-BATCH_SIZE = 3
+REQUEST_TWEET_BATCH_SIZE = 3
+
+SESSION_ID_MAX_AGE = int(timedelta(weeks=1000).total_seconds())
 
 
 def _stringify_tweet_id(tweet: TYPE_TWEET) -> None:
+    """
+    Converts the tweet field "id" to a string.
+
+    In JavaScript, the string format should be used fro the tweet IDs instead of numbers.
+    See https://developer.twitter.com/en/docs/basics/twitter-ids.
+    """
     tweet["id"] = str(tweet["id"])
 
 
 def _stringify_tweet_ids(tweets: Iterable[TYPE_TWEET]) -> None:
-    """
-    Converts the tweet field "id" to string for each tweet in the tweets list.
-
-    Tweet IDs in string format should be used in JavaScript instead of numbers.
-    See https://developer.twitter.com/en/docs/basics/twitter-ids
-    """
     for tweet in tweets:
         _stringify_tweet_id(tweet)
 
@@ -49,7 +51,10 @@ def _generate_id() -> str:  # From https://stackoverflow.com/a/2257449/1165181
 
 
 def _get_session_id() -> str:
-    return request.cookies.get("id") or _generate_id()
+    if prolific_id := request.args.get("PROLIFIC_PID"):
+        return f"prolific-id-{prolific_id}"
+    else:
+        return request.cookies.get("id") or _generate_id()
 
 
 @app.after_request
@@ -57,7 +62,7 @@ def add_header(response: Response) -> Response:
     response.cache_control.max_age = 0
     response.cache_control.no_cache = True
 
-    response.set_cookie("id", _get_session_id(), max_age=int(timedelta(weeks=1000).total_seconds()))
+    response.set_cookie("id", _get_session_id(), max_age=SESSION_ID_MAX_AGE)
 
     return response
 
@@ -66,10 +71,10 @@ def add_header(response: Response) -> Response:
 def tweets_route() -> Response:
     session_id = _get_session_id()
 
-    tweets = list(database.random_least_voted_unseen_tweets(session_id, BATCH_SIZE))
+    tweets = list(database.random_least_voted_unseen_tweets(session_id, REQUEST_TWEET_BATCH_SIZE))
 
-    if len(tweets) < BATCH_SIZE:
-        tweets = tweets + list(database.random_tweets(BATCH_SIZE - len(tweets)))
+    if len(tweets) < REQUEST_TWEET_BATCH_SIZE:
+        tweets.extend(database.random_tweets(REQUEST_TWEET_BATCH_SIZE - len(tweets)))
 
     _stringify_tweet_ids(tweets)
 
@@ -94,6 +99,11 @@ def vote_and_get_new_tweet_route() -> Response:
     _stringify_tweet_id(tweet)
 
     return jsonify(tweet)
+
+
+@app.route("/session-vote-count")
+def session_vote_count_route() -> Response:
+    return jsonify(database.session_vote_count_with_skips(_get_session_id()))
 
 
 @app.route("/vote-count")

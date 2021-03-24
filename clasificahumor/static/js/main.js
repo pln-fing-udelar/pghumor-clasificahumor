@@ -14,6 +14,9 @@ let $legendVote;
 let $notHumor;
 let $skip;
 let $isOffensive;
+let $voteCount;
+let $consent;
+let $consentForm;
 let emoji;
 
 let legendsShownForFirstTime = false;
@@ -29,6 +32,25 @@ const voteCodeToText = {
 let tweets = [];
 let index = 0;
 
+function getParameterByName(name, url = window.location.href) {
+  name = name.replace(/[\[\]]/g, "\\$&");
+  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+  const results = regex.exec(url);
+  if (!results) {
+    return null;
+  }
+  if (!results[2]) {
+    return "";
+  }
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+const PROLIFIC_TASK_TWEET_COUNT = 100;
+
+const prolificId = getParameterByName("PROLIFIC_PID");
+const isAProlificSession = Boolean(prolificId);
+let voteCount = 0;
+
 $(document).ready(main);
 
 function main() {
@@ -39,6 +61,7 @@ function main() {
   getRandomTweets();
   setUiListeners();
   moveToolboxIfOutside();
+  setupProlificSessionIfNeeded();
 }
 
 function setupSentry() {
@@ -65,6 +88,9 @@ function setupElements() {
   $notHumor = $("#not-humor");
   $skip = $("#skip");
   $isOffensive = $("#is-offensive");
+  $voteCount = $("#vote-count");
+  $consent = $("#consent");
+  $consentForm = $("#consent form");
 }
 
 function showTweet() {
@@ -95,7 +121,8 @@ function setupEmojiConverter() {
   // noinspection JSUnresolvedFunction
   emoji = new EmojiConvertor();
   emoji.img_set = "twitter";
-  emoji.img_sets.twitter.path = "https://raw.githubusercontent.com/iamcal/emoji-data/a97b2d2efa64535d6300660eb2cd15ecb584e79e/img-twitter-64/";
+  emoji.img_sets.twitter.path = "https://raw.githubusercontent.com/iamcal/emoji-data/"
+      + "a97b2d2efa64535d6300660eb2cd15ecb584e79e/img-twitter-64/";
 }
 
 function getRandomTweets() {
@@ -125,7 +152,7 @@ function setUiListeners() {
     $notHumor.addClass("no-hover");
   });
 
-  $notHumor.on("mousemove mouswdown", () => $notHumor.removeClass("no-hover"));
+  $notHumor.on("mousemove mousedown", () => $notHumor.removeClass("no-hover"));
 
   $vote1.click(() => vote("1"));
   $vote2.click(() => vote("2"));
@@ -134,9 +161,13 @@ function setUiListeners() {
   $vote5.click(() => vote("5"));
   $skip.click(() => vote("n"));
 
-  $("button").mouseup(function() {
-    // Can"t use an arrow here because we need `this` to be the button.
-    $(this).blur();
+  $("#answers button").mouseup(e => $(e.currentTarget).blur());
+
+  $consentForm.submit(e => {
+    localStorage.setItem(`consent-prolific-id-${prolificId}`, "done");
+    $consent.modal("hide");
+    e.preventDefault();
+    e.stopPropagation();
   });
 }
 
@@ -151,9 +182,7 @@ function vote(voteOption) {
     vote: voteOption,
     ignore_tweet_ids: [tweets[index].id, tweets[otherIndex].id],
     is_offensive: $isOffensive.prop("checked"),
-  }, tweet => {
-    tweets[oldIndex] = tweet;
-  }, "json");
+  }, tweet => tweets[oldIndex] = tweet, "json");
 
   showTweet();
 
@@ -162,6 +191,11 @@ function vote(voteOption) {
   $votesAndToolbox.fadeOut();
 
   $isOffensive.prop("checked", false);
+
+  if (isAProlificSession) {
+    voteCount++;
+    updateVoteCount();
+  }
 }
 
 function toastText(voteOption) {
@@ -193,4 +227,29 @@ function moveToolboxIfOutside() {
 
 function addPxToLeft(element, translation) {
   element.css("left", `${(parseInt(element.css("left")) + translation)}px`);
+}
+
+function updateVoteCount() {
+  if (voteCount === PROLIFIC_TASK_TWEET_COUNT) {
+    // TODO: modal with a code.
+  } else {
+    voteCount %= PROLIFIC_TASK_TWEET_COUNT;
+    $voteCount.text(`Progreso: ${voteCount}/${PROLIFIC_TASK_TWEET_COUNT}`);
+  }
+}
+
+function setupProlificSessionIfNeeded() {
+  if (isAProlificSession) {
+    $skip.parent().css("display", "none");
+
+    if (localStorage.getItem(`consent-prolific-id-${prolificId}`) !== "done") {
+      $consent.modal("show");
+    }
+
+    $.getJSON("session-vote-count", count => {
+      voteCount = count;
+      updateVoteCount();
+      $voteCount.css("display", "block");
+    });
+  }
 }

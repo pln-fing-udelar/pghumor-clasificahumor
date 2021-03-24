@@ -74,7 +74,8 @@ h2 {
 }
 
 .answer {
-  display: inline;
+  align-items: center;
+  display: flex;
   margin: 0 20px 20px 20px;
 }
 
@@ -134,13 +135,18 @@ h2 {
 
 #is-offensive-label {
   font-weight: normal;
-  /*margin: 0 20px 50px 20px;*/
-  margin-top: 16px;
+  margin: 0;
   text-align: center;
 }
 
 #is-offensive {
   vertical-align: top;
+}
+
+#vote-count {
+  display: none;
+  margin-top: 20px;
+  text-align: center;
 }
 
 #about-us-content {

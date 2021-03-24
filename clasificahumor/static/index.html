@@ -63,18 +63,23 @@
 </script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js"></script>
 
-<script>window.twttr = ((d, s, id) => {
-  let js, fjs = d.getElementsByTagName(s)[0],
-      t = window.twttr || {};
-  if (d.getElementById(id)) return t;
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://platform.twitter.com/widgets.js";
-  fjs.parentNode.insertBefore(js, fjs);
-  t._e = [];
-  t.ready = t._e.push;
-  return t;
-})(document, "script", "twitter-wjs");</script>
+<script>
+  window.twttr = ((d, s, id) => {
+    let js;
+    const fjs = d.getElementsByTagName(s)[0]
+    const t = window.twttr || {};
+    if (d.getElementById(id)) {
+      return t;
+    }
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+    t._e = [];
+    t.ready = t._e.push;
+    return t;
+  })(document, "script", "twitter-wjs");
+</script>
 
 <div class="main-content">
   <div class="container">
@@ -90,6 +95,13 @@
         <p id="question">¿El tweet pretende ser humorístico?</p>
 
         <ul id="answers">
+          <li class="answer">
+            <label id="is-offensive-label" for="is-offensive">
+              <input id="is-offensive" type="checkbox"/>
+              Ofensivo
+            </label>
+          </li>
+
           <li id="humor-answer" class="answer">
             <div id="humor-container">
               <button id="humor" type="button" class="btn btn-lg btn-default btn-answer">Sí</button>
@@ -111,16 +123,11 @@
           <li class="answer">
             <button id="skip" type="button" class="btn btn-lg btn-link btn-answer">Saltear</button>
           </li>
-
-          <li class="answer">
-            <label id="is-offensive-label" for="is-offensive">
-              <input id="is-offensive" type="checkbox"/>
-              Ofensivo
-            </label>
-          </li>
         </ul>
       </div>
     </div>
+
+    <p id="vote-count"></p>
   </div>
 
   <footer class="container">
@@ -152,14 +159,136 @@
   </footer>
 </div>
 
-<div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div id="consent" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+     aria-labelledby="modal-consent">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-consent">Información y Formulario de Consentimiento</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          Por favor, lea cuidadosamente la siguiente información. Recomendamos que guarde una captura de esta página.
+        </p>
+
+        <h4>¿Quiénes son los investigadores?</h4>
+
+        <p>
+          Los investigadores detrás de este trabajo son Luis Chiruzzo, Santiago Castro, Santiago Góngora, Aiala Rosá,
+          Julie-Anne Meaney y Rada Mihalcea.
+        </p>
+
+        <h4>¿Cuál es el propósito de este estudio?</h4>
+
+        <p>
+          El propósito de este proceso de anotación es examinar qué textos son considerados humorísticos o no
+          humorísticos por las personas y en qué grado.
+        </p>
+
+        <h4>¿Por qué me han pedido que forme parte de este estudio?</h4>
+
+        <p>Esta investigación busca anotadores que hablen español como primera lengua.</p>
+
+        <h4>¿Estoy obligado a participar?</h4>
+
+        <p>
+          No. La participación en este estudio es enteramente voluntaria. Puede darse de baja del estudio en cualquier
+          momento, sin dar ninguna explicación. Sus derechos no se verán afectados. Si desea darse de baja del estudio,
+          por favor contáctenos a <a href="mailto:haha@fing.edu.uy">haha@fing.edu.uy</a>. No utilizaremos sus datos en
+          ninguna publicación o presentaciones si usted se dio de baja del estudio. Sin embergo, mantendremos una copia
+          del formulario de consentimiento original y de su pedido para darse de baja.
+        </p>
+
+        <h4>¿Hay algún riesgo asociado con formar parte de este estudio?</h4>
+
+        <p>
+          No hay riesgos significativos asociados con la participación. Sin embargo, algunos de los textos pueden llegar
+          a ser ofensivos. Si en cualquier momento desea darse de baja, por favor no dude en hacerlo.
+        </p>
+
+        <h4>¿Hay algún beneficio asociado con formar parte de este estudio?</h4>
+
+        <p>
+          No hay beneficios significativos por formar parte del estudio, pero podría encontrar algunos textos graciosos.
+        </p>
+
+        <h4>¿Cómo puedo contactarlos?</h4>
+
+        <p>
+          Si tiene más preguntas acerca del estudio, o desea formular una queja sobre él, por favor
+          <a href="mailto:haha@fing.edu.uy">haha@fing.edu.uy</a>. Cuando nos contacte, por favor indique el título del
+          estudio y la naturaleza de su queja.
+        </p>
+
+        <hr>
+
+        <form>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" required/>
+              Confirmo que he leído y entendido la información indicada arriba, que he tenido la oportunidad de realizar
+              preguntas, y de que las preguntas que he tenido han sido respondidas satisfactoriamente.
+            </label>
+          </div>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" required/>
+              Entiendo que mi participación es voluntaria, y que puedo darme de baja en cualquier momento sin dar una
+              razón. Darme de baja no afectará mis derechos.
+            </label>
+          </div>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" required/>
+              Doy mi consentimiento para que mis datos anonimizados se utilicen en publicaciones y presentaciones
+              académicas.
+            </label>
+          </div>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" required/>
+              Entiendo que mis datos anonimizados podrán ser guardados por un mínimo de dos años.
+            </label>
+          </div>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" required/>
+              Permito que mis datos sean utilizados en futuras investigaciones de manera ética.
+            </label>
+          </div>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" required/>
+              Estoy de acuerdo en formar parte de este estudio.
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="prolific-id">ID de Prolific</label>
+            <input type="text" id="prolific-id" class="form-control" minlength="24" maxlength="24"
+                   pattern="[a-zA-Z0-9]+" required/>
+          </div>
+
+          <button id="consent-continue" type="submit" class="btn btn-primary">Continuar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="about-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title" id="myModalLabel">Ayuda</h4>
+        <h4 class="modal-title" id="about-label">Ayuda</h4>
       </div>
       <div class="modal-body">
         <h4>Instrucciones</h4>
