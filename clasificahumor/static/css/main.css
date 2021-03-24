@@ -186,5 +186,6 @@ footer {
 }
 
 .wa_btn {
+  display: none;
   vertical-align: bottom;
 }
