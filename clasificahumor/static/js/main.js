@@ -166,6 +166,9 @@ function setUiListeners() {
   $consentForm.submit(e => {
     localStorage.setItem(`consent-prolific-id-${prolificId}`, "done");
     $consent.modal("hide");
+
+    $("#about").modal("show");
+
     e.preventDefault();
     e.stopPropagation();
   });
@@ -231,7 +234,7 @@ function addPxToLeft(element, translation) {
 
 function updateVoteCount() {
   if (voteCount === PROLIFIC_TASK_TWEET_COUNT) {
-    // TODO: modal with a code.
+    $("#finished").modal("show");
   } else {
     voteCount %= PROLIFIC_TASK_TWEET_COUNT;
     $voteCount.text(`Progreso: ${voteCount}/${PROLIFIC_TASK_TWEET_COUNT}`);
@@ -241,6 +244,8 @@ function updateVoteCount() {
 function setupProlificSessionIfNeeded() {
   if (isAProlificSession) {
     $skip.parent().css("display", "none");
+    $("#skip-instructions").css("display", "none");
+    $("#optional-participation-instructions").css("display", "none");
 
     if (localStorage.getItem(`consent-prolific-id-${prolificId}`) !== "done") {
       $consent.modal("show");

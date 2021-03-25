@@ -281,6 +281,20 @@
   </div>
 </div>
 
+<div id="finished" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+     aria-labelledby="finished-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="finished-label">¡Terminaste de anotar!</h4>
+      </div>
+      <div class="modal-body">
+        <a href="https://app.prolific.co/submissions/complete?cc=91CF60A5">Volver a la tarea de Prolific.</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="about" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="about-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -294,16 +308,18 @@
         <h4>Instrucciones</h4>
 
         <p>
-          Dado el tweet que se muestra en pantalla, ¿lo considerás humorístico? En caso positivo, apretá el
-          botón "Sí", y elegí qué tan gracioso le parece del 1 al 5 (representado por los 5 emojis).
-          En caso que no, apretá en "No". Si no estás seguro, poné "Saltear". Luego de esto, se mostrará otro tweet y
-          se repite el procedimiento de anotación.
+          Dado el tweet que se muestra en pantalla, ¿lo consideras humorístico? En caso positivo, pon el cursor sobre
+          el botón "Sí", y elige qué tan gracioso le parece del 1 al 5 (representado por los 5 emojis).
+          En caso que no, elige en "No".
+          <span id="skip-instructions">Si no estás seguro, poné "Saltear".</span>
+          Luego de esto, se mostrará otro tweet y se repite el procedimiento de anotación.
         </p>
 
         <p>
-          En un segundo nivel de importancia, también nos interesa saber si los tweets son ofensivos. Entonces, antes
-          de indicar si son humorísticos, tildá la casilla de verificación que dice "Ofensivo" si te parece que el tweet
-          que aparece en pantalla es ofensivo.
+          En un segundo nivel de importancia, también nos interesa saber si los tweets son ofensivos. En caso de que
+          consideres que un tweet lo es, tilda la casilla de verificación que dice "Ofensivo" antes de indicar si es
+          humorístico o no. Recuerda que puede ocurrir que un texto sea ofensivo y a la vez tenga la intención de ser
+          humorístico.
         </p>
 
         <hr>
@@ -311,23 +327,25 @@
         <h4>Sobre el proyecto</h4>
 
         <p>
-          El fin de esta página es armar una base de datos de opiniones sobre humor durante febrero de 2019,
-          y así hacer investigación sobre
+          El fin de esta página es armar una base de datos de opiniones sobre humor en español, como parte de una
+          investigación sobre
           <a href="https://es.wikipedia.org/wiki/Humor_computacional" target="_blank">Humor Computacional</a>.
         </p>
         <p>
-          Por ejemplo, va a usarse como conjunto de datos para
-          <a href="https://www.fing.edu.uy/inco/grupos/pln/haha/" target="_blank">la competencia HAHA 2019 (2ª
+          Actualmente la estamos usando como conjunto de datos para
+          <a href="https://www.fing.edu.uy/inco/grupos/pln/haha/" target="_blank">la competencia HAHA 2021 (3ª
             edición)</a>,
           organizada por el
           <a href="https://www.fing.edu.uy/inco/grupos/pln" target="_blank">Grupo de Procesamiento de Lenguaje Natural
             (PLN)</a> de la
           <a href="https://www.fing.edu.uy" target="_blank">Facultad de Ingeniería</a> de la
           <a href="http://www.universidad.edu.uy/" target="_blank">Universidad de la República</a>, Uruguay.
-          La competencia consiste básicamente en predecir si un tweet es humorístico o no, y también decir qué tan
-          gracioso le puede resultar a la gente 😲 Si te interesa, podés participar.
+          La competencia consiste, entre otras cosas, en predecir si un tweet es humorístico o no, y también decir qué
+          tan gracioso le puede resultar a la gente 😲
+          <span id="optional-participation-instructions">Si te interesa, podés participar.</span>
         </p>
-        <p>El código de este proyecto
+        <p>
+          El código de este proyecto
           <a href="https://github.com/pln-fing-udelar/pghumor-clasificahumor" target="_blank">se encuentra disponible
             en GitHub</a>.
         </p>
@@ -345,7 +363,8 @@
           <a href="https://github.com/pln-fing-udelar/pghumor" target="_blank">pgHumor</a>
           – Universidad de la República, Uruguay, apoyados por la
           <a href="http://www.anii.org.uy" target="_blank">ANII</a>. En 2018 se volvió a lanzar para tener más
-          anotaciones y de mejor calidad 😊, para la 1ª edición de la competencia HAHA.
+          anotaciones y de mejor calidad 😊, para la 1ª edición de la competencia HAHA. En 2019 se hizo lo mismo pero
+          para la 2ª edición de la competencia HAHA.
         </p>
 
         <h4>Cookies</h4>
@@ -353,8 +372,8 @@
         <p>
           Este sitio usa cookies para hacer un seguimiento de qué tweets ya clasificó cada persona, y evitar mostrar
           repetidos. También usa <a href="https://analytics.google.com/analytics/web/" target="_blank">Google
-          Analytics</a> para conocer información general sobre los anotadores (país, idioma, género, rango etario,
-          etc).
+          Analytics</a> para conocer información general y agregada sobre los anotadores (como país, idioma, género y
+          rango etario).
         </p>
       </div>
       <div class="modal-footer">
