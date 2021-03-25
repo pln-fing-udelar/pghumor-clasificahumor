@@ -248,6 +248,7 @@ function setupProlificSessionIfNeeded() {
     $("#optional-participation-instructions").css("display", "none");
 
     if (localStorage.getItem(`consent-prolific-id-${prolificId}`) !== "done") {
+      $("#prolific-id").val(prolificId);
       $consent.modal("show");
     }
 
