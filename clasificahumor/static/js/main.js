@@ -45,7 +45,7 @@ function getParameterByName(name, url = window.location.href) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-const PROLIFIC_TASK_TWEET_COUNT = 100;
+const PROLIFIC_TASK_TWEET_COUNT = 200;
 
 const prolificId = getParameterByName("PROLIFIC_PID");
 const isAProlificSession = Boolean(prolificId);
