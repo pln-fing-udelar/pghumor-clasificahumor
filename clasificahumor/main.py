@@ -136,8 +136,3 @@ def stats_route() -> Response:
 @app.route("/<path:path>")
 def static_files_route(path: str) -> Response:
     return send_from_directory("static", path)
-
-
-@app.route("/debug-sentry")
-def trigger_error():
-    var = 1 / 0  # noqa
