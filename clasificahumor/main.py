@@ -1,16 +1,20 @@
 import itertools
-import logging
 import os
 import random
 import string
 from datetime import timedelta
 from typing import Iterable
 
+import sentry_sdk
 from flask import Flask, Response, jsonify, render_template, request, send_from_directory
-from raven.contrib.flask import Sentry
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 from clasificahumor import database
 from clasificahumor.database import TYPE_TWEET
+
+REQUEST_TWEET_BATCH_SIZE = 3
+
+SESSION_ID_MAX_AGE = int(timedelta(weeks=1000).total_seconds())
 
 
 def _create_app() -> Flask:
@@ -19,16 +23,12 @@ def _create_app() -> Flask:
     app_.secret_key = os.environ["FLASK_SECRET_KEY"]
     app_.config["SESSION_TYPE"] = "filesystem"
 
-    Sentry(app_, logging=True, level=logging.ERROR)
-
     return app_
 
 
+sentry_sdk.init(integrations=[FlaskIntegration()], traces_sample_rate=1.0)
+
 app = _create_app()
-
-REQUEST_TWEET_BATCH_SIZE = 3
-
-SESSION_ID_MAX_AGE = int(timedelta(weeks=1000).total_seconds())
 
 
 def _stringify_tweet_id(tweet: TYPE_TWEET) -> None:
@@ -136,3 +136,8 @@ def stats_route() -> Response:
 @app.route("/<path:path>")
 def static_files_route(path: str) -> Response:
     return send_from_directory("static", path)
+
+
+@app.route("/debug-sentry")
+def trigger_error():
+    var = 1 / 0  # noqa
