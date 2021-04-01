@@ -7,7 +7,7 @@ from datetime import timedelta
 from typing import Iterable, Tuple
 
 import sentry_sdk
-from flask import Flask, Response, jsonify, render_template, request, send_from_directory
+from flask import Flask, Response, jsonify, redirect, render_template, request, send_from_directory
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from clasificahumor import database
@@ -116,6 +116,12 @@ def vote_count_route() -> Response:
 def prolific_consent_route() -> Tuple[str, int]:
     database.prolific_consent(_get_session_id())
     return "", http.HTTPStatus.NO_CONTENT
+
+
+@app.route("/prolific-finish", methods=["POST"])
+def prolific_finish_route() -> Tuple[str, int]:
+    database.prolific_finish(_get_session_id(), request.form.get("comments", ""))
+    return redirect("https://app.prolific.co/submissions/complete?cc=91CF60A5")
 
 
 @app.route("/stats")

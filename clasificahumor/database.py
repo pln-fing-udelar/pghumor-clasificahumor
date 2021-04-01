@@ -1,5 +1,6 @@
 """Provides mechanisms to handle the database."""
 import os
+from datetime import datetime
 from typing import Any, Iterable, Iterator, MutableMapping, Optional, Union
 
 import sqlalchemy
@@ -96,6 +97,11 @@ STATEMENT_PROLIFIC_CONSENT = sqlalchemy.sql.text("INSERT INTO prolific (session_
                                                  " VALUES (:session_id)"
                                                  " ON DUPLICATE KEY UPDATE session_id = session_id")
 
+STATEMENT_PROLIFIC_FINISH = sqlalchemy.sql.text("UPDATE prolific"
+                                                " SET finish_date = :finish_date,"
+                                                "     comments = :comments"
+                                                " WHERE session_id = :session_id")
+
 
 def create_engine() -> Engine:
     return sqlalchemy.create_engine(f"mysql://{os.environ['DB_USER']}:{os.environ['DB_PASS']}@{os.environ['DB_HOST']}"
@@ -177,9 +183,16 @@ def vote_count_without_skips() -> int:
 
 
 def prolific_consent(session_id: str) -> None:
-    """Adds now as a consent date for the prolific session ID."""
+    """Sets the current time as the consent date for the prolific session ID."""
     with engine.connect() as connection:
         return connection.execute(STATEMENT_PROLIFIC_CONSENT, {"session_id": session_id})
+
+
+def prolific_finish(session_id: str, comments: str) -> None:
+    """Sets the current time as the finish date and the given comments for the prolific session ID."""
+    with engine.connect() as connection:
+        return connection.execute(STATEMENT_PROLIFIC_FINISH, {"session_id": session_id, "finish_date": datetime.now(),
+                                                              "comments": comments})
 
 
 def stats() -> TYPE_TWEET:
