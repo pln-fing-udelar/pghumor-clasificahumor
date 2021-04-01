@@ -293,10 +293,10 @@
 
         <!--suppress HtmlUnknownTarget -->
         <form method="post" action="prolific-finish">
-          <label>
-            Comentarios
-            <textarea name="comments" class="form-control" rows="3" maxlength="300"></textarea>
-          </label>
+          <div class="form-group">
+            <label for="comments" class="control-label">Comentarios</label>
+            <textarea id="comments" name="comments" class="form-control" rows="3" maxlength="300"></textarea>
+          </div>
           <button id="prolific-finish" type="submit" class="btn btn-primary">Finalizar</button>
         </form>
       </div>
