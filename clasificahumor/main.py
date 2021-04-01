@@ -1,9 +1,10 @@
+import http
 import itertools
 import os
 import random
 import string
 from datetime import timedelta
-from typing import Iterable
+from typing import Iterable, Tuple
 
 import sentry_sdk
 from flask import Flask, Response, jsonify, render_template, request, send_from_directory
@@ -109,6 +110,12 @@ def session_vote_count_route() -> Response:
 @app.route("/vote-count")
 def vote_count_route() -> Response:
     return jsonify(database.vote_count_without_skips())
+
+
+@app.route("/prolific-consent", methods=["POST"])
+def prolific_consent_route() -> Tuple[str, int]:
+    database.prolific_consent(_get_session_id())
+    return "", http.HTTPStatus.NO_CONTENT
 
 
 @app.route("/stats")

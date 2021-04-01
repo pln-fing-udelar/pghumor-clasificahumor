@@ -92,6 +92,10 @@ STATEMENT_HISTOGRAM = sqlalchemy.sql.text("SELECT c, COUNT(*) as freq"
                                           " ORDER BY c")
 STATEMENT_VOTE_COUNT_PER_CATEGORY = sqlalchemy.sql.text("SELECT vote, COUNT(*) FROM votes GROUP BY vote ORDER BY vote")
 
+STATEMENT_PROLIFIC_CONSENT = sqlalchemy.sql.text("INSERT INTO prolific (session_id)"
+                                                 " VALUES (:session_id)"
+                                                 " ON DUPLICATE KEY UPDATE session_id = session_id")
+
 
 def create_engine() -> Engine:
     return sqlalchemy.create_engine(f"mysql://{os.environ['DB_USER']}:{os.environ['DB_PASS']}@{os.environ['DB_HOST']}"
@@ -170,6 +174,12 @@ def vote_count_without_skips() -> int:
     """Returns the vote count, not including skips."""
     with engine.connect() as connection:
         return connection.execute(STATEMENT_VOTE_COUNT, {"without_skips": True, "pass_test": False}).fetchone()[0]
+
+
+def prolific_consent(session_id: str) -> None:
+    """Adds now as a consent date for the prolific session ID."""
+    with engine.connect() as connection:
+        return connection.execute(STATEMENT_PROLIFIC_CONSENT, {"session_id": session_id})
 
 
 def stats() -> TYPE_TWEET:

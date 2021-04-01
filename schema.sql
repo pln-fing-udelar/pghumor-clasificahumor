@@ -34,3 +34,14 @@ CREATE TABLE votes
     INDEX (session_id),
     FOREIGN KEY (tweet_id) REFERENCES tweets (tweet_id)
 ) ENGINE InnoDB;
+
+# No foreign key between `votes` and `prolific` for `session_id` because there could be no votes, and also the ID may
+# have not consented yet.
+CREATE TABLE prolific
+(
+    session_id CHAR(100) NOT NULL,
+    consent_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    finish_date TIMESTAMP NULL,
+    comments VARCHAR(300) DEFAULT NULL,
+    PRIMARY KEY (session_id)
+) ENGINE InnoDB;

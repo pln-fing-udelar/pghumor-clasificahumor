@@ -250,6 +250,9 @@ function setupProlificSessionIfNeeded() {
     if (localStorage.getItem(`consent-prolific-id-${prolificId}`) !== "done") {
       $("#prolific-id").val(prolificId);
       $consent.modal("show");
+      $("#consent-continue").click(() => {
+        $.post("prolific-consent");
+      });
     }
 
     $.getJSON("session-vote-count", count => {
