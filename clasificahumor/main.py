@@ -119,7 +119,7 @@ def prolific_consent_route() -> Tuple[str, int]:
 
 
 @app.route("/prolific-finish", methods=["POST"])
-def prolific_finish_route() -> Tuple[str, int]:
+def prolific_finish_route() -> Response:
     database.prolific_finish(_get_session_id(), request.form.get("comments", ""))
     return redirect("https://app.prolific.co/submissions/complete?cc=5E395F77")
 
