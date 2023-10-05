@@ -1,4 +1,4 @@
-FROM mysql:5
+FROM mysql:5-debian
 
 COPY mysql-charset.cnf /etc/mysql/conf.d/mysql-charset.cnf
 
