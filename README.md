@@ -16,7 +16,7 @@ for advanced usage (such as debugging with an IDE).
 You need Docker and Docker Compose for this. To run the Flask development server in debug mode, auto-detecting changes:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 ### Pipenv
@@ -56,7 +56,7 @@ docker-compose up --build
 
 ## Tweet data
 
-You need a data to mess with.
+You need data to mess with.
 There's [a dump with the downloaded tweets in the HUMOR repo](https://github.com/pln-fing-udelar/humor/blob/master/extraction/dump-tweets-without-votes.sql).
 
 First, create a database with the options `DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci`. It could be created
@@ -75,7 +75,7 @@ To load a database dump, run in another shell:
 mysql -u $USER -p pghumor < dump.sql
 ```
 
-You can prefix `docker-compose exec database` to the command to run it in the database Docker container. Or you can use
+You can prefix `docker compose exec database` to the command to run it in the database Docker container. Or you can use
 a local `mysql`:
 
 ```bash
@@ -87,7 +87,7 @@ mysql -h 172.19.0.3 -u root -p
 # You can also set the password in the command like: -p$PASSWORD
 ```
 
-**Pro tip:** you can use `mycli`, which is included in the dev dependencies for this project, and it's a more powerful
+**Pro-tip:** you can use `mycli`, which is included in the dev dependencies for this project, and it's a more powerful
 MySQL default CLI client (e.g., it has code highlighting, command auto-complete, and doesn't need the semicolon at 
 the end of every command):
 
@@ -131,7 +131,7 @@ SELECT * FROM tweets LIMIT 10;
 To run it using a WSGI server, just like in production, do:
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.testing.yml up -d --build
+docker compose -f docker-compose.yml -f docker-compose.testing.yml up -d --build
 ```
 
 Then you can do some testing, such as running a load test:
@@ -160,9 +160,9 @@ To open a mysql interactive session in production:
 docker exec -i clasificahumor_database_1 mysql -u root -p pghumor
 ```
 
-For these commands, using directly Docker Compose (`docker-compose exec database`) is also supported instead of the
+For these commands, using directly Docker Compose (`docker compose exec database`) is also supported instead of the
 Docker CLI directly (`docker exec clasificahumor_database_1`). However, the extra flags needed for each of them change
-as Docker Compose `exec` subcommand uses a pseudo TTY and it's interactive by default while the Docker CLI `exec`
+as Docker Compose `exec` subcommand uses a pseudo TTY, and it's interactive by default while the Docker CLI `exec`
 subcommand doesn't.
 
 ## Production setup
@@ -180,7 +180,7 @@ deploy on `git push`:
 #!/usr/bin/env bash
 
 pushd .. > /dev/null  # So it loads the .env file in the working directory.
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 popd > /dev/null
 ```
 
@@ -214,7 +214,7 @@ ACCESS_TOKEN_SECRET=...
 ```
 
 > Note that normally we wouldn't need the access token and access token secret as we're not authenticating other users 
-> to this "Twitter app". However, the app access token can be used to act in name of the Twitter app user owner 
+> to this "Twitter app." However, the app access token can be used to act in the name of the Twitter app user owner 
 > (user-based authentication), and thus gain greater Twitter API rate limits than in an app-based authentication context. 
 
 #### Download tweets from the hose
@@ -239,7 +239,7 @@ See the options available in the command with `./extraction/persist.py --help`.
 
 ## Analysis
 
-To compute the agreement (for example with
+To compute the agreement (for example, with
 [this annotations_by_tweet.csv file](https://github.com/pln-fing-udelar/humor/blob/main/annotations_by_tweet.csv)):
 
 ```bash
