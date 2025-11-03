@@ -1,7 +1,7 @@
 services:
   web:
     build:
-      dockerfile: Dockerfile.prod
+      dockerfile: web/Dockerfile.prod
     environment:
       - FLASK_SECRET_KEY=ze4f2fWLmEY9dADjhwvhym3U
       - DB_PASS=123123

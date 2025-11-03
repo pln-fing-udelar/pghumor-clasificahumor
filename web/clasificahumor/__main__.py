@@ -11,8 +11,8 @@ import werkzeug.wrappers
 from flask import Flask, Response, jsonify, redirect, render_template, request, send_from_directory
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-from clasificahumor import database
-from clasificahumor.database import TYPE_TWEET
+from web.clasificahumor import database
+from web.clasificahumor.database import TYPE_TWEET
 
 REQUEST_TWEET_BATCH_SIZE = 3
 
@@ -146,7 +146,7 @@ def stats_route() -> str:
         [str(a), b] for a, b in stats["votes-per-category"].items()
     ]
 
-    return render_template("stats.html", stats=stats)
+    return render_template("templates/stats.html", stats=stats)
 
 
 @app.route("/", defaults={"path": "index.html"})

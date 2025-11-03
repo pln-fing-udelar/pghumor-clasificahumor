@@ -1,7 +1,8 @@
 FROM python:3.12
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /usr/src/app
-COPY pyproject.toml uv.lock README.md ./
+RUN touch README.md
+COPY pyproject.toml uv.lock ./
 COPY clasificahumor clasificahumor
 RUN uv sync --locked
 EXPOSE 5000

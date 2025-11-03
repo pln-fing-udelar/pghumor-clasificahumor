@@ -1,7 +1,8 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.12
 COPY --from=docker.io/astral/uv /uv /uvx /bin/
 ENV UV_PROJECT_ENVIRONMENT=/usr/local/
-COPY pyproject.toml uv.lock README.md ./
+RUN touch README.md
+COPY pyproject.toml uv.lock ./
 COPY clasificahumor clasificahumor
 RUN uv sync --no-default-groups --inexact --locked
 COPY uwsgi.ini prestart.sh ./

@@ -8,7 +8,7 @@ services:
     ports:
       - '5000:5000'
     volumes:
-      - ./clasificahumor:/usr/src/app/clasificahumor
+      - ./web/clasificahumor:/usr/src/app/clasificahumor
   database:
     environment:
       - MYSQL_ROOT_PASSWORD=123123

@@ -7,9 +7,9 @@ data and its format, see [HUMOR](https://github.com/pln-fing-udelar/humor) websi
 
 ## Setup
 
-There are two ways to run this code after cloning the repo: with Docker or via Pipenv. The first one is the recommended
-way to get started (or to just use for the database), and the second one is for the extraction and analysis part, and
-for advanced usage (such as debugging with an IDE).
+There are two ways to run this code after cloning the repo: with Docker or via `uv`.
+The first one is the recommended way to get started (or to just use for the database),
+and the second one is for the extraction and analysis part, and for advanced usage (such as debugging with an IDE).
 
 ### Docker
 
@@ -27,7 +27,7 @@ docker compose up --build
     sudo apt install libmysqlclient-dev python3-dev
     ```
 
-2. Install the dependencies using [Pipenv](https://docs.pipenv.org/):
+2. Install the dependencies using [uv](https://docs.astral.sh/uv/):
 
     ```bash
     pipenv install -d
@@ -48,19 +48,20 @@ docker compose up --build
 4. Run:
 
     ```bash
-    pipenv shell  # It will load the environment, along with the .env file.
-    flask run
+    uv sync
+    source .venv/bin/activate
+    uv --run --env-file .env flask -h :: run --debug
     ```
 
-5. Set up a MySQL 5.7 instance. It could be the instance generated with the Docker setup.
+5. Set up a MySQL 9 instance. It could be the instance generated with the Docker setup.
 
 ## Tweet data
 
 You need data to mess with.
-There's [a dump with the downloaded tweets in the HUMOR repo](https://github.com/pln-fing-udelar/humor/blob/master/extraction/dump-tweets-without-votes.sql).
+There's [a dump with the downloaded tweets in the HUMOR repo](https://raw.githubusercontent.com/pln-fing-udelar/humor/b8943a40548db7cb09f614aa3e795480d0a85c8c/extraction/dump-tweets-without-votes.sql).
 
-First, create a database with the options `DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci`. It could be created
-with [schema.sql](schema.sql):
+First, create a database with the options `DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci`.
+It could be created with [`db/schema.sql`](db/schema.sql):
 
 ```bash
 mysql -u $USER -p < schema.sql
@@ -75,15 +76,14 @@ To load a database dump, run in another shell:
 mysql -u $USER -p pghumor < dump.sql
 ```
 
-You can prefix `docker compose exec database` to the command to run it in the database Docker container. Or you can use
-a local `mysql`:
+You can prefix `docker compose exec database` to the command to run it in the database Docker container.
+Or you can use a local `mysql`:
 
 ```bash
 # First check the IP address of the container.
-# Note the actual Docker container name depends on the local folder name.
-docker container inspect pghumor-clasificahumor_database_1 | grep IPAddress
-# Then use the IP address (e.g., 172.19.0.3) to connect:
-mysql -h 172.19.0.3 -u root -p
+# Note the actual Docker container name depends on the local directory name:
+DB_IP_ADDRESS=$(docker container inspect clasificahumor-database-1 | jq -r '.[0].NetworkSettings.Networks."mwahaha-vote-webapp_net".IPAddress')
+mysql -h "$DB_IP_ADDRESS" -u root -p
 # You can also set the password in the command like: -p$PASSWORD
 ```
 
@@ -92,12 +92,12 @@ MySQL default CLI client (e.g., it has code highlighting, command auto-complete,
 the end of every command):
 
 ```bash
-mycli -h 172.19.0.3 -u root
+mycli -h "$DB_IP_ADDRESS" -u root
 # You can also set the password in the command like: -p $PASSWORD
 ```
 
-For both `mysql` and `mycli`, you can append a database name at the end of the command (e.g., `pghumor`) to select it
-when starting the session.
+For both `mysql` and `mycli`,
+you can append a database name at the end of the command (e.g., `pghumor`) to select it when starting the session.
 
 ### Useful SQL commands
 
@@ -137,7 +137,7 @@ docker compose -f docker-compose.yml -f docker-compose.testing.yml up -d --build
 Then you can do some testing, such as running a load test:
 
 ```bash
-./load_test.sh
+./web/load_test.sh
 ```
 
 ## Manipulating production data
@@ -145,25 +145,25 @@ Then you can do some testing, such as running a load test:
 To back up the data in production:
 
 ```bash
-docker exec clasificahumor_database_1 mysqldump -u root -p pghumor > dump.sql
+docker exec clasificahumor-database-1 mysqldump -u root -p pghumor > dump.sql
 ```
 
 To run a SQL script in production (e.g., to restore some data):
 
 ```bash
-docker exec -i clasificahumor_database_1 mysql -u root -p pghumor < dump.sql
+docker exec -i clasificahumor-database-1 mysql -u root -p pghumor < dump.sql
 ```
 
 To open a mysql interactive session in production:
 
 ```bash
-docker exec -i clasificahumor_database_1 mysql -u root -p pghumor
+docker exec -i clasificahumor-database-1 mysql -u root -p pghumor
 ```
 
 For these commands, using directly Docker Compose (`docker compose exec database`) is also supported instead of the
-Docker CLI directly (`docker exec clasificahumor_database_1`). However, the extra flags needed for each of them change
-as Docker Compose `exec` subcommand uses a pseudo TTY, and it's interactive by default while the Docker CLI `exec`
-subcommand doesn't.
+Docker CLI directly (`docker exec clasificahumor-database-1`).
+However, the extra flags needed for each of them change as Docker Compose `exec` subcommand uses a pseudo TTY,
+and it's interactive by default while the Docker CLI `exec` subcommand doesn't.
 
 ## Production setup
 
@@ -220,6 +220,7 @@ ACCESS_TOKEN_SECRET=...
 #### Download tweets from the hose
 
 ```bash
+cd web/
 ./extraction/download_hose.py > tweets1.jsonl
 ```
 
@@ -240,9 +241,10 @@ See the options available in the command with `./extraction/persist.py --help`.
 ## Analysis
 
 To compute the agreement (for example, with
-[this annotations_by_tweet.csv file](https://github.com/pln-fing-udelar/humor/blob/main/annotations_by_tweet.csv)):
+[this `annotations_by_tweet.csv` file](https://github.com/pln-fing-udelar/humor/blob/main/annotations_by_tweet.csv)):
 
 ```bash
+cd web/
 ./analysis/agreement.py FILE
 ```
 

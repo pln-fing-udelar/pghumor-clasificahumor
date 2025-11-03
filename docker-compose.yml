@@ -1,6 +1,6 @@
 services:
   web:
-    build: .
+    build: web
     environment:
       - FLASK_SECRET_KEY
       - DB_HOST=database
