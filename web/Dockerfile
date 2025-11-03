@@ -1,5 +1,5 @@
 FROM python:3.12
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv /uv /uvx /bin/
 WORKDIR /usr/src/app
 RUN touch README.md
 COPY pyproject.toml uv.lock ./

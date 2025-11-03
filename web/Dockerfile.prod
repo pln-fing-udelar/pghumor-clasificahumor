@@ -1,5 +1,5 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.12
-COPY --from=docker.io/astral/uv /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv /uv /uvx /bin/
 ENV UV_PROJECT_ENVIRONMENT=/usr/local/
 RUN touch README.md
 COPY pyproject.toml uv.lock ./
