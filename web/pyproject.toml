@@ -22,8 +22,10 @@ dev = [
     "mycli<2",
     "mysqlclient<3",
     "pandas<3",
+    "pandas-stubs",
     "tweepy<5",
     "tqdm<5",
+    "types-tqdm",
 ]
 
 [build-system]

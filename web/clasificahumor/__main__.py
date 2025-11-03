@@ -11,8 +11,8 @@ import werkzeug.wrappers
 from flask import Flask, Response, jsonify, redirect, render_template, request, send_from_directory
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-from web.clasificahumor import database
-from web.clasificahumor.database import TYPE_TWEET
+from clasificahumor import database
+from clasificahumor.database import TYPE_TWEET
 
 REQUEST_TWEET_BATCH_SIZE = 3
 
