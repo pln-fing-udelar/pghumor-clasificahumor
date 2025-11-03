@@ -4,6 +4,6 @@ ENV UV_PROJECT_ENVIRONMENT=/usr/local/
 RUN touch README.md
 COPY pyproject.toml uv.lock ./
 COPY clasificahumor clasificahumor
-RUN uv sync --no-default-groups --inexact --locked
+RUN uv sync --no-default-groups --no-managed-python --inexact --locked
 COPY uwsgi.ini prestart.sh ./
 COPY uwsgi.conf /etc/nginx/conf.d/
