@@ -1,7 +1,7 @@
 services:
   web:
     environment:
-      - FLASK_APP=clasificahumor/main.py
+      - FLASK_APP=clasificahumor
       - FLASK_DEBUG=1
       - FLASK_SECRET_KEY=ze4f2fWLmEY9dADjhwvhym3U
       - DB_PASS=123123
