@@ -1,7 +1,7 @@
 services:
   web:
     build:
-      dockerfile: web/Dockerfile.prod
+      dockerfile: Dockerfile.prod
     environment:
       - SENTRY_DSN
       - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
