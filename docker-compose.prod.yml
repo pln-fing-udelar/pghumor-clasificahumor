@@ -5,6 +5,7 @@ services:
     environment:
       - SENTRY_DSN
       - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
+      - VIRTUAL_PATH=/
       - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
       - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
     networks:
