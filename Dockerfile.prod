@@ -1,13 +1,8 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.8
-# Note it doesn't support Python 3.9 yet.
-
-RUN set -ex && pip install pipenv --upgrade
-
-COPY Pipfile* /app/
-
-RUN set -ex && pipenv install --deploy --system
-
-COPY uwsgi.conf /etc/nginx/conf.d/
-COPY uwsgi.ini .
-COPY prestart.sh .
+FROM tiangolo/uwsgi-nginx-flask:python3.12
+COPY --from=docker.io/astral/uv /uv /uvx /bin/
+ENV UV_PROJECT_ENVIRONMENT=/usr/local/
+COPY pyproject.toml uv.lock README.md ./
 COPY clasificahumor clasificahumor
+RUN uv sync --no-default-groups --inexact --locked
+COPY uwsgi.ini prestart.sh ./
+COPY uwsgi.conf /etc/nginx/conf.d/
