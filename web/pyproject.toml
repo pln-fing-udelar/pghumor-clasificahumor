@@ -18,6 +18,7 @@ repository = "https://github.com/pln-fing-udelar/pghumor-clasificahumor"
 
 [dependency-groups]
 dev = [
+    "jq<2",
     "krippendorff<1",
     "mycli<2",
     "mysqlclient<3",
