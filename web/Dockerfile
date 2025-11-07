@@ -3,7 +3,7 @@ COPY --from=ghcr.io/astral-sh/uv /uv /uvx /bin/
 WORKDIR /usr/src/app
 RUN touch README.md
 COPY pyproject.toml uv.lock ./
-COPY clasificahumor clasificahumor
+COPY src/clasificahumor src/clasificahumor
 RUN uv sync --locked
 EXPOSE 5000
 CMD ["uv", "run", "flask", "run", "-h", "::", "--debug"]

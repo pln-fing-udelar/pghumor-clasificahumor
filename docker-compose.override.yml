@@ -1,14 +1,14 @@
 services:
   web:
     environment:
-      - FLASK_APP=clasificahumor
+      - FLASK_APP=src/clasificahumor/__main__.py
       - FLASK_DEBUG=1
       - FLASK_SECRET_KEY=ze4f2fWLmEY9dADjhwvhym3U
       - DB_PASS=123123
     ports:
       - '5000:5000'
     volumes:
-      - ./web/clasificahumor:/usr/src/app/clasificahumor
+      - ./web/src/:/usr/src/app/src
   database:
     environment:
       - MYSQL_ROOT_PASSWORD=123123

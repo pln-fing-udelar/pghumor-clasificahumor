@@ -3,7 +3,7 @@ COPY --from=ghcr.io/astral-sh/uv /uv /uvx /bin/
 ENV UV_PROJECT_ENVIRONMENT=/usr/local/
 RUN touch README.md
 COPY pyproject.toml uv.lock ./
-COPY clasificahumor clasificahumor
+COPY src/clasificahumor src/clasificahumor
 RUN uv sync --no-default-groups --no-managed-python --inexact --locked
 COPY uwsgi.ini prestart.sh ./
 COPY uwsgi.conf /etc/nginx/conf.d/

@@ -47,7 +47,7 @@ docker compose up --build
 4. Create a `.env` file with the following content (setting some env vars values):
 
     ```shell
-    FLASK_APP=clasificahumor/__main__.py
+    FLASK_APP=src/clasificahumor/__main__.py
     FLASK_DEBUG=1
     FLASK_SECRET_KEY=SET_VALUE
     DB_HOST=SET_VALUE
