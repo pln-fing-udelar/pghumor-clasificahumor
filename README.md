@@ -61,7 +61,7 @@ docker compose up --build
 6. Run:
 
     ```bash
-    uv --run --env-file .env flask -h :: run --debug
+    uv --run --env-file ../.env flask -h :: run --debug
     cd ..
     ```
 
