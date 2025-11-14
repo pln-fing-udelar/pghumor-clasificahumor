@@ -92,7 +92,7 @@ Or you can use a local `mysql`:
 ```bash
 # First check the IP address of the container.
 # Note the actual Docker container name depends on the local directory name.
-DB_HOST=$(docker container inspect clasificahumor-database-1 | jq -r '.[0].NetworkSettings.Networks."mwahaha-vote-webapp_net".IPAddress')
+DB_HOST=$(docker container inspect clasificahumor-database-1 | jq -r '.[0].NetworkSettings.Networks."clasificahumor_net".IPAddress')
 mycli -h "DB_HOST" -u root -p
 # You can also set the password in the command like: -p $PASSWORD
 ```
