@@ -175,3 +175,28 @@ async def test_lifespan(monkeypatch: pytest.MonkeyPatch) -> None:
 
         async with _lifespan(app) as state:
             assert state["database_engine"] == mock_engine
+
+
+async def test_tweets_route_fallback_random(client: httpx2.AsyncClient) -> None:
+    # Vote on almost all tweets so unseen tweets < REQUEST_TWEET_BATCH_SIZE (3)
+    all_seeded = ["101", "102", "103", "104", "1088158691633713152", "1092855393188020224"]
+    for tid in all_seeded:
+        await client.post("/vote", json={"tweet_id": tid, "vote": "1"})
+
+    # GET /tweets should now have fewer than 3 unseen tweets, triggering fallback to random_tweets
+    res = await client.get("/tweets")
+    assert res.status_code == 200
+    data = res.json()
+    assert len(data) == 3
+
+
+async def test_vote_route_fallback_random(client: httpx2.AsyncClient) -> None:
+    # Ignore all tweets in the database so random_least_voted_unseen_tweets returns []
+    all_ids = ["101", "102", "103", "104", "1088158691633713152", "1092855393188020224", "1086371400431095813"]
+    res = await client.post(
+        "/vote",
+        json={"tweet_id": "101", "vote": "2", "ignore_tweet_ids": all_ids},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert "id" in data

@@ -1,11 +1,157 @@
 """Frontend and security verification tests for ClasificaHumor."""
 
+import json
 from pathlib import Path
 
 import httpx2
+from playwright.async_api import Browser, Page, Route
 
 BASE_DIR = Path(__file__).resolve().parent.parent / "src" / "clasificahumor"
 STATIC_DIR = BASE_DIR / "static"
+
+
+async def _stub_external_trackers(page: Page) -> None:
+    async def _empty_js(route: Route) -> None:
+        await route.fulfill(status=200, content_type="application/javascript", body="")
+
+    await page.route("https://www.googletagmanager.com/**", _empty_js)
+    await page.route("https://connect.facebook.net/**", _empty_js)
+    await page.route("https://platform.twitter.com/**", _empty_js)
+    await page.route("https://cdn.jsdelivr.net/**", _empty_js)
+
+
+async def test_voting_page_flow(browser: Browser, live_server_url: str) -> None:
+    context = await browser.new_context()
+    page = await context.new_page()
+    await _stub_external_trackers(page)
+
+    vote_requests: list[str] = []
+    page.on("request", lambda req: vote_requests.append(req.post_data or "") if req.url.endswith("/vote") else None)
+
+    await page.goto(live_server_url)
+    assert await page.title() == "Clasificá tweets y divertite"
+    assert await page.evaluate("() => typeof window.jQuery === 'undefined'")
+    assert await page.evaluate("() => typeof window.$ === 'undefined'")
+
+    # Wait for initial tweets to load and populate #tweet-text
+    await page.wait_for_function("() => document.querySelector('#tweet-text')?.textContent.trim().length > 0")
+
+    initial_text = await page.locator("#tweet-text").text_content()
+    assert initial_text and len(initial_text.strip()) > 0
+
+    # Mark as offensive first
+    await page.check("#is-offensive")
+    assert await page.is_checked("#is-offensive")
+
+    # Click #vote-4 (rating 4 stars)
+    async with page.expect_response(lambda resp: resp.url.endswith("/vote") and resp.status == 200):
+        await page.locator("#vote-4").dispatch_event("click")
+
+    assert len(vote_requests) == 1
+    payload_1 = json.loads(vote_requests[0])
+    assert payload_1["vote"] == "4"
+    assert payload_1["is_offensive"] is True
+    assert await page.is_checked("#is-offensive") is False
+
+    # Check that toast appeared
+    await page.wait_for_selector(".md-toast")
+    toast_1 = await page.locator(".md-toast").first.text_content()
+    assert toast_1 and "bueno" in toast_1.lower()
+
+    # Vote 'No' (non-humor) on next tweet
+    async with page.expect_response(lambda resp: resp.url.endswith("/vote") and resp.status == 200):
+        await page.click("#not-humor")
+
+    assert len(vote_requests) == 2
+    payload_2 = json.loads(vote_requests[1])
+    assert payload_2["vote"] == "x"
+
+    # Vote 'Saltear' (skip) on next tweet
+    async with page.expect_response(lambda resp: resp.url.endswith("/vote") and resp.status == 200):
+        await page.click("#skip")
+
+    assert len(vote_requests) == 3
+    payload_3 = json.loads(vote_requests[2])
+    assert payload_3["vote"] == "n"
+
+    await context.close()
+
+
+async def test_prolific_session_flow(browser: Browser, live_server_url: str) -> None:
+    context = await browser.new_context()
+    page = await context.new_page()
+    await _stub_external_trackers(page)
+
+    consent_calls: list[str] = []
+    page.on("request", lambda req: consent_calls.append(req.url) if "prolific-consent" in req.url else None)
+
+    # Open with PROLIFIC_PID query param
+    await page.goto(f"{live_server_url}/?PROLIFIC_PID=test_prolific_worker_123")
+
+    # Consent modal should be visible
+    await page.wait_for_selector("#consent.in, #consent[aria-modal='true']")
+    assert await page.is_visible("#consent")
+
+    # Prolific ID should be filled in the modal
+    prolific_val = await page.input_value("#prolific-id")
+    assert prolific_val == "test_prolific_worker_123"
+
+    # Check all checkboxes in consent form and submit
+    checkboxes = await page.locator("#consent input[type='checkbox']").all()
+    assert len(checkboxes) == 6
+    for cb in checkboxes:
+        await cb.check()
+
+    async with page.expect_response(lambda resp: resp.url.endswith("/prolific-consent") and resp.status == 204):
+        await page.click("#consent-continue")
+
+    assert len(consent_calls) == 1
+
+    # Verify modal is hidden
+    await page.wait_for_selector("#consent", state="hidden")
+
+    # Verify vote count displays prolific progress
+    await page.wait_for_function("() => document.querySelector('#vote-count')?.textContent.includes('/')")
+    count_text = await page.locator("#vote-count").text_content()
+    assert count_text and "/200" in count_text
+
+    await context.close()
+
+
+async def test_about_modal(browser: Browser, live_server_url: str) -> None:
+    context = await browser.new_context()
+    page = await context.new_page()
+    await _stub_external_trackers(page)
+
+    await page.goto(live_server_url)
+
+    # Click help button to open about modal
+    await page.click("#help")
+    await page.wait_for_selector("#about.in, #about[aria-modal='true']")
+    assert await page.is_visible("#about")
+
+    # Press Escape to close modal
+    await page.keyboard.press("Escape")
+    await page.wait_for_selector("#about", state="hidden")
+
+    await context.close()
+
+
+async def test_stats_page_live(browser: Browser, live_server_url: str) -> None:
+    context = await browser.new_context()
+    page = await context.new_page()
+    await _stub_external_trackers(page)
+
+    await page.goto(f"{live_server_url}/stats")
+    assert await page.title() == "Estadísticas"
+    assert await page.is_visible("h1")
+
+    # Check chart containers are present in DOM
+    assert await page.is_visible("#chart-votes-per-category")
+    assert await page.is_visible("#chart-histogram")
+    await page.evaluate("window.dispatchEvent(new Event('resize'))")
+
+    await context.close()
 
 
 async def test_index_html_no_jquery_or_bootstrap_js(client: httpx2.AsyncClient) -> None:

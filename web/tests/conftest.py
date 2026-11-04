@@ -1,7 +1,9 @@
+import asyncio
 import datetime
 import os
 import random
 import re
+import socket
 import sqlite3
 from collections.abc import AsyncGenerator
 from typing import Any
@@ -14,10 +16,13 @@ os.environ.setdefault("DB_NAME", "pghumor")
 
 import httpx2
 import pytest
+import pytest_asyncio
 import sqlalchemy
 import sqlalchemy.event
 import sqlalchemy.ext.asyncio
+import uvicorn
 from httpx2 import ASGITransport
+from playwright.async_api import Browser, async_playwright
 
 from clasificahumor.__main__ import app
 
@@ -152,3 +157,47 @@ async def client(
     transport = ASGITransport(app=inject_db)
     async with httpx2.AsyncClient(transport=transport, base_url="http://test") as c:
         yield c
+
+
+def _get_free_port() -> int:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("127.0.0.1", 0))
+        return int(s.getsockname()[1])
+
+
+@pytest_asyncio.fixture(scope="module", loop_scope="module")
+async def browser() -> AsyncGenerator[Browser]:
+    """Provides a headless Chromium browser instance for end-to-end frontend tests."""
+    async with async_playwright() as p:
+        try:
+            b = await p.chromium.launch(channel="chrome", headless=True, args=["--no-sandbox"])
+        except Exception:
+            b = await p.chromium.launch(headless=True, args=["--no-sandbox"])
+        try:
+            yield b
+        finally:
+            await b.close()
+
+
+@pytest.fixture
+async def live_server_url(
+    seeded_db_engine: sqlalchemy.ext.asyncio.AsyncEngine,
+) -> AsyncGenerator[str]:
+    """Runs a live Uvicorn test server bound to an ephemeral port with the test DB engine."""
+
+    async def wrapped_app(scope: Any, receive: Any, send: Any) -> None:
+        scope.setdefault("state", {})["database_engine"] = seeded_db_engine
+        await app(scope, receive, send)
+
+    port = _get_free_port()
+    config = uvicorn.Config(wrapped_app, host="127.0.0.1", port=port, log_level="warning")
+    server = uvicorn.Server(config)
+    task = asyncio.create_task(server.serve())
+    while not server.started:
+        await asyncio.sleep(0.02)
+
+    try:
+        yield f"http://localhost:{port}"
+    finally:
+        server.should_exit = True
+        await task
