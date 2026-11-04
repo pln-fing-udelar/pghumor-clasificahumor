@@ -15,6 +15,11 @@
 .vote {
   border: none;
   background: transparent url('../img/votes.png');
+  background-image: image-set(
+    url('../img/votes.avif') type('image/avif'),
+    url('../img/votes.webp') type('image/webp'),
+    url('../img/votes.png') type('image/png')
+  );
   display: block;
   cursor: pointer;
   height: 48px;

@@ -55,4 +55,5 @@ Configuration in `pyproject.toml`: Python `>=3.15` (using PEP 810 `lazy import` 
 
 - **Database name**: `pghumor`
 - **Python tool**: `uv` for dependency management (Python `>=3.15`)
+- **All scripts** use shebang: `#!/usr/bin/env -S uv run --script --extra scripts --env-file ../.env`
 - **Related repo**: [mwahaha-vote-webapp](https://github.com/pln-fing-udelar/mwahaha-vote-webapp) (battle-based pairwise annotation sibling project)

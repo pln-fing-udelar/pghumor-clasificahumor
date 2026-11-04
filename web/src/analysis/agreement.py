@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run --script --extra scripts --env-file ../.env
 lazy import sys
 
 lazy import krippendorff

@@ -205,7 +205,7 @@ async def test_stats_html_responsive(client: httpx2.AsyncClient) -> None:
 
     # Correct static asset paths
     assert 'href="/css/normalize.css"' in content
-    assert 'href="/img/favicon.png"' in content
+    assert 'href="/img/favicon.avif"' in content
     assert "../static/" not in content
 
 

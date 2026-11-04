@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run --script --extra scripts --env-file ../.env
 import argparse
 from collections.abc import Iterable
 
