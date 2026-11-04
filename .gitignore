@@ -1,5 +1,5 @@
-.env
 .coverage
 .coverage.*
-test-reports/
+.env
 htmlcov/
+test-reports/
