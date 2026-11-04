@@ -41,29 +41,34 @@ docker compose up --build
 
     ```bash
     uv sync
-    source .venv/bin/activate
     ```
 
-4. Create a `.env` file with the following content (setting some env vars values):
+4. Create a `.env` file with the database configuration (setting environment variable values):
 
     ```shell
-    FLASK_APP=src/clasificahumor/__main__.py
-    FLASK_DEBUG=1
-    FLASK_SECRET_KEY=SET_VALUE
     DB_HOST=SET_VALUE
     DB_USER=SET_VALUE
     DB_PASS=SET_VALUE
     DB_NAME=SET_VALUE
     ```
 
-5. Set up a MySQL 9 instance. It could be the instance generated with the Docker setup.
+5. Set up a MySQL 9 instance. It could be the instance generated with the Docker setup (`docker compose up database`).
 
 6. Run:
 
     ```bash
-    uv --run --env-file ../.env flask -h :: run --debug
-    cd ..
+    uv run --env-file ../.env uvicorn clasificahumor.__main__:app --host :: --port 5000 --reload
     ```
+
+### Code Quality & Testing
+
+```bash
+cd web/
+uv run ruff check --fix
+uv run ruff format
+uv run ty check
+uv run pytest --cov-fail-under=90
+```
 
 ## Tweet data
 

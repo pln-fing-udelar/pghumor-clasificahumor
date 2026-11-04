@@ -24,6 +24,7 @@ async def test_create_engine_mock(monkeypatch: pytest.MonkeyPatch) -> None:
                 "mysql+asyncmy://testuser:testpass@db.local/testdb?charset=utf8mb4",
                 pool_size=10,
                 pool_recycle=3600,
+                pool_pre_ping=True,
             )
 
 
