@@ -1,12 +1,13 @@
-import fileinput
-import json
-import os
 import re
-from collections.abc import Iterable, MutableMapping, Sequence
+from collections.abc import MutableMapping
 from typing import Any
+lazy import fileinput
+lazy import json
+lazy import os
+lazy from collections.abc import Iterable, Sequence
 
-import MySQLdb.connections
-import tweepy
+lazy import MySQLdb.connections
+lazy import tweepy
 
 TYPE_TWEET = MutableMapping[str, Any]
 

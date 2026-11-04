@@ -1,28 +1,29 @@
 """FastAPI application for ClasificaHumor."""
 
-import json
 import logging
 import os
-import random
-from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import timedelta
 from pathlib import Path
-from typing import Any
+lazy import json
+lazy import random
+lazy from collections.abc import AsyncGenerator
+lazy from typing import Any
 
 import sentry_sdk
-from fastapi import BackgroundTasks, FastAPI, Form, Request, Response, status
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi import FastAPI, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from sentry_sdk.integrations.logging import LoggingIntegration
-from starlette.datastructures import MutableHeaders
 from starlette.middleware.cors import CORSMiddleware
-from starlette.types import ASGIApp, Message, Receive, Scope, Send
+lazy from fastapi import BackgroundTasks, Request, Response, status
+lazy from fastapi.responses import FileResponse, RedirectResponse
+lazy from starlette.datastructures import MutableHeaders
+lazy from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from clasificahumor import database
-from clasificahumor.database import TYPE_TWEET
+lazy from clasificahumor import database
+lazy from clasificahumor.database import TYPE_TWEET
 
 logger = logging.getLogger(__name__)
 
