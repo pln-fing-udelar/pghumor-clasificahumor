@@ -36,7 +36,7 @@ docker compose up
 
 # Run locally with uv
 cd web/
-uv run flask run --debug
+uv run --env-file ../.env uvicorn clasificahumor.__main__:app --host :: --port 5000 --reload
 ```
 
 ### Code Quality & Testing
@@ -54,5 +54,5 @@ Configuration in `pyproject.toml`: Python `>=3.15`, line length 120.
 ## Important Details
 
 - **Database name**: `pghumor`
-- **Python tool**: `uv` for dependency management (`.python-version` pinned to `3.15`)
+- **Python tool**: `uv` for dependency management (Python `>=3.15`)
 - **Related repo**: [mwahaha-vote-webapp](https://github.com/pln-fing-udelar/mwahaha-vote-webapp) (battle-based pairwise annotation sibling project)
