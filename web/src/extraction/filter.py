@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import random
-from typing import Iterable, Mapping, Set, Tuple
+from collections.abc import Iterable, Mapping
 
 import util
 from argparse_with_defaults import ArgumentParserWithDefaults
@@ -13,10 +13,10 @@ def tweets_with_unique_text(tweets: Iterable[util.TYPE_TWEET]) -> Iterable[util.
     return {tweet["text"]: tweet for tweet in tweets}.values()
 
 
-def tweets_from_database() -> Tuple[Mapping[str, util.TYPE_TWEET], Set[str]]:
+def tweets_from_database() -> tuple[Mapping[str, util.TYPE_TWEET], set[str]]:
     with util.create_connection() as connection, connection as cursor:
         cursor.execute("SELECT tweet_id, text FROM tweets")
-        tweets = {id_: text for id_, text in cursor.fetchall()}
+        tweets = dict(cursor.fetchall())
         return tweets, set(tweets.values())
 
 

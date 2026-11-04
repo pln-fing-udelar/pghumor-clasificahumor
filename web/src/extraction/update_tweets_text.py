@@ -2,10 +2,9 @@
 import argparse
 import time
 
-from tqdm.auto import tqdm
-
 import util
 from argparse_with_defaults import ArgumentParserWithDefaults
+from tqdm.auto import tqdm
 
 USER_AUTH_STATUSES_LOOKUP_RATE_LIMIT_PER_WINDOW = 900
 SECS_IN_A_MINUTE = 60
@@ -50,9 +49,9 @@ def main() -> None:
                 for tweet in new_tweets:
                     print(util.serialize_tweet(tweet) if args.json_format else tweet)
 
-            tweets_to_update = [tweet
-                                for tweet in new_tweets
-                                if tweet["text"] != tweets_in_db_by_id[tweet["id"]]["text"]]
+            tweets_to_update = [
+                tweet for tweet in new_tweets if tweet["text"] != tweets_in_db_by_id[tweet["id"]]["text"]
+            ]
 
             with connection.cursor() as cursor:
                 # There is no simple way to do a batch update in MySQL. One option would be to use

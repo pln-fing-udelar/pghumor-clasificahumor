@@ -145,7 +145,7 @@ def random_least_voted_unseen_tweets(
             {
                 "session_id": session_id,
                 "limit": batch_size,
-                "ignore_tweet_ids": ",".join(tweet_id for tweet_id in ignore_tweet_ids),
+                "ignore_tweet_ids": ",".join(str(tweet_id) for tweet_id in ignore_tweet_ids),
             },
         )
         for id_, text in result:
