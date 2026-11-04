@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-import sys
+lazy import sys
 
-import krippendorff
-import pandas as pd
+lazy import krippendorff
+lazy import pandas as pd
 
 
 def main() -> None:

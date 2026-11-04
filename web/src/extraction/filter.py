@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import argparse
-import random
 from collections.abc import Iterable, Mapping
+lazy import random
 
-import util
-from argparse_with_defaults import ArgumentParserWithDefaults
+lazy import util
+lazy from argparse_with_defaults import ArgumentParserWithDefaults
 
 LIMIT = 4500
 

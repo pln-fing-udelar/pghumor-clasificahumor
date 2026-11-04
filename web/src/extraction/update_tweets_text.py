@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import argparse
-import time
+lazy import time
 
-import util
-from argparse_with_defaults import ArgumentParserWithDefaults
-from tqdm.auto import tqdm
+lazy import util
+lazy from argparse_with_defaults import ArgumentParserWithDefaults
+lazy from tqdm.auto import tqdm
 
 USER_AUTH_STATUSES_LOOKUP_RATE_LIMIT_PER_WINDOW = 900
 SECS_IN_A_MINUTE = 60

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import argparse
-import time
 from collections.abc import Mapping
+lazy import time
 
-import util
-from argparse_with_defaults import ArgumentParserWithDefaults
-from tqdm.auto import tqdm
+lazy import util
+lazy from argparse_with_defaults import ArgumentParserWithDefaults
+lazy from tqdm.auto import tqdm
 
 APP_AUTH_USER_TIMELINE_RATE_LIMIT_PER_WINDOW = 1500
 SECS_IN_A_MINUTE = 60

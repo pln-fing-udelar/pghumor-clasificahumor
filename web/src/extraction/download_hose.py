@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import argparse
-import sys
+lazy import sys
 
 import tweepy
-import util
-from argparse_with_defaults import ArgumentParserWithDefaults
+lazy import util
+lazy from argparse_with_defaults import ArgumentParserWithDefaults
 
 
 class StreamListener(tweepy.StreamListener):

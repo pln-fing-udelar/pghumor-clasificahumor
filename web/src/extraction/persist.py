@@ -2,9 +2,9 @@
 import argparse
 from collections.abc import Iterable
 
-import MySQLdb
-import util
-from argparse_with_defaults import ArgumentParserWithDefaults
+lazy import MySQLdb
+lazy import util
+lazy from argparse_with_defaults import ArgumentParserWithDefaults
 
 
 def insert_users(connection: MySQLdb.Connection, user_ids: Iterable[str]) -> None:

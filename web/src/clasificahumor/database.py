@@ -1,10 +1,10 @@
 """Provides mechanisms to handle the database."""
 
-import os
 from collections.abc import AsyncGenerator, Iterable, MutableMapping
 from contextlib import asynccontextmanager
-from datetime import UTC, datetime
 from typing import Any
+lazy import os
+lazy from datetime import UTC, datetime
 
 import sqlalchemy
 import sqlalchemy.ext.asyncio

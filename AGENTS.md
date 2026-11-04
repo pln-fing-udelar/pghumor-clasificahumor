@@ -49,7 +49,7 @@ uv run ty check
 uv run pytest --cov-fail-under=90 --cov-report=term-missing
 ```
 
-Configuration in `pyproject.toml`: Python `>=3.15`, line length 120.
+Configuration in `pyproject.toml`: Python `>=3.15` (using PEP 810 `lazy import` checked by Ruff `TID255`), line length 120.
 
 ## Important Details
 
