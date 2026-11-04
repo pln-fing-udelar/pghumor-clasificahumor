@@ -1,0 +1,34 @@
+version: 2
+updates:
+  - package-ecosystem: uv
+    directory: "/web"
+    schedule:
+      interval: monthly
+      time: "08:00"
+    open-pull-requests-limit: 10
+    assignees:
+      - bryant1410
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+      time: "08:00"
+    open-pull-requests-limit: 10
+    assignees:
+      - bryant1410
+  - package-ecosystem: docker
+    directory: "/web"
+    schedule:
+      interval: monthly
+      time: "08:00"
+    open-pull-requests-limit: 10
+    assignees:
+      - bryant1410
+  - package-ecosystem: docker
+    directory: "/db"
+    schedule:
+      interval: monthly
+      time: "08:00"
+    open-pull-requests-limit: 10
+    assignees:
+      - bryant1410
