@@ -7,17 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Ayudá a clasificar tweets como humorísticos o no humorísticos, y si lo son, decí qué tan graciosos son. El objetivo es armar un conjunto de datos para investigar sobre Humor Computacional.">
   <meta name="author" content="Santiago Castro, Matías Cubero y el Grupo PLN, UdelaR">
-  <link rel="apple-touch-icon" href="../static/img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/favicon.png">
 
   <title>Estadísticas</title>
 
-  <link rel="stylesheet" href="../static/css/normalize.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
   <style>
     .chart {
-      height: 500px;
-      width: 900px;
+      height: 450px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
     }
   </style>
 </head>
@@ -51,33 +53,39 @@
   </div>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <!--suppress ES6ConvertVarToLetConst, JSUnresolvedFunction, JSUnresolvedVariable -->
+  <!--suppress JSUnresolvedFunction, JSUnresolvedVariable -->
   <script type="text/javascript">
     google.charts.load('current', {packages:['corechart']});
 
     google.charts.setOnLoadCallback(drawHistogramChart);
     function drawHistogramChart() {
-      var data = google.visualization.arrayToDataTable({{ stats['histogram']|safe }});
+      const data = google.visualization.arrayToDataTable({{ stats['histogram']|safe }});
 
-        var options = {
-          legend: { position: 'none' },
-          colors: ['#4285F4']
-        };
+      const options = {
+        legend: { position: 'none' },
+        colors: ['#4285F4']
+      };
 
-      var chart = new google.visualization.ColumnChart(document.getElementById('chart-histogram'));
+      const chart = new google.visualization.ColumnChart(document.getElementById('chart-histogram'));
       chart.draw(data, options);
     }
 
     google.charts.setOnLoadCallback(drawVotesPerCategoryChart);
     function drawVotesPerCategoryChart() {
-      var data = google.visualization.arrayToDataTable({{ stats['votes-per-category']|safe }});
+      const data = google.visualization.arrayToDataTable({{ stats['votes-per-category']|safe }});
 
-        var options = {
-        };
+      const options = {};
 
-      var chart = new google.visualization.PieChart(document.getElementById('chart-votes-per-category'));
+      const chart = new google.visualization.PieChart(document.getElementById('chart-votes-per-category'));
       chart.draw(data, options);
     }
+
+    window.addEventListener('resize', () => {
+      if (typeof google !== 'undefined' && google.visualization) {
+        drawHistogramChart();
+        drawVotesPerCategoryChart();
+      }
+    });
   </script>
 </body>
 
