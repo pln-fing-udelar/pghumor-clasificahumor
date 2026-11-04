@@ -4,7 +4,6 @@ import json
 import logging
 import os
 import random
-import string
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import timedelta
@@ -12,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 import sentry_sdk
-from fastapi import FastAPI, Form, Request, Response, status
+from fastapi import BackgroundTasks, FastAPI, Form, Request, Response, status
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -51,10 +50,15 @@ async def _lifespan(app: FastAPI) -> AsyncGenerator[dict[str, Any]]:
 
 
 def _generate_id() -> str:
-    return "".join(random.choices(string.ascii_uppercase + string.digits, k=100))
+    # With 16 chars of 16 options each, the probability of a collision is ~sqrt(16^16) = ~4B sessions.
+    return "".join(random.choices("0123456789abcdef", k=16))
 
 
 def _get_session_id(request: Request) -> str:
+    if (prolific_id := request.query_params.get("PROLIFIC_PID")) and (
+        prolific_session_id := request.query_params.get("SESSION_ID")
+    ):
+        return f"prolific-id-{prolific_id}-{prolific_session_id}"
     if prolific_id := request.query_params.get("PROLIFIC_PID"):
         return f"prolific-id-{prolific_id}"
     return request.cookies.get("id") or _generate_id()
@@ -196,19 +200,22 @@ async def vote_count_route(request: Request) -> Response:
 
 
 @app.post("/prolific-consent")
-async def prolific_consent_route(request: Request) -> Response:
+async def prolific_consent_route(request: Request, background_tasks: BackgroundTasks) -> Response:
     """Records user consent for the Prolific session."""
-    await database.prolific_consent(request.state.database_engine, request.state.session_id)
+    background_tasks.add_task(database.prolific_consent, request.state.database_engine, request.state.session_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.post("/prolific-finish")
 async def prolific_finish_route(
     request: Request,
+    background_tasks: BackgroundTasks,
     comments: str = Form(""),
 ) -> RedirectResponse:
     """Records session completion and comments, redirecting to Prolific."""
-    await database.prolific_finish(request.state.database_engine, request.state.session_id, comments)
+    background_tasks.add_task(
+        database.prolific_finish, request.state.database_engine, request.state.session_id, comments
+    )
     return RedirectResponse(
         url="https://app.prolific.co/submissions/complete?cc=5E395F77",
         status_code=status.HTTP_303_SEE_OTHER,
