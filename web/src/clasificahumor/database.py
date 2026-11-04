@@ -1,13 +1,14 @@
 """Provides mechanisms to handle the database."""
 
 import os
-from collections.abc import Iterable, Iterator, MutableMapping
+from collections.abc import AsyncGenerator, Iterable, MutableMapping
+from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Any
 
 import sqlalchemy
+import sqlalchemy.ext.asyncio
 import sqlalchemy.sql
-from sqlalchemy.engine import Engine
 
 TYPE_TWEET = MutableMapping[str, Any]
 TYPE_TWEET_ID = int | str
@@ -33,7 +34,7 @@ STATEMENT_ADD_VOTE = sqlalchemy.sql.text(
     " ON DUPLICATE KEY UPDATE tweet_id = tweet_id"
 )
 STATEMENT_SESSION_VOTE_COUNT = sqlalchemy.sql.text(
-    "SELECT COUNT(*) FROM votes v WHERE session_id = :session_id   AND (NOT :without_skips OR vote != 'n')"
+    "SELECT COUNT(*) FROM votes v WHERE session_id = :session_id AND (NOT :without_skips OR vote != 'n')"
 )
 STATEMENT_VOTE_COUNT = sqlalchemy.sql.text(
     "SELECT COUNT(*)"
@@ -93,7 +94,7 @@ STATEMENT_HISTOGRAM = sqlalchemy.sql.text(
     "SELECT c, COUNT(*) as freq"
     " FROM (SELECT COUNT(v.tweet_id) c"
     "        FROM tweets t"
-    "          LEFT JOIN (SELECT tweet_id FROM votes) v"  # WHERE vote != 'n'
+    "          LEFT JOIN (SELECT tweet_id FROM votes) v"
     "            ON t.tweet_id = v.tweet_id"
     "        WHERE weight <= 1 AND t.tweet_id <> 1088158691633713152"
     "        GROUP BY t.tweet_id) a"
@@ -107,139 +108,153 @@ STATEMENT_PROLIFIC_CONSENT = sqlalchemy.sql.text(
 )
 
 STATEMENT_PROLIFIC_FINISH = sqlalchemy.sql.text(
-    "UPDATE prolific SET finish_date = :finish_date,     comments = :comments WHERE session_id = :session_id"
+    "UPDATE prolific SET finish_date = :finish_date, comments = :comments WHERE session_id = :session_id"
 )
 
 
-def create_engine() -> Engine:
-    return sqlalchemy.create_engine(
-        f"mysql://{os.environ['DB_USER']}:{os.environ['DB_PASS']}@{os.environ['DB_HOST']}"
+@asynccontextmanager
+async def create_engine() -> AsyncGenerator[sqlalchemy.ext.asyncio.AsyncEngine]:
+    """Creates and yields an async SQLAlchemy engine using DB environment variables."""
+    engine = sqlalchemy.ext.asyncio.create_async_engine(
+        f"mysql+asyncmy://{os.environ['DB_USER']}:{os.environ['DB_PASS']}@{os.environ['DB_HOST']}"
         f"/{os.environ['DB_NAME']}?charset=utf8mb4",
         pool_size=10,
         pool_recycle=3600,
     )
+    try:
+        yield engine
+    finally:
+        await engine.dispose()
 
 
-engine = create_engine()
-
-
-def random_least_voted_unseen_tweets(
-    session_id: str, batch_size: int, ignore_tweet_ids: Iterable[TYPE_TWEET_ID] = ()
-) -> Iterator[TYPE_TWEET]:
-    """
-    Returns a random list of the least voted unseen tweets (by the session) with size batch_size, ignoring certain list
-    of tweet IDs.
-
-    If there are fewer than batch_size tweets that hold the condition, the response is padded with random tweets.
-
-    Each tweet in the result is represented as a dictionary with the fields "id" and "text".
-
-    :param session_id: Session ID
-    :param batch_size: Size of the list to return
-    :param ignore_tweet_ids: List of tweet IDs to ignore, not returning them in the result
-    :return: Random list of the least voted unseen tweets with size batch_size
-    """
-    with engine.connect() as connection:
-        result = connection.execute(
+async def random_least_voted_unseen_tweets(
+    engine: sqlalchemy.ext.asyncio.AsyncEngine,
+    session_id: str,
+    batch_size: int,
+    ignore_tweet_ids: Iterable[TYPE_TWEET_ID] = (),
+) -> list[TYPE_TWEET]:
+    """Returns a random list of the least voted unseen tweets with size batch_size."""
+    ignore_str = ",".join(str(tid) for tid in ignore_tweet_ids)
+    async with engine.connect() as connection:
+        result = await connection.execute(
             STATEMENT_RANDOM_LEAST_VOTED_UNSEEN_TWEETS,
             {
                 "session_id": session_id,
                 "limit": batch_size,
-                "ignore_tweet_ids": ",".join(str(tweet_id) for tweet_id in ignore_tweet_ids),
+                "ignore_tweet_ids": ignore_str,
             },
         )
-        for id_, text in result:
-            yield {"id": id_, "text": text}
+        return [{"id": str(id_), "text": text} for id_, text in result]
 
 
-def random_tweets(batch_size: int) -> Iterator[TYPE_TWEET]:
-    """
-    Returns a random list tweets with size batch_size.
-
-    Each tweet is represented as a dictionary with the fields "id" and "text".
-
-    :param batch_size: Size of the list to return
-    :return: Random list of tweets with size batch_size
-    """
-    with engine.connect() as connection:
-        result = connection.execute(STATEMENT_RANDOM_TWEETS, {"limit": batch_size})
-        for id_, text in result:
-            yield {"id": id_, "text": text}
+async def random_tweets(
+    engine: sqlalchemy.ext.asyncio.AsyncEngine,
+    batch_size: int,
+) -> list[TYPE_TWEET]:
+    """Returns a random list of tweets with size batch_size."""
+    async with engine.connect() as connection:
+        result = await connection.execute(STATEMENT_RANDOM_TWEETS, {"limit": batch_size})
+        return [{"id": str(id_), "text": text} for id_, text in result]
 
 
-def add_vote(session_id: str, tweet_id: TYPE_TWEET_ID, vote: str, is_offensive: bool) -> None:
-    """
-    Adds a vote for a tweet by a determined session.
-
-    If the vote is not one of `VOTE_CHOICES`, it will do nothing. If the session had already voted, the new vote will be
-    ignored.
-
-    :param session_id: Session ID
-    :param tweet_id: Tweet ID
-    :param vote: Vote of the tweet: "1" to "5" for the stars, "x" for non-humorous and "n" for skipped
-    :param is_offensive: If the tweet is considered offensive
-    """
+async def add_vote(
+    engine: sqlalchemy.ext.asyncio.AsyncEngine,
+    session_id: str,
+    tweet_id: TYPE_TWEET_ID,
+    vote: str,
+    is_offensive: bool,
+) -> None:
+    """Adds a vote for a tweet by a determined session."""
     if vote in VOTE_CHOICES:
-        with engine.connect() as connection:
-            connection.execute(
+        async with engine.begin() as connection:
+            await connection.execute(
                 STATEMENT_ADD_VOTE,
                 {"tweet_id": tweet_id, "session_id": session_id, "vote": vote, "is_offensive": is_offensive},
             )
 
 
-def session_vote_count_with_skips(session_id: str) -> int:
+async def session_vote_count_with_skips(
+    engine: sqlalchemy.ext.asyncio.AsyncEngine,
+    session_id: str,
+) -> int:
     """Returns the vote count for a given session ID, including skips."""
-    with engine.connect() as connection:
-        return connection.execute(  # type: ignore
+    async with engine.connect() as connection:
+        result = await connection.execute(
             STATEMENT_SESSION_VOTE_COUNT, {"session_id": session_id, "without_skips": False}
-        ).fetchone()[0]
+        )
+        row = result.fetchone()
+        return int(row[0]) if row else 0
 
 
-def vote_count_without_skips() -> int:
-    """Returns the vote count, not including skips."""
-    with engine.connect() as connection:
-        return connection.execute(STATEMENT_VOTE_COUNT, {"without_skips": True, "pass_test": False}).fetchone()[0]  # type: ignore
+async def vote_count_without_skips(
+    engine: sqlalchemy.ext.asyncio.AsyncEngine,
+) -> int:
+    """Returns the total vote count, not including skips."""
+    async with engine.connect() as connection:
+        result = await connection.execute(STATEMENT_VOTE_COUNT, {"without_skips": True, "pass_test": False})
+        row = result.fetchone()
+        return int(row[0]) if row else 0
 
 
-def prolific_consent(session_id: str) -> int:
+async def prolific_consent(
+    engine: sqlalchemy.ext.asyncio.AsyncEngine,
+    session_id: str,
+) -> None:
     """Sets the current time as the consent date for the prolific session ID."""
-    with engine.connect() as connection:
-        return connection.execute(STATEMENT_PROLIFIC_CONSENT, {"session_id": session_id})  # type: ignore
+    async with engine.begin() as connection:
+        await connection.execute(STATEMENT_PROLIFIC_CONSENT, {"session_id": session_id})
 
 
-def prolific_finish(session_id: str, comments: str) -> int:
-    """Sets the current time as the finish date and the given comments for the prolific session ID."""
-    with engine.connect() as connection:
-        return connection.execute(  # type: ignore
-            STATEMENT_PROLIFIC_FINISH, {"session_id": session_id, "finish_date": datetime.now(), "comments": comments}
+async def prolific_finish(
+    engine: sqlalchemy.ext.asyncio.AsyncEngine,
+    session_id: str,
+    comments: str,
+) -> None:
+    """Sets the finish date and comments for the prolific session ID."""
+    async with engine.begin() as connection:
+        await connection.execute(
+            STATEMENT_PROLIFIC_FINISH,
+            {"session_id": session_id, "finish_date": datetime.now(), "comments": comments},
         )
 
 
-def stats() -> TYPE_TWEET:
-    """Returns the vote count, vote count without skips, vote count histogram and votes per category."""
-    with engine.connect() as connection:
-        result = {
-            "votes": connection.execute(STATEMENT_VOTE_COUNT, {"without_skips": False, "pass_test": False}).fetchone()[  # type: ignore
-                0
-            ],
-            "sessions": connection.execute(  # type: ignore
-                STATEMENT_SESSION_COUNT, {"without_skips": False, "pass_test": False}
-            ).fetchone()[0],
-            "test-tweets-vote-count": [t[0] for t in connection.execute(STATEMENT_TEST_TWEETS_VOTE_COUNT)],
-            "histogram": dict(connection.execute(STATEMENT_HISTOGRAM)),  # type: ignore
-            "votes-per-category": dict(connection.execute(STATEMENT_VOTE_COUNT_PER_CATEGORY)),  # type: ignore
-            "votes-without-skips": connection.execute(  # type: ignore
-                STATEMENT_VOTE_COUNT, {"without_skips": True, "pass_test": False}
-            ).fetchone()[0],
-            "sessions-without-skips": connection.execute(  # type: ignore
-                STATEMENT_SESSION_COUNT, {"without_skips": True, "pass_test": False}
-            ).fetchone()[0],
-            "votes-pass-test": connection.execute(  # type: ignore
-                STATEMENT_VOTE_COUNT, {"without_skips": True, "pass_test": True}
-            ).fetchone()[0],
-            "sessions-pass-test": connection.execute(  # type: ignore
-                STATEMENT_SESSION_COUNT, {"without_skips": True, "pass_test": True}
-            ).fetchone()[0],
+async def stats(
+    engine: sqlalchemy.ext.asyncio.AsyncEngine,
+) -> dict[str, Any]:
+    """Returns the vote count, vote count without skips, histogram, and votes per category."""
+    async with engine.connect() as connection:
+        votes_row = (
+            await connection.execute(STATEMENT_VOTE_COUNT, {"without_skips": False, "pass_test": False})
+        ).fetchone()
+        sessions_row = (
+            await connection.execute(STATEMENT_SESSION_COUNT, {"without_skips": False, "pass_test": False})
+        ).fetchone()
+        test_tweets_res = await connection.execute(STATEMENT_TEST_TWEETS_VOTE_COUNT)
+        histogram_res = await connection.execute(STATEMENT_HISTOGRAM)
+        category_res = await connection.execute(STATEMENT_VOTE_COUNT_PER_CATEGORY)
+        votes_without_skips_row = (
+            await connection.execute(STATEMENT_VOTE_COUNT, {"without_skips": True, "pass_test": False})
+        ).fetchone()
+        sessions_without_skips_row = (
+            await connection.execute(STATEMENT_SESSION_COUNT, {"without_skips": True, "pass_test": False})
+        ).fetchone()
+        votes_pass_test_row = (
+            await connection.execute(STATEMENT_VOTE_COUNT, {"without_skips": True, "pass_test": True})
+        ).fetchone()
+        sessions_pass_test_row = (
+            await connection.execute(STATEMENT_SESSION_COUNT, {"without_skips": True, "pass_test": True})
+        ).fetchone()
+
+        result: dict[str, Any] = {
+            "votes": int(votes_row[0]) if votes_row else 0,
+            "sessions": int(sessions_row[0]) if sessions_row else 0,
+            "test-tweets-vote-count": [int(t[0]) for t in test_tweets_res],
+            "histogram": {int(k): int(v) for k, v in histogram_res},
+            "votes-per-category": {str(k): int(v) for k, v in category_res},
+            "votes-without-skips": int(votes_without_skips_row[0]) if votes_without_skips_row else 0,
+            "sessions-without-skips": int(sessions_without_skips_row[0]) if sessions_without_skips_row else 0,
+            "votes-pass-test": int(votes_pass_test_row[0]) if votes_pass_test_row else 0,
+            "sessions-pass-test": int(sessions_pass_test_row[0]) if sessions_pass_test_row else 0,
         }
 
     for category in VOTE_CHOICES:

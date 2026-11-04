@@ -7,9 +7,17 @@ authors = [
 ]
 requires-python = ">=3.15"
 dependencies = [
-    "flask<4",
-    "sentry-sdk[flask]<3",
-    "sqlalchemy[mysql]<3",
+    "cryptography",
+    "fastapi<1",
+    "httptools",
+    "jinja2<4",
+    "pydantic>=2,<3",
+    "python-multipart<1",
+    "sentry-sdk<3",
+    "sqlalchemy[asyncmy]<3",
+    "starlette",
+    "uvicorn<1",
+    "uvloop",
 ]
 
 [project.urls]
@@ -19,6 +27,7 @@ repository = "https://github.com/pln-fing-udelar/pghumor-clasificahumor"
 [dependency-groups]
 dev = [
     "aiosqlite<1",
+    "httpx2>=2,<3",
     "jq<2",
     "krippendorff<1",
     "mycli>=2,<3",
