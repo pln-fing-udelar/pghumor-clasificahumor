@@ -1,155 +1,224 @@
-import http
-import itertools
+"""FastAPI application for ClasificaHumor."""
+
+import json
+import logging
 import os
 import random
 import string
-from collections.abc import Iterable
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 from datetime import timedelta
+from pathlib import Path
+from typing import Any
 
 import sentry_sdk
-import werkzeug.wrappers
-from flask import Flask, Response, jsonify, redirect, render_template, request, send_from_directory
-from sentry_sdk.integrations.flask import FlaskIntegration
+from fastapi import FastAPI, Form, Request, Response, status
+from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
+from sentry_sdk.integrations.logging import LoggingIntegration
+from starlette.datastructures import MutableHeaders
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from clasificahumor import database
 from clasificahumor.database import TYPE_TWEET
 
-REQUEST_TWEET_BATCH_SIZE = 3
+logger = logging.getLogger(__name__)
 
+REQUEST_TWEET_BATCH_SIZE = 3
 SESSION_ID_MAX_AGE = int(timedelta(weeks=1000).total_seconds())
 
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "static"
+TEMPLATES_DIR = BASE_DIR / "templates"
 
-def _create_app() -> Flask:
-    app_ = Flask(__name__)
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
-    app_.secret_key = os.environ["FLASK_SECRET_KEY"]
-    app_.config["SESSION_TYPE"] = "filesystem"
-
-    return app_
-
-
-sentry_sdk.init(integrations=[FlaskIntegration()], traces_sample_rate=1.0)
-
-app = _create_app()
-
-
-def _stringify_tweet_id(tweet: TYPE_TWEET) -> None:
-    """
-    Converts the tweet field "id" to a string.
-
-    In JavaScript, the string format should be used from the tweet IDs instead of numbers.
-    See https://developer.twitter.com/en/docs/basics/twitter-ids.
-    """
-    tweet["id"] = str(tweet["id"])
+if "SENTRY_DSN" in os.environ:
+    sentry_sdk.init(
+        send_default_pii=True,
+        traces_sample_rate=1.0,
+        integrations=[LoggingIntegration(level=logging.INFO, event_level=logging.ERROR)],
+    )
 
 
-def _stringify_tweet_ids(tweets: Iterable[TYPE_TWEET]) -> None:
-    for tweet in tweets:
-        _stringify_tweet_id(tweet)
+@asynccontextmanager
+async def _lifespan(app: FastAPI) -> AsyncGenerator[dict[str, Any]]:
+    async with database.create_engine() as database_engine:
+        yield {"database_engine": database_engine}
 
 
-def _generate_id() -> str:  # From https://stackoverflow.com/a/2257449/1165181
+def _generate_id() -> str:
     return "".join(random.choices(string.ascii_uppercase + string.digits, k=100))
 
 
-def _get_session_id() -> str:
-    if prolific_id := request.args.get("PROLIFIC_PID"):
+def _get_session_id(request: Request) -> str:
+    if prolific_id := request.query_params.get("PROLIFIC_PID"):
         return f"prolific-id-{prolific_id}"
-    else:
-        return request.cookies.get("id") or _generate_id()
+    return request.cookies.get("id") or _generate_id()
 
 
-@app.after_request
-def add_header(response: Response) -> Response:
-    response.cache_control.max_age = 0
-    response.cache_control.no_cache = True
+class CacheControlMiddleware:
+    """Sets session cookies and security cache headers on all HTTP responses."""
 
-    response.set_cookie("id", _get_session_id(), max_age=SESSION_ID_MAX_AGE)
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
 
-    return response
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        session_id = _get_session_id(Request(scope))
+        scope.setdefault("state", {})["session_id"] = session_id
+
+        async def send_with_headers(message: Message) -> None:
+            if message["type"] == "http.response.start":
+                headers = MutableHeaders(scope=message)
+                headers.append("Cache-Control", "max-age=0, no-cache")
+                headers.append("Set-Cookie", f"id={session_id}; Max-Age={SESSION_ID_MAX_AGE}; Path=/; SameSite=lax")
+                headers.append("X-Content-Type-Options", "nosniff")
+                headers.append("X-Frame-Options", "SAMEORIGIN")
+                headers.append("Referrer-Policy", "strict-origin-when-cross-origin")
+            await send(message)
+
+        await self.app(scope, receive, send_with_headers)
 
 
-@app.route("/tweets")
-def tweets_route() -> Response:
-    session_id = _get_session_id()
+app = FastAPI(lifespan=_lifespan)
+app.add_middleware(CacheControlMiddleware)
 
-    tweets = list(database.random_least_voted_unseen_tweets(session_id, REQUEST_TWEET_BATCH_SIZE))
+
+class VotePayload(BaseModel):
+    tweet_id: str | int | None = None
+    vote: str | None = None
+    is_offensive: bool = False
+    ignore_tweet_ids: list[str | int] = []
+
+
+@app.get("/tweets")
+async def tweets_route(request: Request) -> list[TYPE_TWEET]:
+    """Returns a batch of random least-voted unseen tweets for the current session."""
+    session_id: str = request.state.session_id
+    engine = request.state.database_engine
+
+    tweets = await database.random_least_voted_unseen_tweets(engine, session_id, REQUEST_TWEET_BATCH_SIZE)
 
     if len(tweets) < REQUEST_TWEET_BATCH_SIZE:
-        tweets.extend(database.random_tweets(REQUEST_TWEET_BATCH_SIZE - len(tweets)))
+        tweets.extend(await database.random_tweets(engine, REQUEST_TWEET_BATCH_SIZE - len(tweets)))
 
-    _stringify_tweet_ids(tweets)
+    for tweet in tweets:
+        tweet["id"] = str(tweet["id"])
 
-    return jsonify(tweets)
+    return tweets
 
 
-@app.route("/vote", methods=["POST"])
-def vote_and_get_new_tweet_route() -> Response:
-    session_id = _get_session_id()
+@app.post("/vote")
+async def vote_and_get_new_tweet_route(request: Request) -> TYPE_TWEET:
+    """Submits a tweet vote and returns the next unseen tweet."""
+    session_id: str = request.state.session_id
+    engine = request.state.database_engine
 
-    if "tweet_id" in request.form and "vote" in request.form and "is_offensive" in request.form:
-        is_offensive = request.form["is_offensive"].lower() == "true"
-        database.add_vote(session_id, request.form["tweet_id"], request.form["vote"], is_offensive)
+    tweet_id: str | None = None
+    vote: str | None = None
+    is_offensive: bool = False
+    ignore_tweet_ids: list[str] = []
 
-    ignore_tweet_ids = request.form.getlist("ignore_tweet_ids[]")
+    content_type = request.headers.get("content-type", "")
+    if "application/json" in content_type:
+        try:
+            body = await request.json()
+            payload = VotePayload.model_validate(body)
+            tweet_id = str(payload.tweet_id) if payload.tweet_id is not None else None
+            vote = payload.vote
+            is_offensive = payload.is_offensive
+            ignore_tweet_ids = [str(t) for t in payload.ignore_tweet_ids]
+        except Exception:
+            pass
+    else:
+        form = await request.form()
+        if "tweet_id" in form:
+            tweet_id = str(form["tweet_id"])
+        if "vote" in form:
+            vote = str(form["vote"])
+        if "is_offensive" in form:
+            is_offensive = str(form["is_offensive"]).lower() == "true"
+        ignore_tweet_ids = [str(x) for x in form.getlist("ignore_tweet_ids[]")]
 
-    tweets = itertools.chain(
-        database.random_least_voted_unseen_tweets(session_id, 1, ignore_tweet_ids), database.random_tweets(1)
+    if tweet_id is not None and vote is not None:
+        await database.add_vote(engine, session_id, tweet_id, vote, is_offensive)
+
+    tweets = await database.random_least_voted_unseen_tweets(engine, session_id, 1, ignore_tweet_ids)
+    if not tweets:
+        tweets = await database.random_tweets(engine, 1)
+
+    tweet = tweets[0] if tweets else {}
+    if tweet and "id" in tweet:
+        tweet["id"] = str(tweet["id"])
+
+    return tweet
+
+
+@app.get("/session-vote-count")
+async def session_vote_count_route(request: Request) -> Response:
+    """Returns the total vote count for the current session, including skips."""
+    count = await database.session_vote_count_with_skips(request.state.database_engine, request.state.session_id)
+    return Response(content=json.dumps(count), media_type="application/json")
+
+
+@app.get("/vote-count")
+async def vote_count_route(request: Request) -> Response:
+    """Returns the global vote count, excluding skips."""
+    count = await database.vote_count_without_skips(request.state.database_engine)
+    return Response(content=json.dumps(count), media_type="application/json")
+
+
+@app.post("/prolific-consent")
+async def prolific_consent_route(request: Request) -> Response:
+    """Records user consent for the Prolific session."""
+    await database.prolific_consent(request.state.database_engine, request.state.session_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.post("/prolific-finish")
+async def prolific_finish_route(
+    request: Request,
+    comments: str = Form(""),
+) -> RedirectResponse:
+    """Records session completion and comments, redirecting to Prolific."""
+    await database.prolific_finish(request.state.database_engine, request.state.session_id, comments)
+    return RedirectResponse(
+        url="https://app.prolific.co/submissions/complete?cc=5E395F77",
+        status_code=status.HTTP_303_SEE_OTHER,
     )
 
-    tweet = next(iter(tweets), {})
 
-    _stringify_tweet_id(tweet)
+@app.get("/stats")
+async def stats_route(request: Request) -> Response:
+    """Renders annotation statistics."""
+    stats_data = await database.stats(request.state.database_engine)
 
-    return jsonify(tweet)
+    stats_data["votes-not-consider-test"] = stats_data["votes"] - sum(stats_data["test-tweets-vote-count"])
+    stats_data["test-tweets-vote-count"] = ", ".join(str(c) for c in stats_data["test-tweets-vote-count"])
 
-
-@app.route("/session-vote-count")
-def session_vote_count_route() -> Response:
-    return jsonify(database.session_vote_count_with_skips(_get_session_id()))
-
-
-@app.route("/vote-count")
-def vote_count_route() -> Response:
-    return jsonify(database.vote_count_without_skips())
-
-
-@app.route("/prolific-consent", methods=["POST"])
-def prolific_consent_route() -> tuple[str, int]:
-    database.prolific_consent(_get_session_id())
-    return "", http.HTTPStatus.NO_CONTENT
-
-
-@app.route("/prolific-finish", methods=["POST"])
-def prolific_finish_route() -> werkzeug.wrappers.Response:
-    database.prolific_finish(_get_session_id(), request.form.get("comments", ""))
-    return redirect("https://app.prolific.co/submissions/complete?cc=5E395F77")
-
-
-@app.route("/stats")
-def stats_route() -> str:
-    stats = database.stats()
-
-    stats["votes-not-consider-test"] = stats["votes"] - sum(stats["test-tweets-vote-count"])
-
-    stats["test-tweets-vote-count"] = ", ".join(str(c) for c in stats["test-tweets-vote-count"])
-
-    stats["histogram"] = [["Cantidad de votos", "Cantidad de tweets"]] + [
-        [str(a), b] for a, b in stats["histogram"].items()
+    stats_data["histogram"] = [["Cantidad de votos", "Cantidad de tweets"]] + [
+        [str(a), b] for a, b in stats_data["histogram"].items()
     ]
 
-    stats["votes-per-category"]["No humor"] = stats["votes-per-category"]["x"]
-    del stats["votes-per-category"]["x"]
-    stats["votes-per-category"]["Saltear"] = stats["votes-per-category"]["n"]
-    del stats["votes-per-category"]["n"]
-    stats["votes-per-category"] = [["Voto", "Cantidad de tweets"]] + [
-        [str(a), b] for a, b in stats["votes-per-category"].items()
+    stats_data["votes-per-category"]["No humor"] = stats_data["votes-per-category"].pop("x", 0)
+    stats_data["votes-per-category"]["Saltear"] = stats_data["votes-per-category"].pop("n", 0)
+    stats_data["votes-per-category"] = [["Voto", "Cantidad de tweets"]] + [
+        [str(a), b] for a, b in stats_data["votes-per-category"].items()
     ]
 
-    return render_template("templates/stats.html", stats=stats)
+    return templates.TemplateResponse(request=request, name="stats.html", context={"stats": stats_data})
 
 
-@app.route("/", defaults={"path": "index.html"})
-@app.route("/<path:path>")
-def static_files_route(path: str) -> Response:
-    return send_from_directory("static", path)
+@app.get("/")
+async def root_route() -> FileResponse:
+    """Serves the main annotation single-page application."""
+    return FileResponse(STATIC_DIR / "index.html")
+
+
+app.mount("/", StaticFiles(directory=str(STATIC_DIR), html=True), name="static")
