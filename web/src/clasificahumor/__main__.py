@@ -19,6 +19,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from sentry_sdk.integrations.logging import LoggingIntegration
 from starlette.datastructures import MutableHeaders
+from starlette.middleware.cors import CORSMiddleware
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from clasificahumor import database
@@ -88,6 +89,17 @@ class CacheControlMiddleware:
 
 app = FastAPI(lifespan=_lifespan)
 app.add_middleware(CacheControlMiddleware)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5000",
+        *(f"https://{host.strip()}" for host in os.environ.get("VIRTUAL_HOST", "").split(",") if host.strip()),
+    ],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+    max_age=600,
+)
 
 
 class VotePayload(BaseModel):
