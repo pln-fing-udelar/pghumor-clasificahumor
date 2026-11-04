@@ -1,7 +1,5 @@
 services:
   web:
-    build:
-      dockerfile: Dockerfile.prod
     environment:
       - SENTRY_DSN
       - VIRTUAL_HOST=clasificahumor.com,www.clasificahumor.com
@@ -9,6 +7,7 @@ services:
       - LETSENCRYPT_HOST=clasificahumor.com,www.clasificahumor.com
       - LETSENCRYPT_EMAIL=sacastro@fing.edu.uy
     networks:
+      - net
       - reverse_proxy_net
     restart: always
   database:
