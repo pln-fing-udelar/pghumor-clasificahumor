@@ -1,25 +1,28 @@
 #!/usr/bin/env python
 import argparse
-from typing import Iterable
+from collections.abc import Iterable
 
 import MySQLdb
-
 import util
 from argparse_with_defaults import ArgumentParserWithDefaults
 
 
 def insert_users(connection: MySQLdb.Connection, user_ids: Iterable[str]) -> None:
     with connection.cursor() as cursor:
-        cursor.executemany("INSERT INTO accounts (account_id) VALUES (%s)"
-                           " ON DUPLICATE KEY UPDATE account_id = account_id;", user_ids)
+        cursor.executemany(
+            "INSERT INTO accounts (account_id) VALUES (%s) ON DUPLICATE KEY UPDATE account_id = account_id;", user_ids
+        )
 
 
 def insert_tweets(connection: MySQLdb.Connection, tweets: Iterable[util.TYPE_TWEET]) -> None:
     with connection.cursor() as cursor:
         # Consider that there are duplicate tweets in sample sometimes.
-        cursor.executemany("INSERT INTO tweets (tweet_id, text, account_id, origin, lang)"
-                           " VALUES (%(id)s, %(text)s, %(user_id)s, %(origin)s, %(lang)s)"
-                           " ON DUPLICATE KEY UPDATE tweet_id = tweet_id", tweets)
+        cursor.executemany(
+            "INSERT INTO tweets (tweet_id, text, account_id, origin, lang)"
+            " VALUES (%(id)s, %(text)s, %(user_id)s, %(origin)s, %(lang)s)"
+            " ON DUPLICATE KEY UPDATE tweet_id = tweet_id",
+            tweets,
+        )
 
 
 def parse_args() -> argparse.Namespace:

@@ -3,7 +3,6 @@ import argparse
 import sys
 
 import tweepy
-
 import util
 from argparse_with_defaults import ArgumentParserWithDefaults
 

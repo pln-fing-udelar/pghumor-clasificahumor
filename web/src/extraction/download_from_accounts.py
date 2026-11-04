@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 import argparse
 import time
-from typing import Mapping
-
-from tqdm.auto import tqdm
+from collections.abc import Mapping
 
 import util
 from argparse_with_defaults import ArgumentParserWithDefaults
+from tqdm.auto import tqdm
 
 APP_AUTH_USER_TIMELINE_RATE_LIMIT_PER_WINDOW = 1500
 SECS_IN_A_MINUTE = 60
@@ -79,8 +78,9 @@ def max_obtainable_status_count_per_user() -> Mapping[str, int]:
     for screen_names in util.chunks(SCREEN_NAMES, MAX_STATUSES_COUNT_PER_USER_AUTH_USERS_LOOKUP_REQUEST):
         users = user_api.lookup_users(screen_names=screen_names, include_entities=False)
 
-        result.update((user.screen_name, min(user.statuses_count, MAX_STATUSES_COUNT_PER_USER_TIMELINE))
-                      for user in users)
+        result.update(
+            (user.screen_name, min(user.statuses_count, MAX_STATUSES_COUNT_PER_USER_TIMELINE)) for user in users
+        )
 
         time.sleep(DELAY_PER_USER_AUTH_USERS_LOOKUP_REQUEST)
 
@@ -98,9 +98,10 @@ def main() -> None:
 
     status_count_per_user = max_obtainable_status_count_per_user()
 
-    assert all(screen_name in status_count_per_user for screen_name in SCREEN_NAMES), \
-        f"The following account names do not match when extracted:" \
+    assert all(screen_name in status_count_per_user for screen_name in SCREEN_NAMES), (
+        f"The following account names do not match when extracted:"
         f" {[screen_name for screen_name in SCREEN_NAMES if screen_name not in status_count_per_user]}"
+    )
 
     status_count = sum(count for count in status_count_per_user.values())
 
@@ -112,9 +113,14 @@ def main() -> None:
         for screen_name in SCREEN_NAMES:
             statuses = ["placeholder"]
             while statuses:
-                statuses = app_api.user_timeline(screen_name=screen_name, max_id=max_id, trim_user=True,
-                                                 exclude_replies=True, include_rts=False,
-                                                 count=MAX_STATUSES_COUNT_PER_APP_AUTH_USER_TIMELINE_REQUEST)
+                statuses = app_api.user_timeline(
+                    screen_name=screen_name,
+                    max_id=max_id,
+                    trim_user=True,
+                    exclude_replies=True,
+                    include_rts=False,
+                    count=MAX_STATUSES_COUNT_PER_APP_AUTH_USER_TIMELINE_REQUEST,
+                )
                 for status in statuses:
                     if util.status_is_valid(status):
                         tweet = util.status_to_dict(status)

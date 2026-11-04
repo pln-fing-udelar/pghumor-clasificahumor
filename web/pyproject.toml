@@ -5,7 +5,7 @@ description = "Website to crowd-annotate tweets for Humor Research."
 authors = [
     { name = "Santiago Castro", email = "sacastro@fing.edu.uy" },
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.15"
 dependencies = [
     "flask<4",
     "sentry-sdk[flask]<3",
@@ -18,40 +18,64 @@ repository = "https://github.com/pln-fing-udelar/pghumor-clasificahumor"
 
 [dependency-groups]
 dev = [
+    "aiosqlite<1",
     "jq<2",
     "krippendorff<1",
-    "mycli<2",
+    "mycli>=2,<3",
     "mysqlclient<3",
-    "pandas<3",
+    "pandas<4",
     "pandas-stubs",
+    "pytest>=8,<10",
+    "pytest-asyncio>=0.24,<2",
+    "pytest-cov>=6,<8",
+    "ruff>=0.3,<1",
     "tweepy<5",
     "tqdm<5",
+    "ty<1",
     "types-tqdm",
 ]
 
 [build-system]
-requires = ["uv_build>=0.9.2,<0.10.0"]
+requires = ["uv_build>=0.11.17,<0.14"]
 build-backend = "uv_build"
 
+[tool.pytest.ini_options]
+addopts = "--cov=clasificahumor --cov-report=term-missing"
+asyncio_default_fixture_loop_scope = "module"
+asyncio_default_test_loop_scope = "module"
+asyncio_mode = "auto"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
 [tool.ruff]
-include = ["pyproject.toml", "analysis/**/*.py", "clasificahumor/**/*.py", "extraction/**/*.py"]
+include = ["pyproject.toml", "src/**/*.py", "tests/**/*.py"]
 line-length = 120
 
 [tool.ruff.lint]
-ignore = ["N803", "N806", "N812"]  # Allow uppercase in variable names, arg names, and import aliases. E.g., `X`.
+ignore = [
+    "ANN002", # `*args` / `**kwargs`: the only annotation that fits is `Any`, which ANN401 then rejects.
+    "ANN003",
+    "ANN401", # Allow `Any` for function args.
+    "N803",
+    "N806",
+    "N812",
+]
 select = ["B", "C", "C90", "E", "F", "I", "N", "RUF", "UP", "W"]
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F403"]  # Allow: `from X import *`.
+"__init__.py" = ["F403"]
+
+[tool.ty.environment]
+extra-paths = ["src/extraction"]
 
 [tool.ty.src]
-include = ["pyproject.toml", "analysis/**/*.py", "clasificahumor/**/*.py", "extraction/**/*.py"]
+include = ["src/clasificahumor/**/*.py", "src/analysis/**/*.py", "tests/**/*.py"]
 
 [tool.ty.terminal]
 error-on-warning = true
 
 [tool.coverage.xml]
-output = ".tox/test-reports/coverage.xml"
+output = "test-reports/coverage.xml"
 
 [tool.coverage.html]
-directory = ".tox/test-reports/htmlcov"
+directory = "test-reports/htmlcov"

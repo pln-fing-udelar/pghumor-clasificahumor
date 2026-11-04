@@ -14,9 +14,11 @@ def main() -> None:
 
     print(f"alpha for humor: {krippendorff.alpha(value_counts=binary, level_of_measurement='nominal'):.4f}")
     print(f"alpha for funniness: {krippendorff.alpha(value_counts=funniness):.4f}")
-    print("alpha for funniness as ordinal: "
-          f"{krippendorff.alpha(value_counts=funniness, level_of_measurement='ordinal'):.4f}")
-    alpha_ratio = krippendorff.alpha(value_counts=funniness, level_of_measurement='ratio', value_domain=[1, 2, 3, 4, 5])
+    print(
+        "alpha for funniness as ordinal: "
+        f"{krippendorff.alpha(value_counts=funniness, level_of_measurement='ordinal'):.4f}"
+    )
+    alpha_ratio = krippendorff.alpha(value_counts=funniness, level_of_measurement="ratio", value_domain=[1, 2, 3, 4, 5])
     print(f"alpha for funniness as ratio: {alpha_ratio:.4f}")
 
 
