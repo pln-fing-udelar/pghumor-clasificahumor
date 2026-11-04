@@ -189,23 +189,28 @@ dependencies = [
     { name = "uvloop" },
 ]
 
+[package.optional-dependencies]
+scripts = [
+    { name = "krippendorff" },
+    { name = "mysqlclient" },
+    { name = "pandas" },
+    { name = "tqdm" },
+    { name = "tweepy" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "aiosqlite" },
+    { name = "clasificahumor", extra = ["scripts"] },
     { name = "httpx2" },
     { name = "jq" },
-    { name = "krippendorff" },
     { name = "mycli" },
-    { name = "mysqlclient" },
-    { name = "pandas" },
     { name = "pandas-stubs" },
     { name = "playwright" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
     { name = "ruff" },
-    { name = "tqdm" },
-    { name = "tweepy" },
     { name = "ty" },
     { name = "types-tqdm" },
 ]
@@ -216,32 +221,34 @@ requires-dist = [
     { name = "fastapi", specifier = "<1" },
     { name = "httptools" },
     { name = "jinja2", specifier = "<4" },
+    { name = "krippendorff", marker = "extra == 'scripts'", specifier = "<1" },
+    { name = "mysqlclient", marker = "extra == 'scripts'", specifier = "<3" },
+    { name = "pandas", marker = "extra == 'scripts'", specifier = "<4" },
     { name = "pydantic", specifier = ">=2,<3" },
     { name = "python-multipart", specifier = "<1" },
     { name = "sentry-sdk", specifier = "<3" },
     { name = "sqlalchemy", extras = ["asyncmy"], specifier = "<3" },
     { name = "starlette" },
+    { name = "tqdm", marker = "extra == 'scripts'", specifier = "<5" },
+    { name = "tweepy", marker = "extra == 'scripts'", specifier = "<5" },
     { name = "uvicorn", specifier = "<1" },
     { name = "uvloop" },
 ]
+provides-extras = ["scripts"]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "aiosqlite", specifier = "<1" },
+    { name = "clasificahumor", extras = ["scripts"] },
     { name = "httpx2", specifier = ">=2,<3" },
     { name = "jq", specifier = "<2" },
-    { name = "krippendorff", specifier = "<1" },
     { name = "mycli", specifier = ">=2,<3" },
-    { name = "mysqlclient", specifier = "<3" },
-    { name = "pandas", specifier = "<4" },
     { name = "pandas-stubs" },
     { name = "playwright", specifier = "<2" },
     { name = "pytest", specifier = ">=8,<10" },
     { name = "pytest-asyncio", specifier = ">=0.24,<2" },
     { name = "pytest-cov", specifier = ">=6,<8" },
     { name = "ruff", specifier = ">=0.3,<1" },
-    { name = "tqdm", specifier = "<5" },
-    { name = "tweepy", specifier = "<5" },
     { name = "ty", specifier = "<1" },
     { name = "types-tqdm" },
 ]
