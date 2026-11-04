@@ -31,13 +31,19 @@ docker compose up --build
     cd web/
     ```
 
-2. Install the dependencies using [uv](https://docs.astral.sh/uv/):
+2. Install the Python, MySQL, and SQLite3 library headers. In Ubuntu, it'd be:
+
+    ```bash
+    sudo apt install libmysqlclient-dev libsqlite3-dev python3-dev
+    ```
+
+3. Install the dependencies using [uv](https://docs.astral.sh/uv/):
 
     ```bash
     uv sync
     ```
 
-3. Create a `.env` file with the database configuration (setting environment variable values):
+4. Create a `.env` file with the database configuration (setting environment variable values):
 
     ```shell
     DB_HOST=SET_VALUE
@@ -46,9 +52,9 @@ docker compose up --build
     DB_NAME=SET_VALUE
     ```
 
-4. Set up a MySQL 9 instance. It could be the instance generated with the Docker setup (`docker compose up database`).
+5. Set up a MySQL 9 instance. It could be the instance generated with the Docker setup (`docker compose up database`).
 
-5. Run:
+6. Run:
 
     ```bash
     uv run --env-file ../.env uvicorn clasificahumor.__main__:app --host :: --port 5000 --reload
