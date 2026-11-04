@@ -2,6 +2,8 @@
 
 url=localhost:5000
 
+start_time=$(date +%s.%N)
+
 for i in {1..50}; do
   curl -sS "${url}/tweets?a=${i}" >/dev/null &
 done
@@ -12,3 +14,8 @@ for tweet_id in {965886693374087169,965678542628577298,965758335067869184,965680
 done
 
 wait
+
+end_time=$(date +%s.%N)
+elapsed=$(echo "$end_time - $start_time" | bc)
+
+echo "Total time taken: ${elapsed} seconds"

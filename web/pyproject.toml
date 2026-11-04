@@ -60,6 +60,9 @@ testpaths = ["tests"]
 include = ["pyproject.toml", "src/**/*.py", "tests/**/*.py"]
 line-length = 120
 
+[tool.ruff.lint.isort]
+known-first-party = ["clasificahumor"]
+
 [tool.ruff.lint]
 ignore = [
     "ANN002", # `*args` / `**kwargs`: the only annotation that fits is `Any`, which ANN401 then rejects.
@@ -69,7 +72,7 @@ ignore = [
     "N806",
     "N812",
 ]
-select = ["B", "C", "C90", "E", "F", "I", "N", "RUF", "UP", "W"]
+select = ["ANN", "B", "C", "C90", "E", "F", "I", "N", "RUF", "TID", "UP", "W"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F403"]
