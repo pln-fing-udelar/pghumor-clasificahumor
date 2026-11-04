@@ -25,4 +25,7 @@ RUN \
 
 EXPOSE 80
 
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD ["python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:80/healthz')"]
+
 CMD ["sh", "-c", "exec uvicorn clasificahumor.__main__:app --host :: --port 80 --workers \"$(($(nproc) + 1))\""]

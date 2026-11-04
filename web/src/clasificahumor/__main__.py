@@ -78,7 +78,10 @@ class CacheControlMiddleware:
             if message["type"] == "http.response.start":
                 headers = MutableHeaders(scope=message)
                 headers.append("Cache-Control", "max-age=0, no-cache")
-                headers.append("Set-Cookie", f"id={session_id}; Max-Age={SESSION_ID_MAX_AGE}; Path=/; SameSite=lax")
+                headers.append(
+                    "Set-Cookie",
+                    f"id={session_id}; Max-Age={SESSION_ID_MAX_AGE}; Path=/; SameSite=lax; HttpOnly",
+                )
                 headers.append("X-Content-Type-Options", "nosniff")
                 headers.append("X-Frame-Options", "SAMEORIGIN")
                 headers.append("Referrer-Policy", "strict-origin-when-cross-origin")
@@ -107,6 +110,12 @@ class VotePayload(BaseModel):
     vote: str | None = None
     is_offensive: bool = False
     ignore_tweet_ids: list[str | int] = []
+
+
+@app.get("/healthz")
+async def healthz_route() -> dict[str, str]:
+    """Health check endpoint for Docker and load balancers."""
+    return {"status": "ok"}
 
 
 @app.get("/tweets")

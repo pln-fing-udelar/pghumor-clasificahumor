@@ -4,6 +4,12 @@ import httpx2
 import pytest
 
 
+async def test_healthz_route(client: httpx2.AsyncClient) -> None:
+    response = await client.get("/healthz")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+
+
 async def test_tweets_route(client: httpx2.AsyncClient) -> None:
     response = await client.get("/tweets")
     assert response.status_code == 200
@@ -14,6 +20,8 @@ async def test_tweets_route(client: httpx2.AsyncClient) -> None:
 
     # Verify cookie and security headers
     assert "id" in response.cookies or "Set-Cookie" in response.headers
+    set_cookie = response.headers.get("Set-Cookie", "").lower()
+    assert "httponly" in set_cookie
     assert response.headers.get("X-Content-Type-Options") == "nosniff"
     assert response.headers.get("X-Frame-Options") == "SAMEORIGIN"
     assert "no-cache" in response.headers.get("Cache-Control", "")
