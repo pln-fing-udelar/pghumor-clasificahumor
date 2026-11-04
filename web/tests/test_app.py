@@ -33,6 +33,19 @@ async def test_prolific_session_id(client: httpx2.AsyncClient) -> None:
     set_cookie = response.headers.get("Set-Cookie", "")
     assert "prolific-id-user_xyz" in set_cookie
 
+    response_composite = await client.get("/tweets?PROLIFIC_PID=user_xyz&SESSION_ID=study_session_1")
+    assert response_composite.status_code == 200
+    set_cookie_composite = response_composite.headers.get("Set-Cookie", "")
+    assert "prolific-id-user_xyz-study_session_1" in set_cookie_composite
+
+
+def test_generate_id() -> None:
+    from clasificahumor.__main__ import _generate_id
+
+    generated = _generate_id()
+    assert len(generated) == 16
+    assert all(c in "0123456789abcdef" for c in generated)
+
 
 async def test_vote_route_form(client: httpx2.AsyncClient) -> None:
     # Vote via form data

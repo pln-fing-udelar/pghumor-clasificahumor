@@ -3,7 +3,7 @@
 import os
 from collections.abc import AsyncGenerator, Iterable, MutableMapping
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 import sqlalchemy
@@ -215,7 +215,7 @@ async def prolific_finish(
     async with engine.begin() as connection:
         await connection.execute(
             STATEMENT_PROLIFIC_FINISH,
-            {"session_id": session_id, "finish_date": datetime.now(), "comments": comments},
+            {"session_id": session_id, "finish_date": datetime.now(UTC), "comments": comments},
         )
 
 
