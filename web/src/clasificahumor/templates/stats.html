@@ -14,18 +14,20 @@
   <link rel="stylesheet" href="/css/normalize.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/bootstrap3-compat.css">
   <style>
     .chart {
       height: 450px;
       width: 100%;
       max-width: 900px;
       margin: 0 auto;
+      position: relative;
     }
   </style>
 </head>
 
 <body>
-  <div class="container py-3" style="padding: 0 16px">
+  <div class="container" style="padding: 0 16px">
     <h1>Estadísticas</h1>
 
     <p>Cantidad total de votos: {{ stats['votes'] }}</p>
@@ -34,16 +36,12 @@
     <p>Votos que no fueron a los de prueba: {{ stats['votes-not-consider-test'] }}</p>
 
     <p>Distribución de votos por tweet (sin los de prueba):</p>
-    <div style="position: relative; height: 450px; width: 100%; max-width: 900px; margin: 0 auto;">
-      <canvas id="chart-histogram" class="chart"></canvas>
-    </div>
+    <div class="chart"><canvas id="chart-histogram"></canvas></div>
 
-    <p class="mt-4">Votos por categoría:</p>
-    <div style="position: relative; height: 450px; width: 100%; max-width: 900px; margin: 0 auto;">
-      <canvas id="chart-votes-per-category" class="chart"></canvas>
-    </div>
+    <p>Votos por categoría:</p>
+    <div class="chart"><canvas id="chart-votes-per-category"></canvas></div>
 
-    <h2 class="mt-4">Votos sin salteos</h2>
+    <h2>Votos sin salteos</h2>
 
     <p>Cantidad de votos: {{ stats['votes-without-skips'] }}</p>
     <p>Cantidad de sesiones: {{ stats['sessions-without-skips'] }}</p>
@@ -66,8 +64,50 @@
     let categoryChart = null;
 
     if (typeof Chart !== "undefined") {
+      // The charts look like Google Charts' ones, which this page used to show: no animations, the same fonts, colors,
+      // and proportions.
+      Chart.defaults.animation = false;
+      Chart.defaults.color = "#222";
+      Chart.defaults.font.family = "Arial, sans-serif";
+      Chart.defaults.font.size = 14;
+
+      const tooltip = {
+        backgroundColor: "#fff",
+        bodyColor: "#222",
+        borderColor: "#ccc",
+        borderWidth: 1,
+        cornerRadius: 2,
+        padding: 10,
+        titleColor: "#222",
+        displayColors: false,
+      };
+
+      // Like in Google Charts, the chart area (without the axes labels and the legend) is at a fixed proportion of the
+      // chart's size, and the font is smaller in small charts.
+      const fontSizeFor = width => (width < 600 ? 11 : 14);
+
+      const proportionalLayoutPlugin = paddingFor => ({
+        id: 'proportionalLayout',
+        beforeLayout(chart) {
+          chart.options.layout.padding = paddingFor(chart.width, chart.height);
+          const font = {size: fontSizeFor(chart.width)};
+          Object.values(chart.options.scales ?? {}).forEach(scale => {
+            scale.ticks.font = font;
+          });
+          chart.options.plugins.legend.labels.font = font;
+        },
+      });
+
+      // A tick step so there are about 6 intervals, like Google Charts.
+      const niceStep = max => {
+        const rawStep = Math.max(max, 1) / 6;
+        const magnitude = 10 ** Math.floor(Math.log10(rawStep));
+        return ([1, 2, 5, 10].find(m => m * magnitude >= rawStep) ?? 10) * magnitude;
+      };
+
       const histLabels = rawHistogram.slice(1).map(row => String(row[0]));
       const histData = rawHistogram.slice(1).map(row => Number(row[1]));
+      const histStep = niceStep(Math.max(...histData));
 
       const histCanvas = document.getElementById('chart-histogram');
       if (histCanvas) {
@@ -79,6 +119,8 @@
               label: 'Cantidad de tweets',
               data: histData,
               backgroundColor: '#4285F4',
+              barPercentage: 0.618,
+              categoryPercentage: 1,
             }],
           },
           options: {
@@ -88,23 +130,49 @@
               legend: {
                 display: false,
               },
+              tooltip,
             },
             scales: {
               x: {
-                title: {
-                  display: true,
-                  text: 'Cantidad de votos',
+                afterFit: scale => {
+                  scale.height = 30;
+                },
+                border: {
+                  color: '#333',
+                },
+                grid: {
+                  display: false,
                 },
               },
               y: {
+                afterFit: scale => {
+                  scale.width = 45;
+                },
                 beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Cantidad de tweets',
+                max: Math.ceil(Math.max(...histData) / histStep) * histStep,
+                border: {
+                  display: false,
+                },
+                grid: {
+                  color: context => (context.tick.value % histStep === 0 ? '#ccc' : '#ececec'),
+                  tickLength: 0,
+                },
+                ticks: {
+                  stepSize: histStep / 2,
+                  padding: 12,
+                  callback: value => (value % histStep === 0 ? value : ''),
                 },
               },
             },
           },
+          plugins: [
+            proportionalLayoutPlugin((width, height) => ({
+              top: Math.round(height * 0.19),
+              right: Math.round(width * 0.168),
+              bottom: Math.round(height * 0.19) - 30,
+              left: Math.max(Math.round(width * 0.165) - 45, 0),
+            })),
+          ],
         });
       }
 
@@ -112,9 +180,36 @@
       const catData = rawCategories.slice(1).map(row => Number(row[1]));
 
       const categoryColors = [
-        '#4285F4', '#34A853', '#FBBC05', '#EA4335',
-        '#9C27B0', '#00BCD4', '#FF9800', '#795548',
+        '#3366cc', '#dc3912', '#ff9900', '#109618', '#990099', '#0099c6', '#dd4477', '#66aa00', '#b82e2e', '#316395',
       ];
+
+      // Shows the percentage of each slice inside of it.
+      const sliceTextPlugin = {
+        id: 'sliceText',
+        afterDatasetsDraw(chart) {
+          const {ctx} = chart;
+          const meta = chart.getDatasetMeta(0);
+          const total = catData.reduce((a, b) => a + b, 0);
+          ctx.save();
+          ctx.fillStyle = '#fff';
+          ctx.font = `${fontSizeFor(chart.width)}px Arial, sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          meta.data.forEach((arc, i) => {
+            if (!catData[i] || !total) {
+              return;
+            }
+            const angle = (arc.startAngle + arc.endAngle) / 2;
+            const radius = arc.outerRadius * 0.75;
+            ctx.fillText(
+              `${Math.round((catData[i] / total) * 1000) / 10}%`,
+              arc.x + Math.cos(angle) * radius,
+              arc.y + Math.sin(angle) * radius
+            );
+          });
+          ctx.restore();
+        },
+      };
 
       const catCanvas = document.getElementById('chart-votes-per-category');
       if (catCanvas) {
@@ -125,6 +220,8 @@
             datasets: [{
               data: catData,
               backgroundColor: categoryColors.slice(0, catLabels.length),
+              borderColor: '#fff',
+              borderWidth: 1,
             }],
           },
           options: {
@@ -132,10 +229,28 @@
             maintainAspectRatio: false,
             plugins: {
               legend: {
+                align: 'start',
                 position: 'right',
+                labels: {
+                  boxHeight: 12,
+                  boxWidth: 12,
+                  padding: 8,
+                  pointStyle: 'circle',
+                  usePointStyle: true,
+                },
               },
+              tooltip,
             },
           },
+          plugins: [
+            sliceTextPlugin,
+            proportionalLayoutPlugin((width, height) => ({
+              top: Math.round(height * 0.19),
+              right: Math.round(width * (width < 600 ? 0.21 : 0.293)),
+              bottom: Math.round(height * 0.19),
+              left: Math.round(width * (width < 600 ? 0.2 : 0.154)),
+            })),
+          ],
         });
       }
     }
