@@ -1,0 +1,682 @@
+/*
+ * Bootstrap 3.4.1 look & feel on top of Bootstrap 5.
+ *
+ * The app was designed against Bootstrap 3 (14px base font, 10px root, Bootstrap 3 buttons, modals, grid, ...). To stay
+ * on a maintained Bootstrap release without changing how anything looks or animates, this file restores the Bootstrap 3
+ * rules for the pieces the app uses, overriding Bootstrap 5's counterparts. Keep it loaded right after Bootstrap's CSS.
+ */
+
+/* Base (Bootstrap 3 normalize + scaffolding + typography) */
+
+html {
+  font-family: sans-serif;
+  font-size: 10px;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #fff;
+  color: #333;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: inherit;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+h4,
+h5,
+h6 {
+  margin-top: 10px;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+h4 {
+  font-size: 18px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+ol,
+ul {
+  margin-bottom: 10px;
+  margin-top: 0;
+  padding-left: 40px;
+}
+
+ol ol,
+ol ul,
+ul ol,
+ul ul {
+  margin-bottom: 0;
+}
+
+b,
+strong {
+  font-weight: 700;
+}
+
+small {
+  font-size: 80%;
+}
+
+a {
+  color: #337ab7;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: #23527c;
+  text-decoration: underline;
+}
+
+a:focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+a:active,
+a:hover {
+  outline: 0;
+}
+
+img {
+  vertical-align: middle;
+}
+
+hr {
+  border: 0;
+  color: gray;
+  border-top: 1px solid #eee;
+  box-sizing: content-box;
+  height: 0;
+  margin: 20px auto;
+  opacity: 1;
+}
+
+label {
+  display: inline-block;
+  font-weight: 700;
+  margin-bottom: 5px;
+  max-width: 100%;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+button {
+  border-radius: 0;
+  overflow: visible;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  line-height: normal;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+textarea {
+  resize: both;
+}
+
+/* Grid */
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: none;
+  padding-left: 15px;
+  padding-right: 15px;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+.container::before,
+.container::after,
+.row::before,
+.row::after,
+.modal-header::before,
+.modal-header::after,
+.modal-footer::before,
+.modal-footer::after {
+  content: " ";
+  display: table;
+}
+
+.container::after,
+.row::after,
+.modal-header::after,
+.modal-footer::after {
+  clear: both;
+}
+
+.row {
+  flex-wrap: nowrap;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: 0;
+}
+
+.row > .col-xs-6 {
+  flex-shrink: 1;
+  float: left;
+  margin-top: 0;
+  max-width: none;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+  position: relative;
+  width: 50%;
+}
+
+/* Buttons */
+
+.btn {
+  --bs-btn-padding-x: 12px;
+  --bs-btn-padding-y: 6px;
+  --bs-btn-font-size: 14px;
+  --bs-btn-font-weight: 400;
+  --bs-btn-line-height: 1.42857143;
+  --bs-btn-border-radius: 4px;
+  --bs-btn-box-shadow: none;
+  --bs-btn-focus-box-shadow: none;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-opacity: 0.65;
+  background-image: none;
+  margin-bottom: 0;
+  touch-action: manipulation;
+  transition: all 0s ease 0s;
+  white-space: nowrap;
+}
+
+/* The ":not(:focus-visible)" variants outrank Bootstrap 5's "button:focus:not(:focus-visible) { outline: 0 }", so that
+   the focus ring also shows after a mouse click, as in Bootstrap 3. */
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus,
+.btn.active.focus:not(:focus-visible),
+.btn.active:focus:not(:focus-visible),
+.btn.focus:not(:focus-visible),
+.btn:active.focus:not(:focus-visible),
+.btn:active:focus:not(:focus-visible),
+.btn:focus:not(:focus-visible) {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.btn:hover,
+.btn:focus,
+.btn.focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.btn:active,
+.btn.active {
+  background-image: none;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  outline: 0;
+}
+
+.btn-default {
+  --bs-btn-color: #333;
+  --bs-btn-bg: #fff;
+  --bs-btn-border-color: #ccc;
+  --bs-btn-hover-color: #333;
+  --bs-btn-hover-bg: #e6e6e6;
+  --bs-btn-hover-border-color: #adadad;
+  --bs-btn-active-color: #333;
+  --bs-btn-active-bg: #e6e6e6;
+  --bs-btn-active-border-color: #adadad;
+  --bs-btn-disabled-color: #333;
+  --bs-btn-disabled-bg: #fff;
+  --bs-btn-disabled-border-color: #ccc;
+  background-color: #fff;
+  border-color: #ccc;
+  color: #333;
+}
+
+.btn-default:focus,
+.btn-default.focus {
+  background-color: #e6e6e6;
+  border-color: #8c8c8c;
+  color: #333;
+}
+
+.btn-default:hover {
+  background-color: #e6e6e6;
+  border-color: #adadad;
+  color: #333;
+}
+
+.btn-default:active,
+.btn-default.active {
+  background-color: #e6e6e6;
+  border-color: #adadad;
+  color: #333;
+}
+
+.btn-default:active:hover,
+.btn-default:active:focus,
+.btn-default:active.focus,
+.btn-default.active:hover,
+.btn-default.active:focus,
+.btn-default.active.focus {
+  background-color: #d4d4d4;
+  border-color: #8c8c8c;
+  color: #333;
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #337ab7;
+  --bs-btn-border-color: #2e6da4;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #286090;
+  --bs-btn-hover-border-color: #204d74;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #286090;
+  --bs-btn-active-border-color: #204d74;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #337ab7;
+  --bs-btn-disabled-border-color: #2e6da4;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  color: #fff;
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+  background-color: #286090;
+  border-color: #122b40;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #286090;
+  border-color: #204d74;
+  color: #fff;
+}
+
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #286090;
+  border-color: #204d74;
+  color: #fff;
+}
+
+.btn-primary:active:hover,
+.btn-primary:active:focus,
+.btn-primary:active.focus,
+.btn-primary.active:hover,
+.btn-primary.active:focus,
+.btn-primary.active.focus {
+  background-color: #204d74;
+  border-color: #122b40;
+  color: #fff;
+}
+
+.btn-link {
+  --bs-btn-color: #337ab7;
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: transparent;
+  --bs-btn-border-radius: 0;
+  --bs-btn-hover-color: #23527c;
+  --bs-btn-hover-bg: transparent;
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-active-color: #23527c;
+  --bs-btn-active-bg: transparent;
+  --bs-btn-active-border-color: transparent;
+  --bs-btn-active-shadow: none;
+  --bs-btn-disabled-color: #777;
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  color: #337ab7;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.btn-link:active,
+.btn-link.active {
+  box-shadow: none;
+}
+
+.btn-link:hover,
+.btn-link:focus {
+  background-color: transparent;
+  border-color: transparent;
+  color: #23527c;
+  text-decoration: underline;
+}
+
+.btn-lg {
+  --bs-btn-padding-x: 16px;
+  --bs-btn-padding-y: 10px;
+  --bs-btn-font-size: 18px;
+  --bs-btn-border-radius: 6px;
+  --bs-btn-line-height: 1.3333333;
+  border-radius: 6px;
+}
+
+/* Forms */
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-control {
+  appearance: auto;
+  background-clip: border-box;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  color: #555;
+  font-size: 14px;
+  font-weight: 400;
+  height: 34px;
+  line-height: 1.42857143;
+  padding: 6px 12px;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+.form-control:focus {
+  background-color: #fff;
+  border-color: #66afe9;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  color: #555;
+  outline: 0;
+}
+
+.form-control::placeholder {
+  color: #999;
+  opacity: 1;
+}
+
+.form-control[disabled],
+.form-control[readonly] {
+  background-color: #eee;
+  opacity: 1;
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 0;
+}
+
+.checkbox {
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.checkbox label {
+  cursor: pointer;
+  font-weight: 400;
+  margin-bottom: 0;
+  min-height: 20px;
+  padding-left: 20px;
+}
+
+.checkbox input[type="checkbox"] {
+  margin-left: -20px;
+  position: absolute;
+}
+
+.checkbox + .checkbox {
+  margin-top: -5px;
+}
+
+/* Close button */
+
+button.close,
+.close {
+  -webkit-appearance: none;
+  appearance: none;
+  background: 0 0;
+  border: 0;
+  color: #000;
+  cursor: pointer;
+  float: right;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.2;
+  padding: 0;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  cursor: pointer;
+  opacity: 0.5;
+  text-decoration: none;
+}
+
+/* Modals */
+
+.modal-open {
+  overflow: hidden;
+}
+
+.modal {
+  bottom: 0;
+  display: none;
+  height: auto;
+  left: 0;
+  overflow: hidden;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: auto;
+  z-index: 1050;
+}
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.modal.fade .modal-dialog {
+  transform: translate(0, -25%);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.in .modal-dialog,
+.modal.show .modal-dialog {
+  transform: translate(0, 0);
+}
+
+.fade {
+  transition: opacity 0.15s linear;
+}
+
+.fade:not(.show):not(.in) {
+  opacity: 0;
+}
+
+.fade.in {
+  opacity: 1;
+}
+
+.modal-dialog {
+  margin: 10px;
+  max-width: none;
+  pointer-events: auto;
+  position: relative;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .modal-dialog {
+    margin: 30px auto;
+    width: 600px;
+  }
+}
+
+@media (min-width: 992px) {
+  .modal-lg {
+    width: 900px;
+  }
+}
+
+.modal-content {
+  background-clip: padding-box;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  display: block;
+  flex-direction: row;
+  outline: 0;
+  position: relative;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .modal-content {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.modal-backdrop {
+  bottom: 0;
+  height: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: auto;
+  z-index: 1040;
+}
+
+.modal-backdrop.fade {
+  opacity: 0;
+}
+
+.modal-backdrop.in,
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+.modal-header {
+  align-items: normal;
+  flex-shrink: 1;
+  border-bottom: 1px solid #e5e5e5;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  display: block;
+  padding: 15px;
+}
+
+.modal-header .close {
+  margin-top: -2px;
+}
+
+.modal-title {
+  line-height: 1.42857143;
+  margin: 0;
+}
+
+.modal-body {
+  flex: 0 1 auto;
+  padding: 15px;
+  position: relative;
+}
+
+.modal-footer {
+  align-items: normal;
+  flex-shrink: 1;
+  flex-wrap: nowrap;
+  justify-content: normal;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top: 1px solid #e5e5e5;
+  display: block;
+  padding: 15px;
+  text-align: right;
+}
+
+.modal-footer > * {
+  margin: 0;
+}
+
+.modal-footer .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}

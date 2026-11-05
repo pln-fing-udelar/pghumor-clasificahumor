@@ -52,38 +52,39 @@ const prolificId = getParameterByName("PROLIFIC_PID");
 const isAProlificSession = Boolean(prolificId);
 let voteCount = 0;
 
-// Inlined Toast Notifications (replaces external mdtoast.js)
-function mdtoast(message, options = {}) {
-  const duration = options.duration !== undefined ? options.duration : 3000;
+// Material-style toast notifications (inlined from mdtoast.js): one toast at a time, sliding up from the bottom.
+const TOAST_ANIMATE_MS = 250;
+
+function mdtoast(message, {duration = 5000} = {}) {
+  document.querySelectorAll(".md-toast").forEach(el => el._hideToast?.());
+
   const toast = document.createElement("div");
-  toast.className = "md-toast mdt-load";
-  const messageSpan = document.createElement("span");
-  messageSpan.className = "mdt-message";
-  messageSpan.textContent = message;
-  toast.appendChild(messageSpan);
+  toast.className = "md-toast mdt-load load";
+  const messageEl = document.createElement("div");
+  messageEl.className = "mdt-message";
+  messageEl.textContent = message;
+  toast.appendChild(messageEl);
+
+  let hideTimeout;
+  const hide = () => {
+    clearTimeout(hideTimeout);
+    toast.classList.add("mdt-load", "load");
+    document.body.classList.remove("md-toast-open");
+    setTimeout(() => toast.remove(), TOAST_ANIMATE_MS);
+  };
+  toast._hideToast = hide;
+
   document.body.appendChild(toast);
 
-  // Force layout and remove load class to trigger CSS transition
-  void toast.offsetHeight;
-  toast.classList.remove("mdt-load");
+  setTimeout(() => {
+    toast.classList.remove("mdt-load", "load");
+    if (duration) {
+      hideTimeout = setTimeout(hide, duration);
+    }
+    document.body.classList.add("md-toast-open");
+  }, 10);
 
-  const hide = () => {
-    toast.classList.add("mdt-load");
-    setTimeout(() => {
-      if (toast && toast.parentNode) {
-        toast.parentNode.removeChild(toast);
-      }
-    }, 300);
-  };
-
-  if (duration > 0) {
-    setTimeout(hide, duration);
-  }
-
-  return {
-    hide,
-    element: toast,
-  };
+  return {hide, element: toast};
 }
 window.mdtoast = mdtoast;
 
@@ -214,6 +215,81 @@ function escapeHtml(text) {
 }
 window.escapeHtml = escapeHtml;
 
+// Emoji are shown as Twitter-style images, so they look the same on every device.
+const EMOJI_IMAGES_URL =
+  "https://raw.githubusercontent.com/iamcal/emoji-data/a97b2d2efa64535d6300660eb2cd15ecb584e79e/img-twitter-64/";
+
+const EMOJI_REGEX = new RegExp(
+  [
+    String.raw`[#*0-9]\uFE0F?\u20E3`, // Keycaps.
+    String.raw`\p{Regional_Indicator}{2}`, // Flags.
+    // Pictographs with an optional variation selector or skin tone and tags (like the flag of England), which can be
+    // joined with others using "zero width joiners".
+    String.raw`\p{Extended_Pictographic}(?:\uFE0F|\p{Emoji_Modifier})?(?:[\u{E0020}-\u{E007E}]+\u{E007F})?` +
+      String.raw`(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|\p{Emoji_Modifier})?)*`,
+    String.raw`\p{Emoji_Modifier}`, // A lone skin tone.
+  ].join("|"),
+  "gu"
+);
+const TEXT_STYLE_EMOJI_REGEX = /^(?!\p{Emoji_Presentation})\p{Emoji}$/u;
+const EMOJI_MODIFIER_REGEX = /^\p{Emoji_Modifier}$/u;
+
+// For some emoji that have variants, the image shown is the one of a variant.
+const MAN_VARIANT_EMOJI = new Set(
+  (
+    "1f3c3 1f3c4 1f3ca 1f3cb 1f3cc 1f46e 1f471 1f473 1f477 1f482 1f575 1f647 1f6a3 1f6b4 1f6b5 1f6b6 1f9d6 1f9dc 1f9dd " +
+    "1f9de 1f9df 26f9"
+  ).split(" ")
+);
+const WOMAN_VARIANT_EMOJI = new Set(
+  "1f46f 1f481 1f486 1f487 1f645 1f646 1f64b 1f64d 1f64e 1f9d7 1f9d8 1f9d9 1f9da 1f9db".split(" ")
+);
+const OTHER_VARIANT_EMOJI_IMAGES = {
+  "1f46a": "1f468-200d-1f469-200d-1f466",
+  "1f48f": "1f469-200d-2764-fe0f-200d-1f48b-200d-1f468",
+  "1f491": "1f469-200d-2764-fe0f-200d-1f468",
+};
+
+// The name of the image of an emoji is its code points in hex, with the variation selector after the ones that need it.
+function emojiImageName(emojiText) {
+  const characters = [...emojiText].filter(character => character !== "\uFE0F");
+  const codePoints = characters.flatMap((character, i) => {
+    const codePoint = character.codePointAt(0).toString(16).padStart(4, "0");
+    const needsVariationSelector =
+      TEXT_STYLE_EMOJI_REGEX.test(character) && !EMOJI_MODIFIER_REGEX.test(characters[i + 1] ?? "");
+    return needsVariationSelector ? [codePoint, "fe0f"] : [codePoint];
+  });
+  const name = codePoints.join("-");
+
+  if (characters.length === 1) {
+    if (MAN_VARIANT_EMOJI.has(codePoints[0])) {
+      return `${name}-200d-2642-fe0f`;
+    } else if (WOMAN_VARIANT_EMOJI.has(codePoints[0])) {
+      return `${name}-200d-2640-fe0f`;
+    }
+  }
+  return OTHER_VARIANT_EMOJI_IMAGES[name] ?? name;
+}
+
+function emojiToHtml(html) {
+  return html.replace(EMOJI_REGEX, emojiText => {
+    const name = emojiImageName(emojiText);
+    return (
+      `<span class="emoji emoji-sizer" role="img" aria-label="${emojiText}" data-codepoints="${name}" ` +
+      `style="background-image:url(${EMOJI_IMAGES_URL}${name}.png)"></span>`
+    );
+  });
+}
+
+// Not all emoji have an image (nor is the image always reachable): in that case show the emoji as text.
+function showNativeEmojiIfImageIsMissing(element) {
+  element.querySelectorAll(".emoji").forEach(emojiEl => {
+    const image = new Image();
+    image.onerror = () => emojiEl.replaceWith(emojiEl.getAttribute("aria-label"));
+    image.src = `${EMOJI_IMAGES_URL}${emojiEl.dataset.codepoints}.png`;
+  });
+}
+
 function fadeTransition(element, updateFn, duration = 150) {
   if (!element) return;
   element.style.transition = `opacity ${duration}ms ease-in-out`;
@@ -230,6 +306,7 @@ function main() {
   setupSentry();
   setupElements();
   setupModalDelegation();
+  setupWhatsAppButton();
   getRandomTweets();
   setUiListeners();
   moveToolboxIfOutside();
@@ -247,6 +324,14 @@ function setupSentry() {
       sendDefaultPii: true,
       denyUrls: [/https?:\/\/localhost/, /https?:\/\/127\.0\.0\.1/, /https?:\/\/\[::1?]/],
     });
+  }
+}
+
+// Like the WhatsApp sharing script it replaces, only offer WhatsApp sharing on Android and iPhone.
+function setupWhatsAppButton() {
+  const userAgent = navigator.userAgent;
+  if (/Android|iPhone/i.test(userAgent) && !/iPod|iPad/i.test(userAgent)) {
+    document.querySelector(".wa_btn")?.classList.add("wa_btn_visible");
   }
 }
 
@@ -280,7 +365,8 @@ function showTweet() {
     return;
   }
   fadeTransition(tweetTextEl, () => {
-    tweetTextEl.innerHTML = escapeHtml(tweets[index].text).replace(/\n/mg, "<br/>");
+    tweetTextEl.innerHTML = emojiToHtml(escapeHtml(tweets[index].text).replace(/\n/mg, "<br/>"));
+    showNativeEmojiIfImageIsMissing(tweetTextEl);
   });
 }
 
