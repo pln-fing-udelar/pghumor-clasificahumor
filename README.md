@@ -10,7 +10,7 @@ data and its format, see [HUMOR](https://github.com/pln-fing-udelar/humor) websi
 ## Software Stack
 
 * **Backend & API**: [FastAPI](https://fastapi.tiangolo.com/) running on [Uvicorn](https://www.uvicorn.org/) with [uvloop](https://github.com/MagicStack/uvloop) and [httptools](https://github.com/MagicStack/httptools) for async request handling; [Pydantic](https://docs.pydantic.dev/) for data validation; [Jinja2](https://jinja.palletsprojects.com/) for server-side HTML rendering.
-* **Database Layer**: [MySQL](https://www.mysql.com/) 9.x with [SQLAlchemy](https://www.sqlalchemy.org/) 2.0 (using async drivers: `asyncmy` in production and `aiosqlite` for in-memory unit tests).
+* **Database Layer**: [MySQL](https://www.mysql.com/) 26.x with [SQLAlchemy](https://www.sqlalchemy.org/) 2.0 (using async drivers: `asyncmy` in production and `aiosqlite` for in-memory unit tests).
 * **Frontend**: Vanilla modern JavaScript (ES6+), HTML5, and CSS3 without jQuery or Bootstrap JS dependencies.
 * **Tooling & Environment**: Python `>=3.15` managed via [`uv`](https://docs.astral.sh/uv/); containerized with [Docker Compose](https://docs.docker.com/compose/); tested and linted with [`ruff`](https://docs.astral.sh/ruff/), [`ty`](https://github.com/astral-sh/ty), and [`pytest`](https://docs.pytest.org/).
 
@@ -61,7 +61,7 @@ docker compose up --build
     DB_NAME=SET_VALUE
     ```
 
-5. Set up a MySQL 9 instance. It could be the instance generated with the Docker setup (`docker compose up database`).
+5. Set up a MySQL 26 instance. It could be the instance generated with the Docker setup (`docker compose up database`).
 
 6. Run:
 
