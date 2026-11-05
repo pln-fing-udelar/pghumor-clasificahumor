@@ -12,8 +12,8 @@
   <title>Estadísticas</title>
 
   <link rel="stylesheet" href="/css/normalize.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
     .chart {
       height: 450px;
@@ -25,7 +25,7 @@
 </head>
 
 <body>
-  <div class="container" style="padding: 0 16px">
+  <div class="container py-3" style="padding: 0 16px">
     <h1>Estadísticas</h1>
 
     <p>Cantidad total de votos: {{ stats['votes'] }}</p>
@@ -34,12 +34,16 @@
     <p>Votos que no fueron a los de prueba: {{ stats['votes-not-consider-test'] }}</p>
 
     <p>Distribución de votos por tweet (sin los de prueba):</p>
-    <div id="chart-histogram" class="chart"></div>
+    <div style="position: relative; height: 450px; width: 100%; max-width: 900px; margin: 0 auto;">
+      <canvas id="chart-histogram" class="chart"></canvas>
+    </div>
 
-    <p>Votos por categoría:</p>
-    <div id="chart-votes-per-category" class="chart"></div>
+    <p class="mt-4">Votos por categoría:</p>
+    <div style="position: relative; height: 450px; width: 100%; max-width: 900px; margin: 0 auto;">
+      <canvas id="chart-votes-per-category" class="chart"></canvas>
+    </div>
 
-    <h2>Votos sin salteos</h2>
+    <h2 class="mt-4">Votos sin salteos</h2>
 
     <p>Cantidad de votos: {{ stats['votes-without-skips'] }}</p>
     <p>Cantidad de sesiones: {{ stats['sessions-without-skips'] }}</p>
@@ -52,38 +56,96 @@
     <p>Cantidad de sesiones: {{ stats['sessions-pass-test'] }}</p>
   </div>
 
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <!--suppress JSUnresolvedFunction, JSUnresolvedVariable -->
   <script type="text/javascript">
-    google.charts.load('current', {packages:['corechart']});
+    const rawHistogram = {{ stats['histogram']|tojson }};
+    const rawCategories = {{ stats['votes-per-category']|tojson }};
 
-    google.charts.setOnLoadCallback(drawHistogramChart);
-    function drawHistogramChart() {
-      const data = google.visualization.arrayToDataTable({{ stats['histogram']|safe }});
+    let histogramChart = null;
+    let categoryChart = null;
 
-      const options = {
-        legend: { position: 'none' },
-        colors: ['#4285F4']
-      };
+    if (typeof Chart !== "undefined") {
+      const histLabels = rawHistogram.slice(1).map(row => String(row[0]));
+      const histData = rawHistogram.slice(1).map(row => Number(row[1]));
 
-      const chart = new google.visualization.ColumnChart(document.getElementById('chart-histogram'));
-      chart.draw(data, options);
-    }
+      const histCanvas = document.getElementById('chart-histogram');
+      if (histCanvas) {
+        histogramChart = new Chart(histCanvas, {
+          type: 'bar',
+          data: {
+            labels: histLabels,
+            datasets: [{
+              label: 'Cantidad de tweets',
+              data: histData,
+              backgroundColor: '#4285F4',
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Cantidad de votos',
+                },
+              },
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Cantidad de tweets',
+                },
+              },
+            },
+          },
+        });
+      }
 
-    google.charts.setOnLoadCallback(drawVotesPerCategoryChart);
-    function drawVotesPerCategoryChart() {
-      const data = google.visualization.arrayToDataTable({{ stats['votes-per-category']|safe }});
+      const catLabels = rawCategories.slice(1).map(row => String(row[0]));
+      const catData = rawCategories.slice(1).map(row => Number(row[1]));
 
-      const options = {};
+      const categoryColors = [
+        '#4285F4', '#34A853', '#FBBC05', '#EA4335',
+        '#9C27B0', '#00BCD4', '#FF9800', '#795548',
+      ];
 
-      const chart = new google.visualization.PieChart(document.getElementById('chart-votes-per-category'));
-      chart.draw(data, options);
+      const catCanvas = document.getElementById('chart-votes-per-category');
+      if (catCanvas) {
+        categoryChart = new Chart(catCanvas, {
+          type: 'pie',
+          data: {
+            labels: catLabels,
+            datasets: [{
+              data: catData,
+              backgroundColor: categoryColors.slice(0, catLabels.length),
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+              },
+            },
+          },
+        });
+      }
     }
 
     window.addEventListener('resize', () => {
-      if (typeof google !== 'undefined' && google.visualization) {
-        drawHistogramChart();
-        drawVotesPerCategoryChart();
+      if (histogramChart) {
+        histogramChart.resize();
+      }
+      if (categoryChart) {
+        categoryChart.resize();
       }
     });
   </script>

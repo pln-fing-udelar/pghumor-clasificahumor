@@ -19,7 +19,6 @@ let consentModal;
 let consentForm;
 let aboutModal;
 let finishedModal;
-let emoji;
 
 let legendsShownForFirstTime = false;
 
@@ -53,14 +52,49 @@ const prolificId = getParameterByName("PROLIFIC_PID");
 const isAProlificSession = Boolean(prolificId);
 let voteCount = 0;
 
-// Vanilla JS Modal Management
+// Inlined Toast Notifications (replaces external mdtoast.js)
+function mdtoast(message, options = {}) {
+  const duration = options.duration !== undefined ? options.duration : 3000;
+  const toast = document.createElement("div");
+  toast.className = "md-toast mdt-load";
+  const messageSpan = document.createElement("span");
+  messageSpan.className = "mdt-message";
+  messageSpan.textContent = message;
+  toast.appendChild(messageSpan);
+  document.body.appendChild(toast);
+
+  // Force layout and remove load class to trigger CSS transition
+  void toast.offsetHeight;
+  toast.classList.remove("mdt-load");
+
+  const hide = () => {
+    toast.classList.add("mdt-load");
+    setTimeout(() => {
+      if (toast && toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 300);
+  };
+
+  if (duration > 0) {
+    setTimeout(hide, duration);
+  }
+
+  return {
+    hide,
+    element: toast,
+  };
+}
+window.mdtoast = mdtoast;
+
+// Vanilla JS Modal Management (compatible with Bootstrap 3 and Bootstrap 5)
 let previouslyFocusedElement = null;
 
 function showModal(modalEl) {
   if (typeof modalEl === "string") {
     modalEl = document.querySelector(modalEl);
   }
-  if (!modalEl || modalEl.classList.contains("in")) return;
+  if (!modalEl || modalEl.classList.contains("in") || modalEl.classList.contains("show")) return;
 
   previouslyFocusedElement = document.activeElement;
   document.body.classList.add("modal-open");
@@ -71,12 +105,12 @@ function showModal(modalEl) {
     backdrop.className = "modal-backdrop fade";
     document.body.appendChild(backdrop);
     void backdrop.offsetHeight;
-    backdrop.classList.add("in");
+    backdrop.classList.add("in", "show");
   }
 
   modalEl.style.display = "block";
   void modalEl.offsetHeight;
-  modalEl.classList.add("in");
+  modalEl.classList.add("in", "show");
   modalEl.setAttribute("aria-hidden", "false");
   modalEl.setAttribute("aria-modal", "true");
 
@@ -94,19 +128,19 @@ function hideModal(modalEl) {
   }
   if (!modalEl) return;
 
-  modalEl.classList.remove("in");
+  modalEl.classList.remove("in", "show");
   modalEl.removeAttribute("aria-modal");
 
   const backdrop = document.querySelector(".modal-backdrop");
   if (backdrop) {
-    backdrop.classList.remove("in");
+    backdrop.classList.remove("in", "show");
   }
 
   setTimeout(() => {
     modalEl.style.display = "none";
     modalEl.setAttribute("aria-hidden", "true");
 
-    const openModals = document.querySelectorAll(".modal.in");
+    const openModals = document.querySelectorAll(".modal.in, .modal.show");
     if (openModals.length === 0) {
       document.body.classList.remove("modal-open");
       if (backdrop && backdrop.parentNode) {
@@ -122,17 +156,20 @@ function hideModal(modalEl) {
 
 function setupModalDelegation() {
   document.addEventListener("click", e => {
-    const toggleBtn = e.target.closest("[data-toggle='modal']");
+    const toggleBtn = e.target.closest("[data-toggle='modal'], [data-bs-toggle='modal']");
     if (toggleBtn) {
       e.preventDefault();
-      const targetSelector = toggleBtn.getAttribute("data-target") || toggleBtn.getAttribute("href");
+      const targetSelector =
+        toggleBtn.getAttribute("data-bs-target") ||
+        toggleBtn.getAttribute("data-target") ||
+        toggleBtn.getAttribute("href");
       if (targetSelector && targetSelector !== "#") {
         showModal(targetSelector);
       }
       return;
     }
 
-    const dismissBtn = e.target.closest("[data-dismiss='modal']");
+    const dismissBtn = e.target.closest("[data-dismiss='modal'], [data-bs-dismiss='modal']");
     if (dismissBtn) {
       e.preventDefault();
       const modal = dismissBtn.closest(".modal");
@@ -144,7 +181,7 @@ function setupModalDelegation() {
 
     if (e.target.classList.contains("modal")) {
       const modal = e.target;
-      if (modal.getAttribute("data-backdrop") !== "static") {
+      if (modal.getAttribute("data-backdrop") !== "static" && modal.getAttribute("data-bs-backdrop") !== "static") {
         hideModal(modal);
       }
     }
@@ -152,10 +189,13 @@ function setupModalDelegation() {
 
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
-      const openModals = document.querySelectorAll(".modal.in");
+      const openModals = document.querySelectorAll(".modal.in, .modal.show");
       if (openModals.length > 0) {
         const topModal = openModals[openModals.length - 1];
-        if (topModal.getAttribute("data-keyboard") !== "false") {
+        if (
+          topModal.getAttribute("data-keyboard") !== "false" &&
+          topModal.getAttribute("data-bs-keyboard") !== "false"
+        ) {
           hideModal(topModal);
         }
       }
@@ -190,20 +230,23 @@ function main() {
   setupSentry();
   setupElements();
   setupModalDelegation();
-  setupPlaceload();
-  setupEmojiConverter();
   getRandomTweets();
   setUiListeners();
   moveToolboxIfOutside();
   setupProlificSessionIfNeeded();
 }
 
+window.sentryOnLoad = () => {
+  setupSentry();
+};
+
 function setupSentry() {
-  if (typeof Raven !== "undefined") {
-    // The following key is public.
-    Raven.config("https://3afb3f9917f44b2a87e6fbb070a8977b@sentry.io/298102", {
-      ignoreUrls: ["localhost", "127.0.0.1"],
-    }).install();
+  if (typeof Sentry !== "undefined" && typeof Sentry.init === "function") {
+    Sentry.init({
+      dsn: "https://3afb3f9917f44b2a87e6fbb070a8977b@sentry.io/298102",
+      sendDefaultPii: true,
+      denyUrls: [/https?:\/\/localhost/, /https?:\/\/127\.0\.0\.1/, /https?:\/\/\[::1?]/],
+    });
   }
 }
 
@@ -237,30 +280,8 @@ function showTweet() {
     return;
   }
   fadeTransition(tweetTextEl, () => {
-    tweetTextEl.innerHTML = emoji.replace_unified(escapeHtml(tweets[index].text).replace(/\n/mg, "<br/>"));
+    tweetTextEl.innerHTML = escapeHtml(tweets[index].text).replace(/\n/mg, "<br/>");
   });
-}
-
-function setupPlaceload() {
-  Placeload
-    .$("#tweet-text")
-    .config({speed: "1s"})
-    .line(element => element.width(100).height(15))
-    .config({spaceBetween: "7px"})
-    .line(element => element.width(100).height(15))
-    .config({spaceBetween: "7px"})
-    .line(element => element.width(40).height(15))
-    .fold(
-      () => {},
-      () => {}
-    );
-}
-
-function setupEmojiConverter() {
-  emoji = new EmojiConvertor();
-  emoji.img_set = "twitter";
-  emoji.img_sets.twitter.path =
-    "https://raw.githubusercontent.com/iamcal/emoji-data/a97b2d2efa64535d6300660eb2cd15ecb584e79e/img-twitter-64/";
 }
 
 async function getRandomTweets() {

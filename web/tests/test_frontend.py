@@ -11,13 +11,16 @@ STATIC_DIR = BASE_DIR / "static"
 
 
 async def _stub_external_trackers(page: Page) -> None:
-    async def _empty_js(route: Route) -> None:
-        await route.fulfill(status=200, content_type="application/javascript", body="")
+    async def _empty_response(route: Route) -> None:
+        url = route.request.url
+        content_type = "text/css" if url.endswith(".css") else "application/javascript"
+        await route.fulfill(status=200, content_type=content_type, body="")
 
-    await page.route("https://www.googletagmanager.com/**", _empty_js)
-    await page.route("https://connect.facebook.net/**", _empty_js)
-    await page.route("https://platform.twitter.com/**", _empty_js)
-    await page.route("https://cdn.jsdelivr.net/**", _empty_js)
+    await page.route("https://www.googletagmanager.com/**", _empty_response)
+    await page.route("https://connect.facebook.net/**", _empty_response)
+    await page.route("https://platform.twitter.com/**", _empty_response)
+    await page.route("https://js.sentry-cdn.com/**", _empty_response)
+    await page.route("https://cdn.jsdelivr.net/**", _empty_response)
 
 
 async def test_voting_page_flow(browser: Browser, live_server_url: str) -> None:
@@ -165,11 +168,11 @@ async def test_index_html_no_jquery_or_bootstrap_js(client: httpx2.AsyncClient) 
     assert "bootstrap.min.js" not in content.lower()
     assert "bootstrap.js" not in content.lower()
 
-    # Verify vanilla assets are included
+    # Verify vanilla assets are included and removed libraries are absent
     assert "js/main.js" in content
-    assert "js/mdtoast.js" in content
-    assert "js/placeload.min.js" in content
-    assert "js/emoji.min.js" in content
+    assert "js/mdtoast.js" not in content
+    assert "js/placeload.min.js" not in content
+    assert "js/emoji.min.js" not in content
 
 
 async def test_index_html_structure(client: httpx2.AsyncClient) -> None:
@@ -248,15 +251,16 @@ def test_main_js_xss_protection() -> None:
     assert "jQuery" not in content
 
 
-def test_mdtoast_js_vanilla() -> None:
+def test_mdtoast_inlined() -> None:
     mdtoast_js_path = STATIC_DIR / "js" / "mdtoast.js"
-    assert mdtoast_js_path.exists()
-    content = mdtoast_js_path.read_text(encoding="utf-8")
+    assert not mdtoast_js_path.exists()
+    main_js_path = STATIC_DIR / "js" / "main.js"
+    assert main_js_path.exists()
+    content = main_js_path.read_text(encoding="utf-8")
 
-    # Verify pure vanilla implementation
-    assert "This plugin requires jQuery" not in content
+    # Verify pure vanilla inlined implementation
+    assert "function mdtoast" in content
     assert "document.createElement" in content
-    assert "doc.appendChild(that.toast)" in content
 
 
 def test_escape_html_logic() -> None:
