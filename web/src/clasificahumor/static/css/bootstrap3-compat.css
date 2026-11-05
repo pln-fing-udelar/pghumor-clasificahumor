@@ -106,14 +106,14 @@ a:focus {
   text-decoration: underline;
 }
 
-a:focus {
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
-}
-
 a:active,
 a:hover {
   outline: 0;
+}
+
+a:focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
 }
 
 img {
