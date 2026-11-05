@@ -6,14 +6,25 @@ services:
       - DB_USER=root
       - DB_PASS
       - DB_NAME=pghumor
+    depends_on:
+      database:
+        condition: service_healthy
     networks:
       - net
   database:
     build: db
+    environment:
+      - MYSQL_ROOT_PASSWORD
     volumes:
       - data:/var/lib/mysql
     networks:
       - net
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 networks:
   net:
 volumes:
