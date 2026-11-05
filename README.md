@@ -1,4 +1,6 @@
+[![ACL Anthology](https://img.shields.io/badge/ACL_Anthology-W18--3502-ed1c24.svg)](https://aclanthology.org/W18-3502/)
 [![Actions Status](https://github.com/pln-fing-udelar/pghumor-clasificahumor/workflows/CI/badge.svg)](https://github.com/pln-fing-udelar/pghumor-clasificahumor/actions)
+[![Coverage](https://codecov.io/gh/pln-fing-udelar/pghumor-clasificahumor/branch/main/graph/badge.svg)](https://codecov.io/gh/pln-fing-udelar/pghumor-clasificahumor)
 
 # pgHumor-clasificahumor
 
