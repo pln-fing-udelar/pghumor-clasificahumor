@@ -5,7 +5,7 @@
 Website to crowd-annotate tweets for Humor Research. Originally created for
 [pgHumor](https://github.com/pln-fing-udelar/pghumor), and also used in the
 [HAHA competitions](http://www.fing.edu.uy/inco/grupos/pln/haha). If you want to learn general information about the 
-data and its format, see [HUMOR](https://github.com/pln-fing-udelar/humor) website.
+data and its format, see the [HUMOR](https://github.com/pln-fing-udelar/humor) website.
 
 ## Software Stack
 
@@ -16,19 +16,19 @@ data and its format, see [HUMOR](https://github.com/pln-fing-udelar/humor) websi
 
 ## Setup
 
-There are two ways to run this code after cloning the repo: with Docker or via uv.
+After cloning the repo, you can run this code in two ways: with Docker or via uv.
 The first one is the recommended way to get started (or to just use for the database),
 and the second one is for the extraction and analysis part, and for advanced usage (such as debugging with an IDE).
 
 ### Docker
 
-You need Docker and Docker Compose for this. To run the web server in debug mode, auto-detecting changes:
+You need Docker and Docker Compose. To run the web server in debug mode, auto-detecting changes:
 
 ```bash
 docker compose up --build
 ```
 
-> If under a VPN, first exit the VPN, create the containers for the first time (so that the network is created fine),
+> If you're on a VPN, first exit the VPN, create the containers for the first time (so that the network is created correctly),
 > then you can enter the VPN again.
 
 ### uv
@@ -40,7 +40,7 @@ docker compose up --build
     cd web/
     ```
 
-2. Install the Python, MySQL, and SQLite3 library headers. In Ubuntu, it'd be:
+2. Install Python, MySQL, and SQLite3 library headers. In Ubuntu, it'd be:
 
     ```bash
     sudo apt install libmysqlclient-dev libsqlite3-dev python3-dev
@@ -61,7 +61,7 @@ docker compose up --build
     DB_NAME=SET_VALUE
     ```
 
-5. Set up a MySQL 26 instance. It could be the instance generated with the Docker setup (`docker compose up database`).
+5. Set up a MySQL 26.10 instance. It could be the instance generated with the Docker setup (`docker compose up database`).
 
 6. Run:
 
@@ -90,7 +90,7 @@ First, create a database with [`db/schema.sql`](db/schema.sql):
 mysql -u $USER -p < db/schema.sql
 ```
 
-The default user for Docker is `root`.
+The Docker image's default user is `root`.
 The default password for the dev environment in Docker is specified in the
 [`docker-compose.override.yml`](docker-compose.override.yml) file.
 
@@ -100,7 +100,7 @@ To load a database dump, run in another shell:
 mysql -u $USER -p pghumor < dump.sql
 ```
 
-You can prefix `docker compose exec database` to the command to run it in the database Docker container.
+You can prefix it with `docker compose exec database` to run it in the database Docker container.
 Or you can use a local `mysql`:
 
 ```bash
@@ -170,7 +170,7 @@ To run a SQL script in production (e.g., to restore some data):
 docker exec -i clasificahumor-database-1 mysql -u root -p pghumor < dump.sql
 ```
 
-To open a mysql interactive session in production:
+To open a MySQL interactive session in production:
 
 ```bash
 docker exec -i clasificahumor-database-1 mysql -u root -p pghumor
@@ -178,8 +178,8 @@ docker exec -i clasificahumor-database-1 mysql -u root -p pghumor
 
 For these commands, using Docker Compose directly (`docker compose exec database`) is also supported instead of the
 Docker CLI directly (`docker exec clasificahumor-database-1`).
-However, the extra flags needed for each of them change as Docker Compose `exec` subcommand uses a pseudo TTY,
-and it's interactive by default while the Docker CLI `exec` subcommand doesn't.
+However, the extra flags needed for each of them change as the Docker Compose `exec` subcommand uses a pseudo TTY,
+and it's interactive by default, while the Docker CLI `exec` subcommand doesn't.
 
 ## Production setup
 
@@ -214,7 +214,7 @@ Then just push to production:
 git push production
 ```
 
-After many docker builds in production, if there's not enough storage available, you can run:
+After many Docker builds in production, if there's not enough storage available, you can run:
 
 ```bash
 docker system prune
@@ -222,7 +222,7 @@ docker system prune
 
 ## Tweet extraction
 
-Follow the steps here to download new tweets and get them into the database.
+Follow these steps to download new tweets and add them to the database.
 
 ### Download new tweets
 
